@@ -1,35 +1,30 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:rive/rive.dart' as rv;
-import 'package:agents_promotor_app/screens/dashboard.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
+import '../authenticatebyphone.dart';
 
 
-class LoginController extends GetxController{
+class LoginController extends GetxController {
   final client = http.Client();
-  late String username;
-  late String password;
   final storage = GetStorage();
   bool isLoggingIn = false;
   bool isUser = false;
-  bool isAuthenticatedAlready = false;
   late List allSupervisors = [];
-  late List supervisorEmails = [];
-
-
-  static LoginController get to => Get.find<LoginController>();
+  late List supervisorsCodes = [];
+  late List supervisorsEmails = [];
+  late int oTP = 0;
+  late String myToken = "";
 
   String errorMessage = "";
-  rv.StateMachineController? controller;
-  rv.SMIInput<bool>? trigSuccess;
-  rv.SMIInput<bool>? trigFail;
   bool isLoading = false;
 
-  Future<void> getAllSupervisors() async{
+
+
+  Future<void> getAllSupervisors() async {
     try {
       isLoading = true;
       const completedRides = "https://fnetagents.xyz/get_all_supervisors/";
@@ -40,46 +35,41 @@ class LoginController extends GetxController{
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
         allSupervisors.assignAll(jsonData);
-        for(var i in allSupervisors){
-          supervisorEmails.add(i['email']);
+        for (var i in allSupervisors) {
+          supervisorsCodes.add(i['agent_unique_code']);
         }
         update();
       }
     } catch (e) {
       Get.snackbar("Sorry",
           "something happened or please check your internet connection");
-    }
-    finally{
+    } finally {
       isLoading = false;
     }
   }
 
-
-  Future<void> loginUser(String email,String password) async{
+  Future<void> loginUser(String agentCode, String password) async {
     const loginUrl = "https://fnetagents.xyz/auth/token/login/";
     final myLink = Uri.parse(loginUrl);
-    http.Response response = await client.post(myLink, headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    }, body: {
-      "email": email,
-      "password": password
-    });
+    http.Response response = await client.post(myLink,
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: {"agent_unique_code": agentCode, "password": password});
 
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       final resBody = response.body;
       var jsonData = jsonDecode(resBody);
       var userToken = jsonData['auth_token'];
+
       storage.write("token", userToken);
+      storage.write("agent_code", agentCode);
       isLoggingIn = false;
       isUser = true;
-      trigSuccess?.change(true);
 
-      if(supervisorEmails.contains(email)){
-        Get.offAll(() => const DashBoard());
-      }
-      else{
-        trigFail?.change(true);
-        Get.snackbar("Sorry 😢", "You are not a supervisor or you entered invalid details",
+      if (supervisorsCodes.contains(agentCode)) {
+        Get.offAll(() => const AuthenticateByPhone());
+      } else {
+        Get.snackbar(
+            "Sorry 😢", "You are not an owner or you entered invalid details",
             duration: const Duration(seconds: 5),
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.red,
@@ -87,9 +77,7 @@ class LoginController extends GetxController{
         isLoggingIn = false;
         isUser = false;
       }
-    }
-    else{
-      trigFail?.change(true);
+    } else {
       Get.snackbar("Sorry 😢", "invalid details",
           duration: const Duration(seconds: 5),
           snackPosition: SnackPosition.BOTTOM,
@@ -99,4 +87,5 @@ class LoginController extends GetxController{
       isUser = false;
     }
   }
+
 }
