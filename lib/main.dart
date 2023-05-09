@@ -1,4 +1,5 @@
 
+import 'package:easy_owner/controller/notificationcontroller.dart';
 import 'package:easy_owner/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,6 +31,7 @@ void main() async{
   Get.put(AgentController());
   Get.put(AuthPhoneController());
   Get.put(TrialAndMonthlyPaymentController());
+  Get.put(NotificationController());
   runApp(const MyApp());
 }
 

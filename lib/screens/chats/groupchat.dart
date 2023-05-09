@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:animate_do/animate_do.dart';
+
 import 'package:flutter/foundation.dart';
 import "package:flutter/material.dart";
 import "package:get/get.dart";
@@ -59,9 +60,12 @@ class _GroupChatState extends State<GroupChat> {
       final codeUnits = response.body.codeUnits;
       var jsonData = const Utf8Decoder().convert(codeUnits);
       groupMessages = json.decode(jsonData);
-      // setState(() {
-      //   isLoading = false;
-      // });
+      setState(() {
+        isLoading = false;
+      });
+    }
+    else{
+      print(response.body);
     }
   }
 

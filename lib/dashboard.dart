@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:easy_owner/screens/aboutpage.dart';
+import 'package:easy_owner/screens/agents/addnewagent.dart';
+import 'package:easy_owner/screens/agents/myagents.dart';
+import 'package:easy_owner/screens/chats/groupchat.dart';
 import 'package:easy_owner/screens/makepayment.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -9,10 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:lottie/lottie.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:ussd_advanced/ussd_advanced.dart';
 
 import 'authenticatebyphone.dart';
 
@@ -433,13 +433,7 @@ class _DashboardState extends State<Dashboard> {
                         ],
                       ),
                       onTap: () {
-                        // tpController.accountBalanceDetailsToday.isNotEmpty ?
-                        // Get.to(() => const PayToSummary()) : Get.snackbar("Account balance error", "Please add account balance for today",
-                        //     colorText: defaultWhite,
-                        //     backgroundColor: warning,
-                        //     snackPosition: SnackPosition.BOTTOM,
-                        //     duration: const Duration(seconds: 5));
-                        // // Get.to(() => const PayToSummary());
+                        Get.to(() => const AddNewAgent());
                       },
                     ),
                   ),
@@ -459,12 +453,7 @@ class _DashboardState extends State<Dashboard> {
                         ],
                       ),
                       onTap: () {
-                        // tpController.accountBalanceDetailsToday.isNotEmpty ?
-                        // Get.to(() => const MomoCashInSummary()) : Get.snackbar("Account balance error", "Please add account balance for today",
-                        //     colorText: defaultWhite,
-                        //     backgroundColor: warning,
-                        //     snackPosition: SnackPosition.BOTTOM,
-                        //     duration: const Duration(seconds: 5));
+                        Get.to(() => const MyAgents());
                       },
                     ),
                   ),
@@ -472,23 +461,20 @@ class _DashboardState extends State<Dashboard> {
                     child: GestureDetector(
                       child: Column(
                         children: [
-                          // Image.asset(
-                          //   "assets/images/commission1.png",
-                          //   width: 70,
-                          //   height: 70,
-                          // ),
-                          // const SizedBox(
-                          //   height: 10,
-                          // ),
-                          // const Text("Cash Out"),
+                          Image.asset(
+                            "assets/images/groupchat.png",
+                            width: 70,
+                            height: 70,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("Cash Out"),
                         ],
                       ),
                       onTap: () {
-                        // tpController.accountBalanceDetailsToday.isNotEmpty ? Get.to(() => const MomoCashOutSummary()) :Get.snackbar("Account balance error", "Please add account balance for today",
-                        //     colorText: defaultWhite,
-                        //     backgroundColor: warning,
-                        //     snackPosition: SnackPosition.BOTTOM,
-                        //     duration: const Duration(seconds: 5));
+                        Get.to(() => const GroupChat());
+
                       },
                     ),
                   ),
