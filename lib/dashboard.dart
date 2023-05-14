@@ -3,9 +3,8 @@ import 'dart:convert';
 
 import 'package:easy_owner/screens/aboutpage.dart';
 import 'package:easy_owner/screens/agents/addnewagent.dart';
+import 'package:easy_owner/screens/agents/allagentrequestwithlimits.dart';
 import 'package:easy_owner/screens/agents/myagents.dart';
-import 'package:easy_owner/screens/chats/groupchat.dart';
-import 'package:easy_owner/screens/makepayment.dart';
 import 'package:easy_owner/screens/payments/unapprovedpayments.dart';
 import 'package:easy_owner/screens/rebalancing/unapprovedrebalancing.dart';
 import 'package:easy_owner/screens/requests/unapprovedrequests.dart';
@@ -470,7 +469,7 @@ class _DashboardState extends State<Dashboard> {
                           const SizedBox(
                             height: 10,
                           ),
-                          const Text("Cash Out"),
+                          const Text("Chat"),
                         ],
                       ),
                       onTap: () {
@@ -561,6 +560,80 @@ class _DashboardState extends State<Dashboard> {
               const SizedBox(
                 height: 20,
               ),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: GestureDetector(
+              //         child: Column(
+              //           children: [
+              //             Image.asset(
+              //               "assets/images/meters.png",
+              //               width: 70,
+              //               height: 70,
+              //             ),
+              //             const SizedBox(
+              //               height: 10,
+              //             ),
+              //             const Text("Agent Request"),
+              //             const Text("Limit"),
+              //           ],
+              //         ),
+              //         onTap: () {
+              //           Get.to(() => const AllAgentsRequestsLimit());
+              //         },
+              //       ),
+              //     ),
+              //     Expanded(
+              //       child: GestureDetector(
+              //         child: Column(
+              //           children: [
+              //             // Image.asset(
+              //             //   "assets/images/cash-payment.png",
+              //             //   width: 70,
+              //             //   height: 70,
+              //             // ),
+              //             // const SizedBox(
+              //             //   height: 10,
+              //             // ),
+              //             // const Text("Payments"),
+              //           ],
+              //         ),
+              //         onTap: () {
+              //           // Get.to(() => const AllUnApprovedPayments());
+              //         },
+              //       ),
+              //     ),
+              //     Expanded(
+              //       child: GestureDetector(
+              //         child: Column(
+              //           children: [
+              //             // Image.asset(
+              //             //   "assets/images/law.png",
+              //             //   width: 70,
+              //             //   height: 70,
+              //             // ),
+              //             // const SizedBox(
+              //             //   height: 10,
+              //             // ),
+              //             // const Text("ReBalancing"),
+              //             // const Text("Requests"),
+              //           ],
+              //         ),
+              //         onTap: () {
+              //           // Get.to(() => const AllUnApprovedReBalancing());
+              //
+              //         },
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // const SizedBox(
+              //   height: 20,
+              // ),
+              // const Divider(),
+              // const SizedBox(
+              //   height: 20,
+              // ),
             ],
           ),
 

@@ -93,8 +93,8 @@ class _AddNewAgentState extends State<AddNewAgent> {
           //     Get.back();
           //   },
           // ),
-          title: const Text("Add New Agent",style:TextStyle(color:Colors.black)),
-          backgroundColor: Colors.transparent,
+          title: const Text("Add New Agent",),
+          backgroundColor: secondaryColor,
           elevation: 0,
         ),
         body:  ListView(
