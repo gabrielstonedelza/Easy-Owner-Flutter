@@ -150,7 +150,7 @@ class _AllAgentsState extends State<AllAgents> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(items['username'],style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white),),
-                                  Text(lastMessage.last['timestamp'].toString().split("T").first,style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white),),
+                                  lastMessage.isNotEmpty ? Text(lastMessage.last['timestamp'].toString().split("T").first,style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white),):Container(),
                                 ],
                               ),
                             ),
