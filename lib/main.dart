@@ -11,9 +11,12 @@ import 'constants.dart';
 import 'controller/agentcontroller.dart';
 import 'controller/authphonecontroller.dart';
 import 'controller/customercontroller.dart';
+import 'controller/localnotificationmanager.dart';
 import 'controller/logincontroller.dart';
 import 'controller/profilecontroller.dart';
 import 'controller/trialmonthlypayment.dart';
+import 'dashboard.dart';
+import 'login.dart';
 
 
 onBackgroundMessage(SmsMessage message) {
@@ -32,6 +35,7 @@ void main() async{
   Get.put(AuthPhoneController());
   Get.put(TrialAndMonthlyPaymentController());
   Get.put(NotificationController());
+  NotificationService().initNotification();
   runApp(const MyApp());
 }
 
@@ -47,13 +51,11 @@ class _MyAppState extends State<MyApp> {
   String _message = "";
   final telephony = Telephony.instance;
   final AuthPhoneController phoneController = Get.find();
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-    phoneController.fetchDeviceInfo();
-  }
+  final storage = GetStorage();
+  bool hasToken = false;
+  late String uToken = "";
+  late String authDevice = "";
+  bool isAuthDevice = false;
 
   onMessage(SmsMessage message) async {
     setState(() {
@@ -89,9 +91,31 @@ class _MyAppState extends State<MyApp> {
       telephony.listenIncomingSms(onNewMessage: onMessage, onBackgroundMessage: onBackgroundMessage);
     }
 
-
-
     if (!mounted) return;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+    phoneController.fetchDeviceInfo();
+    if (storage.read("token") != null) {
+      uToken = storage.read("token");
+      setState(() {
+        hasToken = true;
+      });
+    }if (storage.read("phoneFingerprint") != null) {
+      authDevice = storage.read("phoneFingerprint");
+      setState(() {
+        isAuthDevice = true;
+      });
+    }
+
+    else{
+      setState(() {
+        hasToken = false;
+      });
+    }
   }
 
   @override
@@ -106,7 +130,7 @@ class _MyAppState extends State<MyApp> {
             backgroundColor: secondaryColor,
           )
       ),
-      home: const SplashScreen(),
+      home: hasToken && isAuthDevice ? const Dashboard() : const LoginView(),
     );
   }
 }

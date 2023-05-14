@@ -2,10 +2,12 @@
 import 'package:easy_owner/widget/loadingui.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../constants.dart';
+import 'controller/authphonecontroller.dart';
 import 'controller/logincontroller.dart';
 import 'loginabout.dart';
 
@@ -20,6 +22,8 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final LoginController controller = Get.find();
   bool isObscured = true;
+  final storage = GetStorage();
+  late String uToken = "";
 
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _agentCodeController;
@@ -28,6 +32,7 @@ class _LoginViewState extends State<LoginView> {
   FocusNode passwordFocusNode = FocusNode();
 
   final Uri _url = Uri.parse('https://fnetagents.xyz/password-reset/');
+  final AuthPhoneController authController = Get.find();
 
 
   Future<void> _launchInBrowser() async {
@@ -54,6 +59,12 @@ class _LoginViewState extends State<LoginView> {
     _agentCodeController = TextEditingController();
     _passwordController = TextEditingController();
     controller.getAllSupervisors();
+    if (storage.read("token") != null) {
+      setState(() {
+        uToken = storage.read("token");
+      });
+    }
+    authController.fetchAuthPhone(uToken);
   }
 
   @override
@@ -170,6 +181,12 @@ class _LoginViewState extends State<LoginView> {
                       } else {
                         controller.loginUser(_agentCodeController.text.trim(),
                           _passwordController.text.trim(),);
+                        storage.write("phoneAuthenticated", "Authenticated");
+                        storage.write("phoneId", authController.phoneId);
+                        storage.write("phoneModel", authController.phoneModel);
+                        storage.write("phoneBrand", authController.phoneBrand);
+                        storage.write("phoneFingerprint", authController.phoneFingerprint);
+                        authController.authenticatePhone(uToken,authController.phoneId,authController.phoneModel,authController.phoneBrand,authController.phoneFingerprint);
                       }
                     },
                     decoration: const NeoPopTiltedButtonDecoration(

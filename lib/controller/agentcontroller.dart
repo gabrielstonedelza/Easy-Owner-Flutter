@@ -48,6 +48,7 @@ class AgentController extends GetxController{
       "re_password": password2,
       "user_type": "Agent",
       "supervisor": supervisorCode,
+      "user_approved": "True",
     });
     if (response.statusCode == 201) {
 

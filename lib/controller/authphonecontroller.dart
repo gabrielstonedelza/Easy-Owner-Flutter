@@ -49,6 +49,7 @@ class AuthPhoneController extends GetxController {
         for(var i in authPhoneDetails){
           if(i['finger_print'] == phoneFingerprint){
             isAuthDevice = true;
+            storage.write("IsAuthDevice", "YesAuth");
             Get.snackbar("Device Auth Success 😀", "Your is already authenticated",
                 colorText: Colors.white,
                 snackPosition: SnackPosition.BOTTOM,

@@ -33,6 +33,7 @@ class _MtnWithdrawalSummaryDetailState extends State<MtnWithdrawalSummaryDetail>
   late List amountResults = [];
   late List withdrawalDates = [];
   double sum = 0.0;
+  double amountReceived = 0.0;
 
   fetchAgentMtnWithdrawals()async{
     final url = "https://fnetagents.xyz/get_agents_momo_withdrawals/$username/";
@@ -48,7 +49,8 @@ class _MtnWithdrawalSummaryDetailState extends State<MtnWithdrawalSummaryDetail>
       for(var i in allMtnDeposits){
         if(i['date_of_withdrawal'].toString().split("T").first == date_of_withdrawal){
           withdrawalDates.add(i);
-          sum = sum + double.parse(i['amount']);
+          sum = sum + double.parse(i['cash_paid']);
+          amountReceived = amountReceived + double.parse(i['amount_received']);
         }
       }
     }
@@ -106,7 +108,8 @@ class _MtnWithdrawalSummaryDetailState extends State<MtnWithdrawalSummaryDetail>
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                buildRow("Amount: ", "amount"),
+                                buildRow("Amount: ", "cash_paid"),
+                                buildRow("Amount Received: ", "amount_received"),
                                 buildRow("Network: ", "network"),
                                 items["d_200"] == 0 ? Container():
                                 Row(
@@ -208,6 +211,13 @@ class _MtnWithdrawalSummaryDetailState extends State<MtnWithdrawalSummaryDetail>
           Get.defaultDialog(
             buttonColor: secondaryColor,
             title: "Total",
+            content: Column(
+              children: [
+                Text("Amount Sent = $sum"),
+                Text("Amount Received = $amountReceived"),
+                Text("Commission = ${amountReceived - sum}"),
+              ],
+            ),
             middleText: "$sum",
             confirm: RawMaterialButton(
                 shape: const StadiumBorder(),

@@ -84,110 +84,112 @@ class _PayToSummaryState extends State<PayToSummary> {
     return Scaffold(
       body: isLoading ? const LoadingUi() : DefaultTabController(
         length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: secondaryColor,
-            bottom: TabBar(
-              indicatorColor: snackBackground,
-              tabs: [
-                Tab(
-                  child: Column(
-                  children: [
-                     Text("Agents (${date_added_for_agent.length})",style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.white)),
-                  ],
-                ),),
-                Tab(child: Column(
-                  children: [
-                    Text("Merchants (${date_added_for_merchant.length})",style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.white)),
-                  ],
-                ),),
+        child: SafeArea(
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: secondaryColor,
+              bottom: TabBar(
+                indicatorColor: snackBackground,
+                tabs: [
+                  Tab(
+                    child: Column(
+                    children: [
+                       Text("Agents (${date_added_for_agent.length})",style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Colors.white)),
+                    ],
+                  ),),
+                  Tab(child: Column(
+                    children: [
+                      Text("Merchants (${date_added_for_merchant.length})",style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Colors.white)),
+                    ],
+                  ),),
+                ],
+              ),
+              title: Text("$username's Pay To Summary"),
+            ),
+            body: TabBarView(
+              children: [
+                ListView.builder(
+                  itemCount: date_added_for_agent != null ? date_added_for_agent.length : 0,
+                  itemBuilder: (BuildContext context, int index) {
+                    items = date_added_for_agent[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 12,
+                        color: secondaryColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            onTap: (){
+                              Get.to(() => PayToAgentSummaryDetail(date_added:date_added_for_agent[index],username:username));
+                            },
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const Text("Date :",style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,color: defaultWhite
+                                )),
+                                const SizedBox(width:10),
+                                Text(items,style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,color: defaultWhite
+                                )),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },),
+                ListView.builder(
+                  itemCount: date_added_for_merchant != null ? date_added_for_merchant.length : 0,
+                  itemBuilder: (BuildContext context, int index) {
+                    merchatItems = date_added_for_merchant[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 12,
+                        color: secondaryColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            onTap: (){
+                              Get.to(() => PayToMerchantSummaryDetail(date_added:date_added_for_merchant[index],username:username));
+                            },
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const Text("Date :",style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,color: defaultWhite
+                                )),
+                                const SizedBox(width:10),
+                                Text(merchatItems,style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,color: defaultWhite
+                                )),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },),
               ],
             ),
-            title: Text("$username's Pay To Summary"),
-          ),
-          body: TabBarView(
-            children: [
-              ListView.builder(
-                itemCount: date_added_for_agent != null ? date_added_for_agent.length : 0,
-                itemBuilder: (BuildContext context, int index) {
-                  items = date_added_for_agent[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      elevation: 12,
-                      color: secondaryColor,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          onTap: (){
-                            Get.to(() => PayToAgentSummaryDetail(date_added:date_added_for_agent[index],username:username));
-                          },
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const Text("Date :",style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,color: defaultWhite
-                              )),
-                              const SizedBox(width:10),
-                              Text(items,style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,color: defaultWhite
-                              )),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },),
-              ListView.builder(
-                itemCount: date_added_for_merchant != null ? date_added_for_merchant.length : 0,
-                itemBuilder: (BuildContext context, int index) {
-                  merchatItems = date_added_for_merchant[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      elevation: 12,
-                      color: secondaryColor,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          onTap: (){
-                            Get.to(() => PayToMerchantSummaryDetail(date_added:date_added_for_merchant[index],username:username));
-                          },
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const Text("Date :",style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,color: defaultWhite
-                              )),
-                              const SizedBox(width:10),
-                              Text(merchatItems,style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,color: defaultWhite
-                              )),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },),
-            ],
           ),
         ),
       ),

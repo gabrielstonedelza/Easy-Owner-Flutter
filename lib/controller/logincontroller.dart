@@ -76,6 +76,8 @@ class LoginController extends GetxController {
             colorText: Colors.white);
         isLoggingIn = false;
         isUser = false;
+        storage.remove("token");
+        storage.remove("agent_code");
       }
     } else {
       Get.snackbar("Sorry 😢", "invalid details",
@@ -85,6 +87,8 @@ class LoginController extends GetxController {
           colorText: Colors.white);
       isLoggingIn = false;
       isUser = false;
+      storage.remove("token");
+      storage.remove("agent_code");
     }
   }
 

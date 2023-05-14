@@ -1,38 +1,39 @@
 import 'dart:convert';
-
-import 'package:get/get.dart';
+import 'package:easy_owner/screens/agents/summaries/rebalancingsummarydetail.dart';
+import 'package:easy_owner/screens/agents/summaries/requestsummarydetail.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+
 import '../../../constants.dart';
 import '../../../widget/loadingui.dart';
-import 'momodepositsummarydetail.dart';
 
 
-class MomoCashInSummary extends StatefulWidget {
+
+class RebalancingSummary extends StatefulWidget {
   final username;
-  const MomoCashInSummary({Key? key,required this.username}) : super(key: key);
+  const RebalancingSummary({Key? key,required this.username}) : super(key: key);
 
   @override
-  State<MomoCashInSummary> createState() => _MomoCashInSummaryState(username:this.username);
+  State<RebalancingSummary> createState() => _RebalancingSummaryState(username:this.username);
 }
 
-class _MomoCashInSummaryState extends State<MomoCashInSummary> {
+class _RebalancingSummaryState extends State<RebalancingSummary> {
   final username;
-  _MomoCashInSummaryState({required this.username});
+  _RebalancingSummaryState({required this.username});
   double sum = 0.0;
   final storage = GetStorage();
   bool hasToken = false;
   late String uToken = "";
-  late List allMomoDeposits = [];
+  late List allRebalancing = [];
   var items;
   bool isLoading = true;
   late List amounts = [];
-  late List bankAmounts = [];
-  late List mtnDepositDates = [];
+  late List requestsAmounts = [];
+  late List requestsDates = [];
 
-  fetchAllAgentsMtnDeposits()async{
-    final url = "https://fnetagents.xyz/get_agents_momo_deposits/$username/";
+  Future<void>fetchAllRequests()async{
+    final url = "https://fnetagents.xyz/get_user_re_balancing_requests/$username/";
     var myLink = Uri.parse(url);
     final response = await http.get(myLink, headers: {
       "Authorization": "Token $uToken"
@@ -41,18 +42,17 @@ class _MomoCashInSummaryState extends State<MomoCashInSummary> {
     if(response.statusCode ==200){
       final codeUnits = response.body.codeUnits;
       var jsonData = const Utf8Decoder().convert(codeUnits);
-      allMomoDeposits = json.decode(jsonData);
-      for(var i in allMomoDeposits){
-        if(!mtnDepositDates.contains(i['date_deposited'].toString().split("T").first)){
-          mtnDepositDates.add(i['date_deposited'].toString().split("T").first);
+      allRebalancing = json.decode(jsonData);
+
+      for(var i in allRebalancing){
+        if(!requestsDates.contains(i['date_requested'].toString().split("T").first)){
+          requestsDates.add(i['date_requested'].toString().split("T").first);
         }
       }
-      print(response.body);
+      setState(() {
+        isLoading = false;
+      });
     }
-
-    setState(() {
-      isLoading = false;
-    });
   }
 
   @override
@@ -65,28 +65,28 @@ class _MomoCashInSummaryState extends State<MomoCashInSummary> {
         uToken = storage.read("token");
       });
     }
-    fetchAllAgentsMtnDeposits();
+    fetchAllRequests();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text("$username's Mtn Deposit Summary"),
+        title: Text("$username's Rebalancing Summary"),
         backgroundColor: secondaryColor,
       ),
       body: isLoading ? const LoadingUi() :
       ListView.builder(
-          itemCount: mtnDepositDates != null ? mtnDepositDates.length : 0,
+          itemCount: requestsDates != null ? requestsDates.length : 0,
           itemBuilder: (context,i){
-            items = mtnDepositDates[i];
+            items = requestsDates[i];
             return Column(
               children: [
                 const SizedBox(height: 10,),
                 GestureDetector(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return MtnDepositSummaryDetail(deposit_date:mtnDepositDates[i],username:username);
+                      return ReBalancingSummaryDetail(date_requested:requestsDates[i],username:username);
                     }));
                   },
                   child: Padding(
@@ -120,13 +120,7 @@ class _MomoCashInSummaryState extends State<MomoCashInSummary> {
             );
           }
       ),
-      // floatingActionButton:FloatingActionButton(
-      //   backgroundColor: secondaryColor,
-      //   child: const Icon(Icons.add,size: 30,),
-      //   onPressed: (){
-      //     Get.to(() => const CashIn());
-      //   },
-      // )
+
     );
   }
 }

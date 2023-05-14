@@ -6,6 +6,9 @@ import 'package:easy_owner/screens/agents/addnewagent.dart';
 import 'package:easy_owner/screens/agents/myagents.dart';
 import 'package:easy_owner/screens/chats/groupchat.dart';
 import 'package:easy_owner/screens/makepayment.dart';
+import 'package:easy_owner/screens/payments/unapprovedpayments.dart';
+import 'package:easy_owner/screens/rebalancing/unapprovedrebalancing.dart';
+import 'package:easy_owner/screens/requests/unapprovedrequests.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -14,10 +17,12 @@ import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:lottie/lottie.dart';
 import 'package:get/get.dart';
 
+import 'allAgents.dart';
 import 'authenticatebyphone.dart';
 
 import 'constants.dart';
 import 'controller/authphonecontroller.dart';
+import 'controller/localnotificationmanager.dart';
 import 'controller/notificationcontroller.dart';
 import 'controller/profilecontroller.dart';
 import 'controller/trialmonthlypayment.dart';
@@ -109,7 +114,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   unTriggerNotifications(int id) async {
-    final requestUrl = "https://fnetagents.xyz/user_read_notifications/$id/";
+    final requestUrl = "https://fnetagents.xyz/un_trigger_notification/$id/";
     final myLink = Uri.parse(requestUrl);
     final response = await http.put(myLink, headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -117,19 +122,19 @@ class _DashboardState extends State<Dashboard> {
       "Authorization": "Token $uToken"
     }, body: {
       "notification_trigger": "Not Triggered",
+      "read": "Read",
     });
     if (response.statusCode == 200) {}
   }
 
   updateReadNotification(int id) async {
-    final requestUrl = "https://fnetagents.xyz/user_read_notifications/$id/";
+    const requestUrl = "https://fnetagents.xyz/read_notification/";
     final myLink = Uri.parse(requestUrl);
     final response = await http.put(myLink, headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       'Accept': 'application/json',
       "Authorization": "Token $uToken"
     }, body: {
-      "read": "Read",
     });
     if (response.statusCode == 200) {}
   }
@@ -166,17 +171,13 @@ class _DashboardState extends State<Dashboard> {
     getAllTriggeredNotifications();
 
 
-    // _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
-    //   getAllTriggeredNotifications();
-    //   notificationsController.getAllNotifications(uToken);
-    //   notificationsController.getAllUnReadNotifications(uToken);
-    //
-    //   getAllUnReadNotifications();
-    //   for (var i in triggered) {
-    //     localNotificationManager.showNotifications(
-    //         i['notification_title'], i['notification_message']);
-    //   }
-    // });
+    _timer = Timer.periodic(const Duration(seconds: 12), (timer) {
+      getAllTriggeredNotifications();
+      getAllUnReadNotifications();
+      for (var i in triggered) {
+        NotificationService().showNotifications(title:i['notification_title'], body:i['notification_message']);
+      }
+    });
 
     _timer = Timer.periodic(const Duration(seconds: 15), (timer) {
       tpController.fetchFreeTrial(uToken);
@@ -196,6 +197,7 @@ class _DashboardState extends State<Dashboard> {
     storage.remove("token");
     storage.remove("agent_code");
     storage.remove("phoneAuthenticated");
+    storage.remove("IsAuthDevice");
     Get.offAll(() => const LoginView());
     const logoutUrl = "https://www.fnetagents.xyz/auth/token/logout";
     final myLink = Uri.parse(logoutUrl);
@@ -223,8 +225,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return  tpController.freeTrialEnded && tpController.monthEnded ? const MakeMonthlyPayment() : phoneNotAuthenticated
-        ?  AdvancedDrawer(
+    return   phoneNotAuthenticated ?  AdvancedDrawer(
         backdropColor: snackBackground,
         controller: _advancedDrawerController,
         animationCurve: Curves.easeInOut,
@@ -473,42 +474,98 @@ class _DashboardState extends State<Dashboard> {
                         ],
                       ),
                       onTap: () {
-                        Get.to(() => const GroupChat());
+                        Get.to(() => const AllAgents());
 
                       },
                     ),
                   ),
                 ],
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Divider(),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "assets/images/ewallet.png",
+                            width: 70,
+                            height: 70,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("Requests"),
+                        ],
+                      ),
+                      onTap: () {
+                        Get.to(() => const AllUnApprovedRequests());
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "assets/images/cash-payment.png",
+                            width: 70,
+                            height: 70,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("Payments"),
+                        ],
+                      ),
+                      onTap: () {
+                        Get.to(() => const AllUnApprovedPayments());
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "assets/images/law.png",
+                            width: 70,
+                            height: 70,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("ReBalancing"),
+                          const Text("Requests"),
+                        ],
+                      ),
+                      onTap: () {
+                        Get.to(() => const AllUnApprovedReBalancing());
 
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Divider(),
               const SizedBox(
                 height: 20,
               ),
             ],
           ),
-          floatingActionButton: !tpController.freeTrialEnded ? FloatingActionButton(
-            backgroundColor:defaultWhite,
-            onPressed: (){
-              Get.defaultDialog(
-                  buttonColor: secondaryColor,
-                  title: "Trial Alert",
-                  content: Column(
-                    children: [
-                      const Text("You are using a trial version of Easy Agent which is ending on "),
-                      Padding(
-                        padding: const EdgeInsets.only(top:18.0),
-                        child: Text(tpController.endingDate,style: const TextStyle(fontWeight: FontWeight.bold),),
-                      )
-                    ],
-                  )
-              );
-            },
-            child: Image.asset("assets/images/freetrial.png"),
-          ):Container(),
+
         )
-    )
-        :
-    Scaffold(
+    ) : Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

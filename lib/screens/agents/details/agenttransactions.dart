@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:easy_owner/constants.dart';
@@ -14,7 +13,10 @@ import '../summaries/bankdepositsummary.dart';
 import '../summaries/bankwithdrawalsummary.dart';
 import '../summaries/momocashinsummary.dart';
 import '../summaries/momowithdrawsummary.dart';
+import '../summaries/paymentsummary.dart';
 import '../summaries/paytosummary.dart';
+import '../summaries/rebalancingsummary.dart';
+import '../summaries/requestsummary.dart';
 
 class AgentDetails extends StatefulWidget {
   final username;
@@ -320,6 +322,74 @@ class _AgentDetailsState extends State<AgentDetails> {
           const SizedBox(
             height: 10,
           ),
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        "assets/images/ewallet.png",
+                        width: 70,
+                        height: 70,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text("Requests"),
+                    ],
+                  ),
+                  onTap: () {
+                    Get.to(() => RequestSummary(username: username,));
+                  },
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        "assets/images/cash-payment.png",
+                        width: 70,
+                        height: 70,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text("Payment"),
+                    ],
+                  ),
+                  onTap: () {
+                    Get.to(()=>PaymentSummary(username:username));
+                  },
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        "assets/images/law.png",
+                        width: 70,
+                        height: 70,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text("Rebalancing"),
+                    ],
+                  ),
+                  onTap: () {
+                    Get.to(() => RebalancingSummary(username:username));
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Divider(),
         ],
       ),
     );

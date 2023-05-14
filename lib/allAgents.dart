@@ -1,63 +1,89 @@
 import 'dart:convert';
 import 'package:easy_owner/screens/chats/privatechat.dart';
 import 'package:easy_owner/widget/loadingui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
 import '../../constants.dart';
+import 'controller/profilecontroller.dart';
 
 
 
-class AllUsers extends StatefulWidget {
-  const AllUsers({Key? key}) : super(key: key);
+class AllAgents extends StatefulWidget {
+  const AllAgents({Key? key}) : super(key: key);
 
   @override
-  _AllUsersState createState() => _AllUsersState();
+  _AllAgentsState createState() => _AllAgentsState();
 }
 
-class _AllUsersState extends State<AllUsers> {
-  late List allUsers = [];
+class _AllAgentsState extends State<AllAgents> {
+  final ProfileController profileController = Get.find();
+  late List allMyAgents = [];
   bool isLoading = true;
   late var items;
   late List customerNumber = [];
   // late String username = "";
   String profileId = "";
+  String supId = "";
   final storage = GetStorage();
   bool hasToken = false;
   late String uToken = "";
+  late List lastMessage = [];
 
-  fetchAllUsers()async{
-    const url = "https://fnetagents.xyz/get_all_user/";
+  fetchAllAgents()async{
+    final url = "https://fnetagents.xyz/get_supervisor_agents/$supId/";
     var myLink = Uri.parse(url);
     final response = await http.get(myLink,headers: {"Authorization": "Token $uToken"});
 
     if(response.statusCode ==200){
       final codeUnits = response.body.codeUnits;
       var jsonData = const Utf8Decoder().convert(codeUnits);
-      allUsers = json.decode(jsonData);
+      allMyAgents = json.decode(jsonData);
     }
 
     setState(() {
       isLoading = false;
-      allUsers = allUsers;
+      allMyAgents = allMyAgents;
     });
+  }
+
+  fetchAllPrivateMessages(String receiverId) async {
+    final url = "https://fnetagents.xyz/get_private_message/${profileController.userId}/$receiverId/";
+    var myLink = Uri.parse(url);
+    final response =
+    await http.get(myLink, headers: {"Authorization": "Token $uToken"});
+
+    if (response.statusCode == 200) {
+      final codeUnits = response.body.codeUnits;
+      var jsonData = const Utf8Decoder().convert(codeUnits);
+      lastMessage = json.decode(jsonData);
+      // print(lastMessage.last['message']);
+      setState(() {
+        isLoading = false;
+      });
+    }
+    else{
+      if (kDebugMode) {
+        // print(response.body);
+      }
+    }
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // if (storage.read("username") != null) {
-    //   setState(() {
-    //     username = storage.read("username");
-    //   });
-    // }
     if (storage.read("token") != null) {
       setState(() {
         hasToken = true;
         uToken = storage.read("token");
+      });
+    }if (storage.read("agent_code") != null) {
+      setState(() {
+        supId = storage.read("agent_code");
       });
     }
     if (storage.read("profile_id") != null) {
@@ -66,14 +92,15 @@ class _AllUsersState extends State<AllUsers> {
         profileId = storage.read("profile_id");
       });
     }
-    fetchAllUsers();
+
+    fetchAllAgents();
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: const Text("All Users"),
+        title: const Text("All My Agents"),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
@@ -81,7 +108,7 @@ class _AllUsersState extends State<AllUsers> {
               setState(() {
                 isLoading = true;
               });
-              fetchAllUsers();
+              fetchAllAgents();
             },
           )
         ],
@@ -89,9 +116,10 @@ class _AllUsersState extends State<AllUsers> {
       body: SafeArea(
           child:
           isLoading ? const LoadingUi() : ListView.builder(
-              itemCount: allUsers != null ? allUsers.length : 0,
+              itemCount: allMyAgents != null ? allMyAgents.length : 0,
               itemBuilder: (context,i){
-                items = allUsers[i];
+                items = allMyAgents[i];
+                fetchAllPrivateMessages(allMyAgents[i]['id'].toString());
                 return Column(
                   children: [
                     const SizedBox(height: 10,),
@@ -108,7 +136,8 @@ class _AllUsersState extends State<AllUsers> {
                           padding: const EdgeInsets.only(bottom: 1),
                           child: ListTile(
                             onTap: (){
-                              Get.to(()=> PrivateChat(receiverUserName:allUsers[i]['username'],receiverId:allUsers[i]['id'].toString()));
+                              Get.to(()=> PrivateChat(receiverUserName:allMyAgents[i]['username'],receiverId:allMyAgents[i]['id'].toString()));
+                              fetchAllPrivateMessages(allMyAgents[i]['id'].toString());
                             },
                             leading: const CircleAvatar(
                                 backgroundColor: primaryColor,
@@ -117,14 +146,18 @@ class _AllUsersState extends State<AllUsers> {
                             ),
                             title: Padding(
                               padding: const EdgeInsets.only(bottom: 2.0),
-                              child: Text(items['username'],style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white),),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(items['username'],style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white),),
+                                  Text(lastMessage.last['timestamp'].toString().split("T").first,style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white),),
+                                ],
+                              ),
                             ),
-                            // subtitle: Column(
-                            //   crossAxisAlignment: CrossAxisAlignment.start,
-                            //   children: [
-                            //     Text(items['company_name'],style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white),),
-                            //   ],
-                            // ),
+                            subtitle:lastMessage.isNotEmpty ? Padding(
+                              padding: const EdgeInsets.only(top:10.0),
+                              child: Text(lastMessage.last['message']),
+                            ) : Container(),
                           ),
                         ),
                       ),

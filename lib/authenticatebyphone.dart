@@ -144,7 +144,7 @@ class _AuthenticateByPhoneState extends State<AuthenticateByPhone> {
     generate5digit();
     authController.fetchAuthPhone(uToken);
 
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 10), () {
       if(authController.isAuthDevice){
         String num = agentPhone.replaceFirst("0", '+233');
         sendSms.sendMySms(num, "EasyAgent","Your code $oTP");
@@ -179,13 +179,13 @@ class _AuthenticateByPhoneState extends State<AuthenticateByPhone> {
                 androidSmsAutofillMethod:  AndroidSmsAutofillMethod.smsRetrieverApi,
                 validator: (pin) {
                   if (pin?.length == 4 && pin == oTP.toString()){
-                    storage.write("phoneAuthenticated", "Authenticated");
-                    storage.write("phoneId", authController.phoneId);
-                    storage.write("phoneModel", authController.phoneModel);
-                    storage.write("phoneBrand", authController.phoneBrand);
-                    storage.write("phoneFingerprint", authController.phoneFingerprint);
-                    tpController.startFreeTrial(uToken);
-                    authController.authenticatePhone(uToken,authController.phoneId,authController.phoneModel,authController.phoneBrand,authController.phoneFingerprint);
+                    // storage.write("phoneAuthenticated", "Authenticated");
+                    // storage.write("phoneId", authController.phoneId);
+                    // storage.write("phoneModel", authController.phoneModel);
+                    // storage.write("phoneBrand", authController.phoneBrand);
+                    // storage.write("phoneFingerprint", authController.phoneFingerprint);
+                    // tpController.startFreeTrial(uToken);
+                    // authController.authenticatePhone(uToken,authController.phoneId,authController.phoneModel,authController.phoneBrand,authController.phoneFingerprint);
                     Get.offAll(()=> const Dashboard());
                   }
                   else{

@@ -77,7 +77,7 @@ class _PrivateChatState extends State<PrivateChat> {
     }
     else{
       if (kDebugMode) {
-        print(response.body);
+        // print(response.body);
       }
     }
   }
