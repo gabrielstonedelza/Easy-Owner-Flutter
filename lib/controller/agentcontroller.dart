@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'package:easy_owner/constants.dart';
 import 'package:easy_owner/dashboard.dart';
+import 'package:easy_owner/login.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+
+import '../sendsms.dart';
 
 class AgentController extends GetxController{
   late List allMyAgents = [];
   bool isLoading = true;
+  final SendSmsController sendSms = SendSmsController();
 
 
   Future<void> getAllMyAgents(String token,String agentCode) async {
@@ -31,7 +35,7 @@ class AgentController extends GetxController{
     }
   }
 
-  addAgent(String agentCode,String email,String username,String fullName,String phoneNum,String password1,String password2,String supervisorCode)async{
+  addAgent(String email,String username,String fullName,String phoneNum,String password1,String password2,String ownerCode)async{
     const requestUrl = "https://fnetagents.xyz/auth/users/";
     final myLink = Uri.parse(requestUrl);
     final response = await http.post(myLink, headers: {
@@ -39,7 +43,6 @@ class AgentController extends GetxController{
       'Accept': 'application/json',
       // "Authorization": "Token $token"
     }, body: {
-      "agent_unique_code": agentCode,
       "email": email,
       "username": username,
       "full_name": fullName,
@@ -47,10 +50,12 @@ class AgentController extends GetxController{
       "password": password1,
       "re_password": password2,
       "user_type": "Agent",
-      "supervisor": supervisorCode,
+      "owner": ownerCode,
       "user_approved": "True",
     });
     if (response.statusCode == 201) {
+      String num = phoneNum.replaceFirst("0", '+233');
+      sendSms.sendMySms(num, "EasyAgent","Hi $username,you have been registered on the Easy Agent portal,please login with these details.Username = $username and Password=$password1.Make sure to click on forgot password to reset it.");
 
       Get.snackbar("Hurray 😀", "Agent was added successfully",
           colorText: defaultWhite,
@@ -63,6 +68,42 @@ class AgentController extends GetxController{
     else{
 
       Get.snackbar("Agent Error", "Agent with same details already exists or check your internet connection",
+        duration: const Duration(seconds:5),
+        colorText: defaultWhite,
+        backgroundColor: warning,
+      );
+    }
+  }
+
+  registerOwner(String email,String username,String fullName,String phoneNum,String password1,String password2)async{
+    const requestUrl = "https://fnetagents.xyz/auth/users/";
+    final myLink = Uri.parse(requestUrl);
+    final response = await http.post(myLink, headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      'Accept': 'application/json',
+      // "Authorization": "Token $token"
+    }, body: {
+      "email": email,
+      "username": username,
+      "full_name": fullName,
+      "phone_number": phoneNum,
+      "password": password1,
+      "re_password": password2,
+      "user_type": "Owner",
+      "owner": "EA391652Ad",
+    });
+    if (response.statusCode == 201) {
+      Get.snackbar("Hurray 😀", "your account was created successfully,however the admin would have to approve your account first",
+          colorText: defaultWhite,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: snackBackground,
+          duration: const Duration(seconds: 10));
+      Get.offAll(() => const LoginView());
+      update();
+    }
+    else{
+
+      Get.snackbar("Account Error", "an owner with same details already exists or check your internet connection",
         duration: const Duration(seconds:5),
         colorText: defaultWhite,
         backgroundColor: warning,

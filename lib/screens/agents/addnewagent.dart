@@ -1,3 +1,4 @@
+import 'package:easy_owner/controller/profilecontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:get/get.dart';
@@ -19,17 +20,16 @@ class _AddNewAgentState extends State<AddNewAgent> {
 
   final AgentController agentController = Get.find();
   late final TextEditingController _usernameController;
-  late final TextEditingController _agentCodeController;
   late final TextEditingController _emailController;
   late final TextEditingController _fullNameController;
   late final TextEditingController _passwordController;
   late final TextEditingController _rePasswordController;
   late final TextEditingController _phoneNumberController;
+  final ProfileController profileController = Get.find();
 
   final _formKey = GlobalKey<FormState>();
   bool isObscured = true;
   final FocusNode _usernameFocusNode = FocusNode();
-  final FocusNode _agentCodeFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _fullNameFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
@@ -65,7 +65,7 @@ class _AddNewAgentState extends State<AddNewAgent> {
       userCode = storage.read("agent_code");
     }
     _usernameController = TextEditingController();
-    _agentCodeController = TextEditingController();
+
     _emailController = TextEditingController();
     _fullNameController = TextEditingController();
     _passwordController = TextEditingController();
@@ -87,12 +87,6 @@ class _AddNewAgentState extends State<AddNewAgent> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          // leading: IconButton(
-          //   icon: const Icon(Icons.arrow_back, size: 25, color: Colors.black),
-          //   onPressed: () {
-          //     Get.back();
-          //   },
-          // ),
           title: const Text("Add New Agent",),
           backgroundColor: secondaryColor,
           elevation: 0,
@@ -114,7 +108,7 @@ class _AddNewAgentState extends State<AddNewAgent> {
                         cursorRadius: const Radius.elliptical(10, 10),
                         cursorWidth: 10,
                         cursorColor: secondaryColor,
-                        decoration: buildInputDecoration("Agent's Username"),
+                        decoration: buildInputDecoration("Username"),
                         keyboardType: TextInputType.text,
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -130,23 +124,7 @@ class _AddNewAgentState extends State<AddNewAgent> {
                         },
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0),
-                      child: TextFormField(
-                        controller: _agentCodeController,
-                        focusNode: _agentCodeFocusNode,
-                        cursorRadius: const Radius.elliptical(10, 10),
-                        cursorWidth: 10,
-                        cursorColor: secondaryColor,
-                        decoration: buildInputDecoration("Agent's Unique Code(Eg.EA123456)"),
-                        keyboardType: TextInputType.text,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Please enter agent code";
-                          }
-                        },
-                      ),
-                    ),
+
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10.0),
                       child: TextFormField(
@@ -155,11 +133,11 @@ class _AddNewAgentState extends State<AddNewAgent> {
                         cursorRadius: const Radius.elliptical(10, 10),
                         cursorWidth: 10,
                         cursorColor: secondaryColor,
-                        decoration: buildInputDecoration("Agent's Email"),
+                        decoration: buildInputDecoration("Email"),
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Please enter agent email";
+                            return "Please enter email";
                           }
                         },
                       ),
@@ -172,11 +150,11 @@ class _AddNewAgentState extends State<AddNewAgent> {
                         cursorRadius: const Radius.elliptical(10, 10),
                         cursorWidth: 10,
                         cursorColor: secondaryColor,
-                        decoration: buildInputDecoration("Agent's Full Name"),
+                        decoration: buildInputDecoration("Full Name"),
                         keyboardType: TextInputType.text,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Please enter agent full name";
+                            return "Please enter full name";
                           }
                         },
                       ),
@@ -189,11 +167,11 @@ class _AddNewAgentState extends State<AddNewAgent> {
                         cursorRadius: const Radius.elliptical(10, 10),
                         cursorWidth: 10,
                         cursorColor: secondaryColor,
-                        decoration: buildInputDecoration("Agent's Phone Number"),
+                        decoration: buildInputDecoration("Phone Number"),
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Please enter agent phone number";
+                            return "Please enter phone number";
                           }
                         },
                       ),
@@ -258,7 +236,7 @@ class _AddNewAgentState extends State<AddNewAgent> {
                         if (!_formKey.currentState!.validate()) {
                           return;
                         } else {
-                          agentController.addAgent(_agentCodeController.text.trim(),_emailController.text.trim(), _usernameController.text.trim(), _fullNameController.text.trim(), _phoneNumberController.text.trim(), _passwordController.text.trim(), _rePasswordController.text.trim(), userCode);
+                          agentController.addAgent(_emailController.text.trim(), _usernameController.text.trim(), _fullNameController.text.trim(), _phoneNumberController.text.trim(), _passwordController.text.trim(), _rePasswordController.text.trim(), profileController.ownersCode);
                         }
                       },
                       decoration: const NeoPopTiltedButtonDecoration(

@@ -13,9 +13,9 @@ class LoginController extends GetxController {
   final storage = GetStorage();
   bool isLoggingIn = false;
   bool isUser = false;
-  late List allSupervisors = [];
-  late List supervisorsCodes = [];
-  late List supervisorsEmails = [];
+  late List allOwners = [];
+  late List ownerUsernames = [];
+  late List ownersEmails = [];
   late int oTP = 0;
   late String myToken = "";
 
@@ -34,11 +34,12 @@ class LoginController extends GetxController {
       });
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
-        allSupervisors.assignAll(jsonData);
-        for (var i in allSupervisors) {
-          supervisorsCodes.add(i['agent_unique_code']);
+        allOwners.assignAll(jsonData);
+        for (var i in allOwners) {
+          ownerUsernames.add(i['username']);
         }
         update();
+        print(ownerUsernames);
       }
     } catch (e) {
       Get.snackbar("Sorry",
@@ -48,12 +49,12 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> loginUser(String agentCode, String password) async {
+  Future<void> loginUser(String username, String password) async {
     const loginUrl = "https://fnetagents.xyz/auth/token/login/";
     final myLink = Uri.parse(loginUrl);
     http.Response response = await client.post(myLink,
         headers: {"Content-Type": "application/x-www-form-urlencoded"},
-        body: {"agent_unique_code": agentCode, "password": password});
+        body: {"username": username, "password": password});
 
     if (response.statusCode == 200) {
       final resBody = response.body;
@@ -61,11 +62,11 @@ class LoginController extends GetxController {
       var userToken = jsonData['auth_token'];
 
       storage.write("token", userToken);
-      storage.write("agent_code", agentCode);
+      storage.write("agent_code", username);
       isLoggingIn = false;
       isUser = true;
 
-      if (supervisorsCodes.contains(agentCode)) {
+      if (ownerUsernames.contains(username)) {
         Get.offAll(() => const AuthenticateByPhone());
       } else {
         Get.snackbar(

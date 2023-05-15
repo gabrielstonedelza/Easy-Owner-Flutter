@@ -5,9 +5,11 @@ import 'package:easy_owner/screens/aboutpage.dart';
 import 'package:easy_owner/screens/agents/addnewagent.dart';
 import 'package:easy_owner/screens/agents/allagentrequestwithlimits.dart';
 import 'package:easy_owner/screens/agents/myagents.dart';
+import 'package:easy_owner/screens/agents/myagentsaccounts.dart';
 import 'package:easy_owner/screens/payments/unapprovedpayments.dart';
 import 'package:easy_owner/screens/rebalancing/unapprovedrebalancing.dart';
 import 'package:easy_owner/screens/requests/unapprovedrequests.dart';
+import 'package:easy_owner/widget/loadingui.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -138,6 +140,32 @@ class _DashboardState extends State<Dashboard> {
     if (response.statusCode == 200) {}
   }
 
+  List profileDetails = [];
+  late String userId = "";
+  late String ownersCode = "";
+  bool accountApproved = false;
+
+  Future<void> getUserDetails() async {
+    const profileLink = "https://fnetagents.xyz/get_user_details/";
+    var link = Uri.parse(profileLink);
+    http.Response response = await http.get(link, headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Authorization": "Token $uToken"
+    });
+    if (response.statusCode == 200) {
+      var jsonData = jsonDecode(response.body);
+      profileDetails = jsonData;
+      for(var i in profileDetails){
+        userId = i['id'].toString();
+        ownersCode = i['agent_unique_code'];
+        accountApproved = i['user_approved'];
+      }
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
 
   @override
   void initState() {
@@ -168,6 +196,7 @@ class _DashboardState extends State<Dashboard> {
     profileController.getUserDetails(uToken);
     profileController.getUserProfile(uToken);
     getAllTriggeredNotifications();
+    getUserDetails();
 
 
     _timer = Timer.periodic(const Duration(seconds: 12), (timer) {
@@ -182,6 +211,7 @@ class _DashboardState extends State<Dashboard> {
       tpController.fetchFreeTrial(uToken);
       tpController.fetchAccountBalance(uToken);
       tpController.fetchMonthlyPayment(uToken);
+      getUserDetails();
       for (var e in triggered) {
         unTriggerNotifications(e["id"]);
       }
@@ -189,8 +219,6 @@ class _DashboardState extends State<Dashboard> {
     // localNotificationManager
     //     .setOnShowNotificationReceive(onNotificationReceive);
   }
-
-  // onNotificationReceive(ReceiveNotification notification) {}
 
   logoutUser() async {
     storage.remove("token");
@@ -224,7 +252,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return   phoneNotAuthenticated ?  AdvancedDrawer(
+    return  isLoading  ? const Scaffold(body: LoadingUi(),) : phoneNotAuthenticated ?  AdvancedDrawer(
         backdropColor: snackBackground,
         controller: _advancedDrawerController,
         animationCurve: Curves.easeInOut,
@@ -330,30 +358,22 @@ class _DashboardState extends State<Dashboard> {
                     height: 50,
                   ),
                 ),
-                DefaultTextStyle(
-                  style: const TextStyle(
+                const DefaultTextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     color: Colors.white54,
                   ),
-                  child: Column(
-                    children: [
-                      const Text(
-                          'App created by Havens Software Development'),
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                          vertical: 16.0,
-                        ),
-                        child: const Text(
-                            '+233597565022'),
-                      ),
-                    ],
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom:8.0),
+                    child: Text(
+                        'App created by Havens Software Development'),
                   ),
                 ),
               ],
             ),
           ),
         ),
-        child: Scaffold(
+        child:  Scaffold(
           appBar: AppBar(
             leading: IconButton(
               onPressed: _handleMenuButtonPressed,
@@ -370,11 +390,13 @@ class _DashboardState extends State<Dashboard> {
                 },
               ),
             ),
-            title: Text(agentCode,
+            title: Text(ownersCode,
                 style: const TextStyle(fontWeight: FontWeight.bold)),
             backgroundColor: secondaryColor,
             actions: [
-              // IconButton(onPressed: () {  }, icon: const Icon(Icons.notifications),)
+              // IconButton(onPressed: () {
+              //   NotificationService().showNotifications(title:"hi", body:"i am good ");
+              // }, icon: const Icon(Icons.notifications),),
               Padding(
                 padding: const EdgeInsets.only(right: 23.0),
                 child: Row(
@@ -410,7 +432,7 @@ class _DashboardState extends State<Dashboard> {
               ),
             ],
           ),
-          body:  ListView(
+          body: accountApproved ? ListView(
             children: [
               const SizedBox(
                 height: 30,
@@ -560,80 +582,96 @@ class _DashboardState extends State<Dashboard> {
               const SizedBox(
                 height: 20,
               ),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: GestureDetector(
-              //         child: Column(
-              //           children: [
-              //             Image.asset(
-              //               "assets/images/meters.png",
-              //               width: 70,
-              //               height: 70,
-              //             ),
-              //             const SizedBox(
-              //               height: 10,
-              //             ),
-              //             const Text("Agent Request"),
-              //             const Text("Limit"),
-              //           ],
-              //         ),
-              //         onTap: () {
-              //           Get.to(() => const AllAgentsRequestsLimit());
-              //         },
-              //       ),
-              //     ),
-              //     Expanded(
-              //       child: GestureDetector(
-              //         child: Column(
-              //           children: [
-              //             // Image.asset(
-              //             //   "assets/images/cash-payment.png",
-              //             //   width: 70,
-              //             //   height: 70,
-              //             // ),
-              //             // const SizedBox(
-              //             //   height: 10,
-              //             // ),
-              //             // const Text("Payments"),
-              //           ],
-              //         ),
-              //         onTap: () {
-              //           // Get.to(() => const AllUnApprovedPayments());
-              //         },
-              //       ),
-              //     ),
-              //     Expanded(
-              //       child: GestureDetector(
-              //         child: Column(
-              //           children: [
-              //             // Image.asset(
-              //             //   "assets/images/law.png",
-              //             //   width: 70,
-              //             //   height: 70,
-              //             // ),
-              //             // const SizedBox(
-              //             //   height: 10,
-              //             // ),
-              //             // const Text("ReBalancing"),
-              //             // const Text("Requests"),
-              //           ],
-              //         ),
-              //         onTap: () {
-              //           // Get.to(() => const AllUnApprovedReBalancing());
-              //
-              //         },
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // const SizedBox(
-              //   height: 20,
-              // ),
-              // const Divider(),
-              // const SizedBox(
-              //   height: 20,
-              // ),
+              Row(
+                children: [
+
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "assets/images/mywallet.png",
+                            width: 70,
+                            height: 70,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("Agent Accounts"),
+                        ],
+                      ),
+                      onTap: () {
+                        Get.to(() => const MyAgentsAccounts());
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          // Image.asset(
+                          //   "assets/images/meters.png",
+                          //   width: 70,
+                          //   height: 70,
+                          // ),
+                          // const SizedBox(
+                          //   height: 10,
+                          // ),
+                          // const Text("Agent Request"),
+                          // const Text("Limit"),
+                        ],
+                      ),
+                      onTap: () {
+                        // Get.to(() => const AllAgentsRequestsLimit());
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          // Image.asset(
+                          //   "assets/images/law.png",
+                          //   width: 70,
+                          //   height: 70,
+                          // ),
+                          // const SizedBox(
+                          //   height: 10,
+                          // ),
+                          // const Text("ReBalancing"),
+                          // const Text("Requests"),
+                        ],
+                      ),
+                      onTap: () {
+                        // Get.to(() => const AllUnApprovedReBalancing());
+
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Divider(),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          ) : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Lottie.asset("assets/images/136192-rejected.json"),
+              const Padding(
+                padding: EdgeInsets.all(18.0),
+                child: Center(
+                  child: Text("Sorry,the administrator hasn't approved your account yet,please kindly wait.",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                ),
+              ),
+              const Center(
+                child: Text("Thank you.",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+              ),
             ],
           ),
 
@@ -661,7 +699,6 @@ class _DashboardState extends State<Dashboard> {
           )
         ],
       ),
-
     );
   }
 

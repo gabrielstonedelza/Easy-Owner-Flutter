@@ -10,6 +10,7 @@ import '../constants.dart';
 import 'controller/authphonecontroller.dart';
 import 'controller/logincontroller.dart';
 import 'loginabout.dart';
+import 'ownerregistration.dart';
 
 
 class LoginView extends StatefulWidget {
@@ -26,9 +27,9 @@ class _LoginViewState extends State<LoginView> {
   late String uToken = "";
 
   final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _agentCodeController;
+  late final TextEditingController _usernameController;
   late final TextEditingController _passwordController;
-  FocusNode agentCodeFocusNode = FocusNode();
+  FocusNode usernameFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
 
   final Uri _url = Uri.parse('https://fnetagents.xyz/password-reset/');
@@ -56,7 +57,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   void initState() {
     super.initState();
-    _agentCodeController = TextEditingController();
+    _usernameController = TextEditingController();
     _passwordController = TextEditingController();
     controller.getAllSupervisors();
     if (storage.read("token") != null) {
@@ -70,7 +71,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   void dispose() {
     super.dispose();
-    _agentCodeController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
   }
 
@@ -84,12 +85,20 @@ class _LoginViewState extends State<LoginView> {
             padding: const EdgeInsets.only(right: 25.0),
             child: TextButton(
               onPressed: (){
+                Get.to(() => const OwnerRegistration());
+              },
+              child: const Text("Register",style: TextStyle(color: secondaryColor,fontSize: 18,fontWeight: FontWeight.bold),),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 25.0),
+            child: TextButton(
+              onPressed: (){
                 Get.to(() => const LoginAboutPage());
               },
               child: const Text("About",style: TextStyle(color: secondaryColor,fontSize: 18,fontWeight: FontWeight.bold),),
             ),
           ),
-
         ],
       ),
       body: ListView(
@@ -110,16 +119,16 @@ class _LoginViewState extends State<LoginView> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: TextFormField(
-                      controller: _agentCodeController,
-                      focusNode: agentCodeFocusNode,
+                      controller: _usernameController,
+                      focusNode: usernameFocusNode,
                       cursorColor: secondaryColor,
                       cursorRadius: const Radius.elliptical(10, 10),
                       cursorWidth: 10,
-                      decoration: buildInputDecoration("Agent Code"),
+                      decoration: buildInputDecoration("Username"),
                       keyboardType: TextInputType.text,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "Please enter agent code";
+                          return "Please enter username";
                         }
                       },
                     ),
@@ -179,7 +188,7 @@ class _LoginViewState extends State<LoginView> {
                       if (!_formKey.currentState!.validate()) {
                         return;
                       } else {
-                        controller.loginUser(_agentCodeController.text.trim(),
+                        controller.loginUser(_usernameController.text.trim(),
                           _passwordController.text.trim(),);
                         storage.write("phoneAuthenticated", "Authenticated");
                         storage.write("phoneId", authController.phoneId);

@@ -1,6 +1,5 @@
 
 import 'package:easy_owner/controller/notificationcontroller.dart';
-import 'package:easy_owner/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';

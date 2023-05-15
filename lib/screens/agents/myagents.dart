@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 
 import '../../constants.dart';
 import '../../controller/agentcontroller.dart';
-import '../../widget/loadingui.dart';
+import '../../controller/profilecontroller.dart';
 import 'details/agenttransactions.dart';
 
 
@@ -22,6 +22,7 @@ class MyAgents extends StatefulWidget {
 
 class _MyAgentsState extends State<MyAgents> {
   final AgentController controller = Get.find();
+  final ProfileController profileController = Get.find();
   late String uToken = "";
   late String agentCode = "";
   final storage = GetStorage();
@@ -35,7 +36,7 @@ class _MyAgentsState extends State<MyAgents> {
   Future<void> getAllMyAgents() async {
     try {
       isLoading = true;
-      final completedRides = "https://fnetagents.xyz/get_all_my_agents/$agentCode";
+      final completedRides = "https://fnetagents.xyz/get_all_my_agents/${profileController.ownersCode}";
       var link = Uri.parse(completedRides);
       http.Response response = await http.get(link, headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -154,10 +155,10 @@ class _MyAgentsState extends State<MyAgents> {
         agentCode = storage.read("agent_code");
       });
     }
-    controller.getAllMyAgents(uToken,agentCode);
-    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      controller.getAllMyAgents(uToken,agentCode);
-    });
+    controller.getAllMyAgents(uToken,profileController.ownersCode);
+    // _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+    //   controller.getAllMyAgents(uToken,profileController.ownersCode);
+    // });
   }
 
   @override
