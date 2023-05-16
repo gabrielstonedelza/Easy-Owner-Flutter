@@ -30,6 +30,7 @@ import 'controller/trialmonthlypayment.dart';
 import 'login.dart';
 import 'package:badges/badges.dart' as badges;
 
+import 'meetings.dart';
 import 'notifications.dart';
 
 class Dashboard extends StatefulWidget {
@@ -609,20 +610,19 @@ class _DashboardState extends State<Dashboard> {
                     child: GestureDetector(
                       child: Column(
                         children: [
-                          // Image.asset(
-                          //   "assets/images/meters.png",
-                          //   width: 70,
-                          //   height: 70,
-                          // ),
-                          // const SizedBox(
-                          //   height: 10,
-                          // ),
-                          // const Text("Agent Request"),
-                          // const Text("Limit"),
+                          Image.asset(
+                            "assets/images/coworking.png",
+                            width: 70,
+                            height: 70,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("Meetings"),
                         ],
                       ),
                       onTap: () {
-                        // Get.to(() => const AllAgentsRequestsLimit());
+                        Get.to(() => const Meetings());
                       },
                     ),
                   ),
