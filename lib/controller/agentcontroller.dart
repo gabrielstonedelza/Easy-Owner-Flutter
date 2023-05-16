@@ -66,12 +66,12 @@ class AgentController extends GetxController{
       update();
     }
     else{
-
       Get.snackbar("Agent Error", "Agent with same details already exists or check your internet connection",
         duration: const Duration(seconds:5),
         colorText: defaultWhite,
         backgroundColor: warning,
       );
+      return;
     }
   }
 
@@ -93,6 +93,7 @@ class AgentController extends GetxController{
       "owner": "EA391652Ad",
     });
     if (response.statusCode == 201) {
+      sendSms.sendMySms("+233244529353", "EasyAgent","Hi Mr Frank Fordjour,a new owner with the name  $fullName has registered on the Easy Portal,please login and check.");
       Get.snackbar("Hurray 😀", "your account was created successfully,however the admin would have to approve your account first",
           colorText: defaultWhite,
           snackPosition: SnackPosition.BOTTOM,
