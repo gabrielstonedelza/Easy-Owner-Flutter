@@ -77,7 +77,7 @@ class JoinScreen extends StatelessWidget {
                   cursorWidth: 10,
                   cursorColor: secondaryColor,
                   decoration: buildInputDecoration("Enter Meeting Id"),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please enter meeting id";
@@ -96,7 +96,7 @@ class JoinScreen extends StatelessWidget {
                   if (!_formKey.currentState!.validate()) {
                     return;
                   } else {
-                    onJoinButtonPressed(context, Mode.VIEWER);
+                    onJoinButtonPressed(context, Mode.CONFERENCE);
                   }
                 },
                 decoration: const NeoPopTiltedButtonDecoration(
