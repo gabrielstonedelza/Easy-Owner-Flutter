@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:easy_owner/screens/chats/groupchat.dart';
+import 'package:easy_owner/screens/chats/agentsGroupchat.dart';
 import 'package:easy_owner/widget/loadingui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -104,12 +104,7 @@ class _NotificationsState extends State<Notifications> {
                     if(notifications[index]['notification_title'] == "New fraud alert"){
                       Get.to(() => const Fraud());
                     }
-                    if(notifications[index]['notification_title'] == "New group message"){
-                      Get.to(() => const GroupChat());
-                    }
-                    if(notifications[index]['notification_title'] == "New private message"){
-                      Get.to(() => const GroupChat());
-                    }
+
                   },
                   title: Text(items['notification_title'],style: const TextStyle(fontWeight: FontWeight.bold,)),
                   subtitle: Padding(

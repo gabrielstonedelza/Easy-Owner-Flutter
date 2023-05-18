@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:animate_do/animate_do.dart';
-
 import 'package:flutter/foundation.dart';
 import "package:flutter/material.dart";
 import "package:get/get.dart";
@@ -10,18 +9,17 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
-import '../../allAgents.dart';
 import '../../constants.dart';
+import '../../controller/profilecontroller.dart';
 
-
-class GroupChat extends StatefulWidget {
-  const GroupChat({Key? key}) : super(key: key);
+class AgentsGroupChat extends StatefulWidget {
+  const AgentsGroupChat({Key? key}) : super(key: key);
 
   @override
-  State<GroupChat> createState() => _GroupChatState();
+  State<AgentsGroupChat> createState() => _AgentsGroupChatState();
 }
 
-class _GroupChatState extends State<GroupChat> {
+class _AgentsGroupChatState extends State<AgentsGroupChat> {
   late String username = "";
   final storage = GetStorage();
   bool hasToken = false;
@@ -32,15 +30,20 @@ class _GroupChatState extends State<GroupChat> {
   late final TextEditingController messageController = TextEditingController();
   final FocusNode messageFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
+  final ProfileController controller = Get.find();
+  late List ownerDetails = [];
+  late String ownerId = "";
 
   sendGroupMessage() async {
-    const bidUrl = "https://fnetagents.xyz/send_group_message/";
+    const bidUrl = "https://fnetagents.xyz/send_agents_group_message/";
     final myLink = Uri.parse(bidUrl);
     http.Response response = await http.post(myLink, headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       "Authorization": "Token $uToken"
     }, body: {
       "message": messageController.text,
+      "agent": controller.userId,
+      "owner": ownerId,
     });
     if (response.statusCode == 201) {
     } else {
@@ -51,7 +54,7 @@ class _GroupChatState extends State<GroupChat> {
   }
 
   fetchAllGroupMessages() async {
-    const url = "https://fnetagents.xyz/get_all_group_message/";
+    final url = "https://fnetagents.xyz/get_agents_group_messages/$ownerId/";
     var myLink = Uri.parse(url);
     final response =
     await http.get(myLink, headers: {"Authorization": "Token $uToken"});
@@ -64,7 +67,23 @@ class _GroupChatState extends State<GroupChat> {
         isLoading = false;
       });
     }
-    else{
+  }
+  fetchOwnerWithCode() async {
+    final url = "https://fnetagents.xyz/get_supervisor_with_code/${controller.ownersCode}/";
+    var myLink = Uri.parse(url);
+    final response =
+    await http.get(myLink, headers: {"Authorization": "Token $uToken"});
+
+    if (response.statusCode == 200) {
+      final codeUnits = response.body.codeUnits;
+      var jsonData = const Utf8Decoder().convert(codeUnits);
+      ownerDetails = json.decode(jsonData);
+      for(var i in ownerDetails){
+        ownerId = i['id'].toString();
+      }
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -82,6 +101,13 @@ class _GroupChatState extends State<GroupChat> {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       fetchAllGroupMessages();
     });
+    fetchOwnerWithCode();
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    _timer.cancel();
   }
 
   @override
@@ -90,15 +116,9 @@ class _GroupChatState extends State<GroupChat> {
         child: Scaffold(
             backgroundColor: Colors.grey,
             appBar: AppBar(
-              title: const Text("Group Chats"),
+              title: const Text("Agents Group Chats"),
               backgroundColor: secondaryColor,
-              actions: [
-                IconButton(
-                    onPressed: () {
-                      Get.to(() => const AllAgents());
-                    },
-                    icon: const Icon(Icons.people_alt))
-              ],
+
             ),
             body: Column(
               children: [
@@ -139,14 +159,14 @@ class _GroupChatState extends State<GroupChat> {
                                       mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                       children: [
+                                        // Text(
+                                        //   element['get_phone_number'],
+                                        //   style: const TextStyle(
+                                        //       fontSize: 12,
+                                        //       fontWeight: FontWeight.bold),
+                                        // ),
                                         Text(
-                                          element['get_phone_number'],
-                                          style: const TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          element['get_username'],
+                                          element['get_agent_username'],
                                           style: const TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.bold),

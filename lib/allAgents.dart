@@ -34,7 +34,7 @@ class _AllAgentsState extends State<AllAgents> {
   late List lastMessage = [];
 
   fetchAllAgents()async{
-    final url = "https://fnetagents.xyz/get_supervisor_agents/$supId/";
+    final url = "https://fnetagents.xyz/get_supervisor_agents/${profileController.ownersCode}/";
     var myLink = Uri.parse(url);
     final response = await http.get(myLink,headers: {"Authorization": "Token $uToken"});
 
@@ -119,7 +119,7 @@ class _AllAgentsState extends State<AllAgents> {
               itemCount: allMyAgents != null ? allMyAgents.length : 0,
               itemBuilder: (context,i){
                 items = allMyAgents[i];
-                fetchAllPrivateMessages(allMyAgents[i]['id'].toString());
+                // fetchAllPrivateMessages(allMyAgents[i]['id'].toString());
                 return Column(
                   children: [
                     const SizedBox(height: 10,),
@@ -136,8 +136,8 @@ class _AllAgentsState extends State<AllAgents> {
                           padding: const EdgeInsets.only(bottom: 1),
                           child: ListTile(
                             onTap: (){
-                              Get.to(()=> PrivateChat(receiverUserName:allMyAgents[i]['username'],receiverId:allMyAgents[i]['id'].toString()));
-                              fetchAllPrivateMessages(allMyAgents[i]['id'].toString());
+                              // Get.to(()=> PrivateChat();
+                              // fetchAllPrivateMessages(allMyAgents[i]['id'].toString());
                             },
                             leading: const CircleAvatar(
                                 backgroundColor: primaryColor,
@@ -154,10 +154,10 @@ class _AllAgentsState extends State<AllAgents> {
                                 ],
                               ),
                             ),
-                            subtitle:lastMessage.isNotEmpty ? Padding(
-                              padding: const EdgeInsets.only(top:10.0),
-                              child: Text(lastMessage.last['message']),
-                            ) : Container(),
+                            // subtitle:lastMessage.isNotEmpty ? Padding(
+                            //   padding: const EdgeInsets.only(top:10.0),
+                            //   child: Text(lastMessage.last['message']),
+                            // ) : Container(),
                           ),
                         ),
                       ),

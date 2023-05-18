@@ -13,22 +13,18 @@ import 'package:http/http.dart' as http;
 
 import '../../constants.dart';
 import '../../controller/profilecontroller.dart';
+import '../../widget/loadingui.dart';
 
 
 class PrivateChat extends StatefulWidget {
-  final receiverId;
-  String receiverUserName;
-  PrivateChat({Key? key,required this.receiverId,required this.receiverUserName}) : super(key: key);
+  PrivateChat({Key? key,}) : super(key: key);
 
   @override
-  State<PrivateChat> createState() => _PrivateChatState(receiverId:this.receiverId,receiverUserName:this.receiverUserName);
+  State<PrivateChat> createState() => _PrivateChatState();
 }
 
 class _PrivateChatState extends State<PrivateChat> {
   final ProfileController profileController = Get.find();
-  final receiverId;
-  String receiverUserName;
-  _PrivateChatState({required this.receiverId,required this.receiverUserName});
   late String username = "";
   String profileId = "";
   final storage = GetStorage();
@@ -40,6 +36,33 @@ class _PrivateChatState extends State<PrivateChat> {
   late final TextEditingController messageController = TextEditingController();
   final FocusNode messageFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
+  late List adminDetails = [];
+  late String adminId = "";
+  late String adminUsername = "";
+
+  Future<void> fetchAdminDetails() async {
+    const postUrl = "https://fnetagents.xyz/get_de_admin/";
+    final pLink = Uri.parse(postUrl);
+    http.Response res = await http.get(pLink, headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      'Accept': 'application/json',
+      "Authorization": "Token $uToken"
+    });
+    if (res.statusCode == 200) {
+      final codeUnits = res.body;
+      var jsonData = jsonDecode(codeUnits);
+      var allPosts = jsonData;
+      adminDetails.assignAll(allPosts);
+      for(var i in adminDetails){
+        adminId = i['id'].toString();
+        adminUsername = i['username'];
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+    }
+  }
 
 
   sendPrivateMessage() async {
@@ -50,7 +73,7 @@ class _PrivateChatState extends State<PrivateChat> {
       "Authorization": "Token $uToken"
     }, body: {
       "sender": profileController.userId,
-      "receiver": receiverId,
+      "receiver": adminId,
       "message": messageController.text,
     });
     if (response.statusCode == 201) {
@@ -62,7 +85,7 @@ class _PrivateChatState extends State<PrivateChat> {
   }
 
   fetchAllPrivateMessages() async {
-    final url = "https://fnetagents.xyz/get_private_message/${profileController.userId}/$receiverId/";
+    final url = "https://fnetagents.xyz/get_private_message/${profileController.userId}/$adminId/";
     var myLink = Uri.parse(url);
     final response =
     await http.get(myLink, headers: {"Authorization": "Token $uToken"});
@@ -77,7 +100,7 @@ class _PrivateChatState extends State<PrivateChat> {
     }
     else{
       if (kDebugMode) {
-        // print(response.body);
+        print(response.body);
       }
     }
   }
@@ -93,6 +116,7 @@ class _PrivateChatState extends State<PrivateChat> {
       });
     }
 
+    fetchAdminDetails();
     fetchAllPrivateMessages();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       fetchAllPrivateMessages();
@@ -105,10 +129,10 @@ class _PrivateChatState extends State<PrivateChat> {
         child:Scaffold(
             backgroundColor:Colors.grey,
             appBar: AppBar(
-              title: Text(receiverUserName),
+              title: Text(adminUsername),
               backgroundColor: secondaryColor,
             ),
-            body: Column(
+            body: isLoading ? const LoadingUi() : Column(
               children: [
                 Expanded(
                   child: GroupedListView<dynamic, String>(

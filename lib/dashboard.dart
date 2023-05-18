@@ -6,6 +6,9 @@ import 'package:easy_owner/screens/agents/addnewagent.dart';
 import 'package:easy_owner/screens/agents/allagentrequestwithlimits.dart';
 import 'package:easy_owner/screens/agents/myagents.dart';
 import 'package:easy_owner/screens/agents/myagentsaccounts.dart';
+import 'package:easy_owner/screens/chats/agentsGroupchat.dart';
+import 'package:easy_owner/screens/chats/owersgroupchat.dart';
+import 'package:easy_owner/screens/chats/privatechat.dart';
 import 'package:easy_owner/screens/payments/unapprovedpayments.dart';
 import 'package:easy_owner/screens/rebalancing/unapprovedrebalancing.dart';
 import 'package:easy_owner/screens/requests/unapprovedrequests.dart';
@@ -17,6 +20,7 @@ import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:lottie/lottie.dart';
 import 'package:get/get.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'allAgents.dart';
 import 'authenticatebyphone.dart';
@@ -27,6 +31,7 @@ import 'controller/localnotificationmanager.dart';
 import 'controller/notificationcontroller.dart';
 import 'controller/profilecontroller.dart';
 import 'controller/trialmonthlypayment.dart';
+import 'join_screen.dart';
 import 'login.dart';
 import 'package:badges/badges.dart' as badges;
 
@@ -496,8 +501,79 @@ class _DashboardState extends State<Dashboard> {
                         ],
                       ),
                       onTap: () {
-                        Get.to(() => const AllAgents());
-
+                        showMaterialModalBottomSheet(
+                          context: context,
+                          builder: (context) => SizedBox(
+                            height: 200,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top:25.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: GestureDetector(
+                                      child: Column(
+                                        children: [
+                                          Image.asset(
+                                            "assets/images/authorization.png",
+                                            width: 70,
+                                            height: 70,
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          const Text("Admin"),
+                                        ],
+                                      ),
+                                      onTap: () {
+                                        Get.to(()=> PrivateChat());
+                                      },
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: GestureDetector(
+                                      child: Column(
+                                        children: [
+                                          Image.asset(
+                                            "assets/images/cashier.png",
+                                            width: 70,
+                                            height: 70,
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          const Text("Owners"),
+                                        ],
+                                      ),
+                                      onTap: () {
+                                        Get.to(()=> const OwnersGroupChat());
+                                      },
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: GestureDetector(
+                                      child: Column(
+                                        children: [
+                                          Image.asset(
+                                            "assets/images/team1.png",
+                                            width: 70,
+                                            height: 70,
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          const Text("Agent Chat"),
+                                        ],
+                                      ),
+                                      onTap: () {
+                                        Get.to(() => const AgentsGroupChat());
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ),
@@ -630,21 +706,19 @@ class _DashboardState extends State<Dashboard> {
                     child: GestureDetector(
                       child: Column(
                         children: [
-                          // Image.asset(
-                          //   "assets/images/law.png",
-                          //   width: 70,
-                          //   height: 70,
-                          // ),
-                          // const SizedBox(
-                          //   height: 10,
-                          // ),
-                          // const Text("ReBalancing"),
-                          // const Text("Requests"),
+                          Image.asset(
+                            "assets/images/live-stream.png",
+                            width: 70,
+                            height: 70,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("Live Meeting"),
                         ],
                       ),
                       onTap: () {
-                        // Get.to(() => const AllUnApprovedReBalancing());
-
+                        Get.to(() => JoinScreen());
                       },
                     ),
                   ),
