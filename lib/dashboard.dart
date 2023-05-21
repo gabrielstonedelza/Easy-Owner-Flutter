@@ -11,6 +11,7 @@ import 'package:easy_owner/screens/chats/owersgroupchat.dart';
 import 'package:easy_owner/screens/chats/privatechat.dart';
 import 'package:easy_owner/screens/payments/unapprovedpayments.dart';
 import 'package:easy_owner/screens/rebalancing/unapprovedrebalancing.dart';
+import 'package:easy_owner/screens/reportstoday.dart';
 import 'package:easy_owner/screens/requests/unapprovedrequests.dart';
 import 'package:easy_owner/widget/loadingui.dart';
 import 'package:get_storage/get_storage.dart';
@@ -719,6 +720,78 @@ class _DashboardState extends State<Dashboard> {
                       ),
                       onTap: () {
                         Get.to(() => JoinScreen());
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Divider(),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "assets/images/market-analysis.png",
+                            width: 70,
+                            height: 70,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("Reports"),
+                        ],
+                      ),
+                      onTap: () {
+                        Get.to(() => const ReportsToday());
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          // Image.asset(
+                          //   "assets/images/coworking.png",
+                          //   width: 70,
+                          //   height: 70,
+                          // ),
+                          // const SizedBox(
+                          //   height: 10,
+                          // ),
+                          // const Text("Meetings"),
+                        ],
+                      ),
+                      onTap: () {
+                        // Get.to(() => const Meetings());
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          // Image.asset(
+                          //   "assets/images/live-stream.png",
+                          //   width: 70,
+                          //   height: 70,
+                          // ),
+                          // const SizedBox(
+                          //   height: 10,
+                          // ),
+                          // const Text("Live Meeting"),
+                        ],
+                      ),
+                      onTap: () {
+                        // Get.to(() => JoinScreen());
                       },
                     ),
                   ),

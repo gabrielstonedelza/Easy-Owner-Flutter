@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:get/get.dart';
 import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';
-
+import 'package:http/http.dart' as http;
 import '../../constants.dart';
 import '../../controller/agentcontroller.dart';
 import '../../widget/loadingui.dart';
@@ -50,6 +52,37 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
     });
   }
 
+  late List adminDetails = [];
+  late String adminId = "";
+  late String adminUsername = "";
+  late String uniqueCode = "";
+  bool isLoading = true;
+
+  Future<void> fetchAdminDetails() async {
+    const postUrl = "https://fnetagents.xyz/get_de_admin/";
+    final pLink = Uri.parse(postUrl);
+    http.Response res = await http.get(pLink, headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      'Accept': 'application/json',
+    });
+    if (res.statusCode == 200) {
+      final codeUnits = res.body;
+      var jsonData = jsonDecode(codeUnits);
+      var allPosts = jsonData;
+      adminDetails.assignAll(allPosts);
+      for(var i in adminDetails){
+        adminId = i['id'].toString();
+        adminUsername = i['username'];
+        uniqueCode = i['agent_unique_code'];
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      print(res.body);
+    }
+  }
+
 
   @override
   void initState() {
@@ -59,15 +92,14 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
     if (storage.read("userToken") != null) {
       uToken = storage.read("userToken");
     }
-    if (storage.read("agent_code") != null) {
-      userCode = storage.read("agent_code");
-    }
+
     _usernameController = TextEditingController();
     _emailController = TextEditingController();
     _fullNameController = TextEditingController();
     _passwordController = TextEditingController();
     _rePasswordController = TextEditingController();
     _phoneNumberController = TextEditingController();
+    fetchAdminDetails();
   }
 
   @override
@@ -88,7 +120,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
         backgroundColor: secondaryColor,
         elevation: 0,
       ),
-      body:  ListView(
+      body: isLoading ? const LoadingUi() : ListView(
         children: [
           Padding(
             padding: const EdgeInsets.all(18.0),
@@ -233,7 +265,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
                       if (!_formKey.currentState!.validate()) {
                         return;
                       } else {
-                        agentController.registerOwner(_emailController.text.trim(), _usernameController.text.trim(), _fullNameController.text.trim(), _phoneNumberController.text.trim(), _passwordController.text.trim(), _rePasswordController.text.trim());
+                        agentController.registerOwner(_emailController.text.trim(), _usernameController.text.trim(), _fullNameController.text.trim(), _phoneNumberController.text.trim(), _passwordController.text.trim(), _rePasswordController.text.trim(),uniqueCode);
                       }
                     },
                     decoration: const NeoPopTiltedButtonDecoration(

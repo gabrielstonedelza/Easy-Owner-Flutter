@@ -17,7 +17,7 @@ import '../../widget/loadingui.dart';
 
 
 class PrivateChat extends StatefulWidget {
-  PrivateChat({Key? key,}) : super(key: key);
+  const PrivateChat({Key? key,}) : super(key: key);
 
   @override
   State<PrivateChat> createState() => _PrivateChatState();

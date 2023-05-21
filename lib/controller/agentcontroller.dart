@@ -75,7 +75,7 @@ class AgentController extends GetxController{
     }
   }
 
-  registerOwner(String email,String username,String fullName,String phoneNum,String password1,String password2)async{
+  registerOwner(String email,String username,String fullName,String phoneNum,String password1,String password2,String ownerCode)async{
     const requestUrl = "https://fnetagents.xyz/auth/users/";
     final myLink = Uri.parse(requestUrl);
     final response = await http.post(myLink, headers: {
@@ -90,7 +90,7 @@ class AgentController extends GetxController{
       "password": password1,
       "re_password": password2,
       "user_type": "Owner",
-      "owner": "EA391652Ad",
+      "owner": ownerCode,
     });
     if (response.statusCode == 201) {
       sendSms.sendMySms("+233244529353", "EasyAgent","Hi Mr Frank Fordjour,a new owner with the name  $fullName has registered on the Easy Portal,please login and check.");
