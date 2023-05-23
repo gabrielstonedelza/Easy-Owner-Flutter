@@ -79,7 +79,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
         isLoading = false;
       });
     } else {
-      print(res.body);
+      // print(res.body);
     }
   }
 

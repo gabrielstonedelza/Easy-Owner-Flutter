@@ -1,11 +1,14 @@
 
+import 'dart:convert';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_owner/widget/loadingui.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:http/http.dart' as http;
 import '../constants.dart';
 import 'controller/authphonecontroller.dart';
 import 'controller/logincontroller.dart';
@@ -27,13 +30,88 @@ class _LoginViewState extends State<LoginView> {
   late String uToken = "";
 
   final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _usernameController;
+  late final TextEditingController usernameController;
   late final TextEditingController _passwordController;
   FocusNode usernameFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
 
   final Uri _url = Uri.parse('https://fnetagents.xyz/password-reset/');
   final AuthPhoneController authController = Get.find();
+  late List authPhoneDetails = [];
+  late List authPhoneDetailsForAgent = [];
+  late String phoneModel = "";
+  late String phoneId = "";
+  late String phoneBrand = "";
+  late String phoneFingerprint = "";
+  bool isDeUser = false;
+  bool canLogin = false;
+  bool isLoading = false;
+
+  Future<void> fetchDeviceInfo() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+
+    phoneModel = androidInfo.model;
+    phoneId = androidInfo.id;
+    phoneBrand = androidInfo.brand;
+    phoneFingerprint = androidInfo.fingerprint;
+  }
+
+  Future<void> fetchAuthPhone() async {
+    const postUrl = "https://fnetagents.xyz/get_all_auth_phones/";
+    final pLink = Uri.parse(postUrl);
+    http.Response res = await http.get(pLink, headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      'Accept': 'application/json',
+    });
+    if (res.statusCode == 200) {
+      final codeUnits = res.body;
+      var jsonData = jsonDecode(codeUnits);
+      var allPosts = jsonData;
+      authPhoneDetails.assignAll(allPosts);
+
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      // print(res.body);
+    }
+  }
+  Future<void> fetchAgentAuthPhone() async {
+    final postUrl = "https://fnetagents.xyz/get_all_auth_phone_agent_by_phone_id/$phoneId/";
+    final pLink = Uri.parse(postUrl);
+    http.Response res = await http.get(pLink, headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      'Accept': 'application/json',
+    });
+    if (res.statusCode == 200) {
+      final codeUnits = res.body;
+      var jsonData = jsonDecode(codeUnits);
+      var allPosts = jsonData;
+      authPhoneDetailsForAgent.assignAll(allPosts);
+      setState(() {
+        isLoading = false;
+      });
+      for(var i in authPhoneDetailsForAgent){
+        if(authPhoneDetailsForAgent.isNotEmpty && i['get_agent_username'] == usernameController.text.trim() && i['finger_print'] == phoneFingerprint && i['phone_id'] == phoneId){
+          setState(() {
+            canLogin = true;
+          });
+        }
+        if(i['get_agent_username'] != usernameController.text.trim() && i['finger_print'] == phoneFingerprint && i['phone_id'] == phoneId){
+          setState(() {
+            canLogin = false;
+          });
+          Get.snackbar("Device Auth Error 😝😜🤪", "This device is registered to another user,please use another device,thank you.",
+              colorText: Colors.white,
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: warning,
+              duration: const Duration(seconds: 10));
+          Get.offAll(() => const LoginView());
+        }
+      }
+    }
+  }
 
 
   Future<void> _launchInBrowser() async {
@@ -57,7 +135,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   void initState() {
     super.initState();
-    _usernameController = TextEditingController();
+    usernameController = TextEditingController();
     _passwordController = TextEditingController();
     controller.getAllSupervisors();
     if (storage.read("token") != null) {
@@ -66,12 +144,14 @@ class _LoginViewState extends State<LoginView> {
       });
     }
     authController.fetchAuthPhone(uToken);
+    fetchDeviceInfo();
+    fetchAuthPhone();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _usernameController.dispose();
+    usernameController.dispose();
     _passwordController.dispose();
   }
 
@@ -119,7 +199,7 @@ class _LoginViewState extends State<LoginView> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: TextFormField(
-                      controller: _usernameController,
+                      controller: usernameController,
                       focusNode: usernameFocusNode,
                       cursorColor: secondaryColor,
                       cursorRadius: const Radius.elliptical(10, 10),
@@ -136,6 +216,11 @@ class _LoginViewState extends State<LoginView> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: TextFormField(
+                      onChanged: (value){
+                        if(value.length > 1){
+                          fetchAgentAuthPhone();
+                        }
+                      },
                       controller: _passwordController,
                       focusNode: passwordFocusNode,
                       cursorRadius: const Radius.elliptical(10, 10),
@@ -188,7 +273,7 @@ class _LoginViewState extends State<LoginView> {
                       if (!_formKey.currentState!.validate()) {
                         return;
                       } else {
-                        controller.loginUser(_usernameController.text.trim(),
+                        controller.loginUser(usernameController.text.trim(),
                           _passwordController.text.trim(),);
                         // storage.write("phoneAuthenticated", "Authenticated");
                         // storage.write("phoneId", authController.phoneId);

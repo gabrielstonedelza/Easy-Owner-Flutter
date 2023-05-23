@@ -56,18 +56,18 @@ class AuthPhoneController extends GetxController {
                 backgroundColor: secondaryColor,
                 duration: const Duration(seconds: 5));
           }
-          else{
-            isAuthDevice = false;
-            storage.remove("token");
-            storage.remove("agent_code");
-            storage.remove("phoneAuthenticated");
-            Get.snackbar("Device Auth Error", "This is not your authenticated device,please contact the admin or login with the auth device",
-                colorText: Colors.white,
-                snackPosition: SnackPosition.BOTTOM,
-                backgroundColor: warning,
-                duration: const Duration(seconds: 10));
-            Get.offAll(()=> const LoginView());
-          }
+          // else{
+          //   isAuthDevice = false;
+          //   storage.remove("token");
+          //   storage.remove("agent_code");
+          //   storage.remove("phoneAuthenticated");
+          //   Get.snackbar("Device Auth Error", "This is not your authenticated device,please contact the admin or login with the auth device",
+          //       colorText: Colors.white,
+          //       snackPosition: SnackPosition.BOTTOM,
+          //       backgroundColor: warning,
+          //       duration: const Duration(seconds: 10));
+          //   Get.offAll(()=> const LoginView());
+          // }
         }
         update();
       } else {

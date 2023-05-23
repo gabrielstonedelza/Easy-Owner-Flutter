@@ -1,10 +1,12 @@
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:easy_owner/controller/notificationcontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:telephony/telephony.dart';
 import 'package:get/get.dart';
+import 'package:upgrader/upgrader.dart';
 
 import 'constants.dart';
 import 'controller/agentcontroller.dart';
@@ -35,6 +37,15 @@ void main() async{
   Get.put(TrialAndMonthlyPaymentController());
   Get.put(NotificationController());
   NotificationService().initNotification();
+  AwesomeNotifications().initialize(
+    null,
+    [
+      NotificationChannel(
+        channelKey: 'basic_channel',channelDescription: 'basic_channel description',channelName:'Basic Notification'
+      )
+    ],
+    debug: true
+  );
   runApp(const MyApp());
 }
 
@@ -98,6 +109,11 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     initPlatformState();
     phoneController.fetchDeviceInfo();
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) => {
+      if(!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications()
+      }
+    });
     if (storage.read("token") != null) {
       uToken = storage.read("token");
       setState(() {
@@ -129,7 +145,16 @@ class _MyAppState extends State<MyApp> {
             backgroundColor: secondaryColor,
           )
       ),
-      home: hasToken && isAuthDevice ? const Dashboard() : const LoginView(),
+      home: hasToken && isAuthDevice ? UpgradeAlert(
+        upgrader: Upgrader(
+            showLater: false,
+            showIgnore: false,
+            canDismissDialog: false,
+            durationUntilAlertAgain: const Duration(days: 3),
+            messages: UpgraderMessages()
+        ),
+        child: const Dashboard(),
+      ): const LoginView(),
     );
   }
 }
