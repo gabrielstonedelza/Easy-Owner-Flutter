@@ -76,7 +76,7 @@ class _MyAgentsState extends State<MyAgents> {
     }
 
   }
-  addToBlockedList(String userId,String email,String username,String phone,String fullName,String supervisor,String aCode) async {
+  addToBlockedList(String userId,String email,String username,String phone,String fullName,String owner,String aCode) async {
     final depositUrl = "https://fnetagents.xyz/update_blocked/$userId/";
     final myLink = Uri.parse(depositUrl);
     final res = await http.put(myLink, headers: {
@@ -88,7 +88,7 @@ class _MyAgentsState extends State<MyAgents> {
       "username": username,
       "phone_number": phone,
       "full_name": fullName,
-      "supervisor": supervisor,
+      "owner": owner,
       "agent_unique_code": aCode,
     });
     if (res.statusCode == 201) {
@@ -96,7 +96,7 @@ class _MyAgentsState extends State<MyAgents> {
         isLoading = false;
       });
       getAllMyAgents();
-      Get.snackbar("Success", "agent is added to block lists",
+      Get.snackbar("Success", "blocking agent",
           colorText: defaultWhite,
           snackPosition: SnackPosition.BOTTOM,
           duration: const Duration(seconds: 5),
@@ -104,12 +104,12 @@ class _MyAgentsState extends State<MyAgents> {
     }
     else{
       if (kDebugMode) {
-        // print(res.body);
+        print(res.body);
       }
     }
   }
 
-  removeFromBlockedList(String userId,String email,String username,String phone,String fullName,String supervisor,String aCode) async {
+  removeFromBlockedList(String userId,String email,String username,String phone,String fullName,String owner,String aCode) async {
     final depositUrl = "https://fnetagents.xyz/update_blocked/$userId/";
     final myLink = Uri.parse(depositUrl);
     final res = await http.put(myLink, headers: {
@@ -121,7 +121,7 @@ class _MyAgentsState extends State<MyAgents> {
       "username": username,
       "phone_number": phone,
       "full_name": fullName,
-      "supervisor": supervisor,
+      "owner": owner,
       "agent_unique_code": aCode,
     });
     if (res.statusCode == 201) {
@@ -196,23 +196,27 @@ class _MyAgentsState extends State<MyAgents> {
                     ],
                   ),
                   trailing: items['user_blocked'] ? IconButton(
-                      onPressed: () {
-                        Get.snackbar("Please wait...", "removing user from  block lists",
+                      onPressed: () async{
+                        Get.snackbar("Please wait...", "unblocking agent",
                             colorText: defaultWhite,
                             snackPosition: SnackPosition.BOTTOM,
                             duration: const Duration(seconds: 5),
                             backgroundColor: snackBackground);
-                        removeFromBlockedList(controller.allMyAgents[i]['id'].toString(),controller.allMyAgents[i]['email'],controller.allMyAgents[i]['username'],controller.allMyAgents[i]['phone_number'],controller.allMyAgents[i]['full_name'],controller.allMyAgents[i]['supervisor'],controller.allMyAgents[i]['agent_unique_code'],);
+                        removeFromBlockedList(controller.allMyAgents[i]['id'].toString(),controller.allMyAgents[i]['email'],controller.allMyAgents[i]['username'],controller.allMyAgents[i]['phone_number'],controller.allMyAgents[i]['full_name'],controller.allMyAgents[i]['owner'],controller.allMyAgents[i]['agent_unique_code'],);
+                        await Future.delayed(const Duration(seconds: 3));
+                        controller.getAllMyAgents(uToken,profileController.ownersCode);
                       },
                       icon:Image.asset("assets/images/blocked.png",width:100,height:100)
                   ) : IconButton(
-                      onPressed: () {
-                        Get.snackbar("Please wait...", "adding user to block lists",
+                      onPressed: () async{
+                        Get.snackbar("Please wait...", "blocking user",
                             colorText: defaultWhite,
                             snackPosition: SnackPosition.BOTTOM,
                             duration: const Duration(seconds: 5),
                             backgroundColor: snackBackground);
-                        addToBlockedList(controller.allMyAgents[i]['id'].toString(),controller.allMyAgents[i]['email'],controller.allMyAgents[i]['username'],controller.allMyAgents[i]['phone_number'],controller.allMyAgents[i]['full_name'],controller.allMyAgents[i]['supervisor'],controller.allMyAgents[i]['agent_unique_code']);
+                        addToBlockedList(controller.allMyAgents[i]['id'].toString(),controller.allMyAgents[i]['email'],controller.allMyAgents[i]['username'],controller.allMyAgents[i]['phone_number'],controller.allMyAgents[i]['full_name'],controller.allMyAgents[i]['owner'],controller.allMyAgents[i]['agent_unique_code']);
+                        await Future.delayed(const Duration(seconds: 3));
+                        controller.getAllMyAgents(uToken,profileController.ownersCode);
                       },
                       icon:Image.asset("assets/images/block.png",width:100,height:100)
                   ),

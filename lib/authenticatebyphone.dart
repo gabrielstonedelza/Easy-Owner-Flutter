@@ -225,7 +225,7 @@ class _AuthenticateByPhoneState extends State<AuthenticateByPhone> {
                       isCompleted = false;
                     });
                   },
-                  child: const Text("Resend Code",style:TextStyle(color:secondaryColor)),
+                  child: const Text("Resend Code",style:TextStyle(color:snackBackground)),
                 ) : Text("00:${seconds.toString()}",style:const TextStyle(color:defaultWhite)),
               ],
             ),

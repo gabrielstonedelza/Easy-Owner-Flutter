@@ -260,7 +260,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return  isLoading  ? const Scaffold(body: LoadingUi(),) : phoneNotAuthenticated ?  AdvancedDrawer(
-        backdropColor: snackBackground,
+        backdropColor: secondaryColor,
         controller: _advancedDrawerController,
         animationCurve: Curves.easeInOut,
         animationDuration: const Duration(milliseconds: 300),

@@ -114,6 +114,30 @@ class _ReportsTodayState extends State<ReportsToday> {
                         ],
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0, top: 2),
+                      child: Row(
+                        children: [
+                          const Text(
+                            "Time: ",
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          Text(
+                            items['time_reported']
+                                .toString()
+                                .split(".")
+                                .first,
+                            style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

@@ -1,5 +1,4 @@
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:easy_owner/controller/notificationcontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,15 +36,7 @@ void main() async{
   Get.put(TrialAndMonthlyPaymentController());
   Get.put(NotificationController());
   NotificationService().initNotification();
-  AwesomeNotifications().initialize(
-    null,
-    [
-      NotificationChannel(
-        channelKey: 'basic_channel',channelDescription: 'basic_channel description',channelName:'Basic Notification'
-      )
-    ],
-    debug: true
-  );
+
   runApp(const MyApp());
 }
 
@@ -109,11 +100,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     initPlatformState();
     phoneController.fetchDeviceInfo();
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) => {
-      if(!isAllowed) {
-        AwesomeNotifications().requestPermissionToSendNotifications()
-      }
-    });
+
     if (storage.read("token") != null) {
       uToken = storage.read("token");
       setState(() {

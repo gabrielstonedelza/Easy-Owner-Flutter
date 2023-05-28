@@ -1,11 +1,12 @@
 
+import 'package:easy_owner/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'constants.dart';
-import 'login.dart';
+import 'getonlineimage.dart';
 
 class LoginAboutPage extends StatefulWidget {
   const LoginAboutPage({Key? key}) : super(key: key);
@@ -42,22 +43,52 @@ class _LoginAboutPageState extends State<LoginAboutPage> {
         title: const Text("About Easy Agent"),
         backgroundColor: secondaryColor,
       ),
-      body:  Column(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 20,),
           Image.asset("assets/images/forapp.png",width: 100,height: 100,),
           const SizedBox(height: 20,),
-          const Center(child: Text("Powered by",style: TextStyle(fontWeight: FontWeight.bold),)),
-          const SizedBox(height: 20,),
-          Image.asset("assets/images/logo.png",width: 70,height: 70,),
           const Padding(
-            padding: EdgeInsets.only(top:8.0,left: 18),
-            child: Center(child: Text("in partnership with Agent Banks Association of Ghana(ABAG)",style: TextStyle(fontWeight: FontWeight.bold),)),
+            padding: EdgeInsets.all(18.0),
+            child: Center(child: Text("App created by Havens Software Development, initiative of FNET",style: TextStyle(fontWeight: FontWeight.bold),)),
           ),
           const SizedBox(height: 20,),
-          Image.asset("assets/images/abaglogo.png",width: 70,height: 70,),
+          Container(
+            width: 140.0,
+            height: 140.0,
+            margin: const EdgeInsets.only(
+              top: 10.0,
+              bottom: 14.0,
+            ),
+            clipBehavior: Clip.antiAlias,
+            decoration: const BoxDecoration(
+              color: Colors.black26,
+              shape: BoxShape.circle,
+            ),
+            child: Image.asset(
+              'assets/images/png.png',
+              width: 50,
+              height: 50,
+            ),
+          ),
+          const DefaultTextStyle(
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white54,
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                      'App created by Havens Software Development'),
+                ),
+
+              ],
+            ),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -76,21 +107,21 @@ class _LoginAboutPageState extends State<LoginAboutPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Click to call"),
+                      const Text("Click to "),
                       IconButton(
                         onPressed: (){
                           _callNumber();
                         },
                         icon: Image.asset("assets/images/telephone-call.png",width: 40,height: 40,),
                       ),
+                      IconButton(
+                        onPressed: () async{
+                          launchWhatsapp(number: "+233550222888", message: "Hello 😀");
+                        },
+                        icon: myOnlineImage("https://cdn-icons-png.flaticon.com/128/3992/3992601.png",40,40),
+                      ),
                     ],
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top:18.0),
-                    child: Center(
-                      child: Text("Reach us on Whatsapp 0550222888"),
-                    ),
-                  )
                 ],
               )
           );
