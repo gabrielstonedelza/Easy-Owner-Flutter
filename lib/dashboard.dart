@@ -185,6 +185,9 @@ class _DashboardState extends State<Dashboard> {
     //   print(apps);
     // }
   }
+  Future<void> openFinancialServicesPullFromBank() async {
+    await UssdAdvanced.multisessionUssd(code: "*171*6*1*2#", subscriptionId: 1);
+  }
   void showInstalled() {
     showMaterialModalBottomSheet(
       context: context,
@@ -253,7 +256,7 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      openFinancialServices();
+                      openFinancialServicesPullFromBank();
                       // Get.back();
                     },
                     child: Column(
