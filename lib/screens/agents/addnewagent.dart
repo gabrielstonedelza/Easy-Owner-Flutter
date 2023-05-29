@@ -20,6 +20,10 @@ class _AddNewAgentState extends State<AddNewAgent> {
 
   final AgentController agentController = Get.find();
   late final TextEditingController _usernameController;
+  late final TextEditingController _companyNameController;
+  late final TextEditingController _companyNumberController;
+  late final TextEditingController _locationController;
+  late final TextEditingController _digitalAddressController;
   late final TextEditingController _emailController;
   late final TextEditingController _fullNameController;
   late final TextEditingController _passwordController;
@@ -30,6 +34,10 @@ class _AddNewAgentState extends State<AddNewAgent> {
   final _formKey = GlobalKey<FormState>();
   bool isObscured = true;
   final FocusNode _usernameFocusNode = FocusNode();
+  final FocusNode _companyNameFocusNode = FocusNode();
+  final FocusNode _companyNumberFocusNode = FocusNode();
+  final FocusNode _locationFocusNode = FocusNode();
+  final FocusNode _digitalAddressFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _fullNameFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
@@ -64,8 +72,12 @@ class _AddNewAgentState extends State<AddNewAgent> {
     if (storage.read("agent_code") != null) {
       userCode = storage.read("agent_code");
     }
-    _usernameController = TextEditingController();
 
+    _usernameController = TextEditingController();
+    _companyNameController = TextEditingController();
+    _companyNumberController = TextEditingController();
+    _locationController = TextEditingController();
+    _digitalAddressController = TextEditingController();
     _emailController = TextEditingController();
     _fullNameController = TextEditingController();
     _passwordController = TextEditingController();
@@ -77,6 +89,10 @@ class _AddNewAgentState extends State<AddNewAgent> {
   void dispose() {
     super.dispose();
     _usernameController.dispose();
+    _companyNameController.dispose();
+    _companyNumberController.dispose();
+    _locationController.dispose();
+    _digitalAddressController.dispose();
     _emailController.dispose();
     _fullNameController.dispose();
     _passwordController.dispose();
@@ -124,7 +140,6 @@ class _AddNewAgentState extends State<AddNewAgent> {
                         },
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10.0),
                       child: TextFormField(
@@ -172,6 +187,74 @@ class _AddNewAgentState extends State<AddNewAgent> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Please enter phone number";
+                          }
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: TextFormField(
+                        controller: _companyNameController,
+                        focusNode: _companyNameFocusNode,
+                        cursorRadius: const Radius.elliptical(10, 10),
+                        cursorWidth: 10,
+                        cursorColor: secondaryColor,
+                        decoration: buildInputDecoration("Company Name"),
+                        keyboardType: TextInputType.text,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter company name";
+                          }
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: TextFormField(
+                        controller: _companyNumberController,
+                        focusNode: _companyNumberFocusNode,
+                        cursorRadius: const Radius.elliptical(10, 10),
+                        cursorWidth: 10,
+                        cursorColor: secondaryColor,
+                        decoration: buildInputDecoration("Company Number"),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter company number";
+                          }
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: TextFormField(
+                        controller: _locationController,
+                        focusNode: _locationFocusNode,
+                        cursorRadius: const Radius.elliptical(10, 10),
+                        cursorWidth: 10,
+                        cursorColor: secondaryColor,
+                        decoration: buildInputDecoration("Location"),
+                        keyboardType: TextInputType.text,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter location";
+                          }
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: TextFormField(
+                        controller: _digitalAddressController,
+                        focusNode: _digitalAddressFocusNode,
+                        cursorRadius: const Radius.elliptical(10, 10),
+                        cursorWidth: 10,
+                        cursorColor: secondaryColor,
+                        decoration: buildInputDecoration("Digital Add"),
+                        keyboardType: TextInputType.text,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter digital add";
                           }
                         },
                       ),
@@ -236,12 +319,12 @@ class _AddNewAgentState extends State<AddNewAgent> {
                         if (!_formKey.currentState!.validate()) {
                           return;
                         } else {
-                          agentController.addAgent(_emailController.text.trim(), _usernameController.text.trim(), _fullNameController.text.trim(), _phoneNumberController.text.trim(), _passwordController.text.trim(), _rePasswordController.text.trim(), profileController.ownersCode);
+                          agentController.addAgent(_emailController.text.trim(), _usernameController.text.trim(), _fullNameController.text.trim(), _phoneNumberController.text.trim(), _passwordController.text.trim(), _rePasswordController.text.trim(), profileController.ownersCode,_companyNameController.text.trim(),_companyNumberController.text.trim(),_locationController.text.trim(),_digitalAddressController.text.trim());
                         }
                       },
                       decoration: const NeoPopTiltedButtonDecoration(
                         color: secondaryColor,
-                        plunkColor: Color.fromRGBO(255, 235, 52, 1),
+                        plunkColor: secondaryColor,
                         shadowColor: Color.fromRGBO(36, 36, 36, 1),
                         showShimmer: true,
                       ),

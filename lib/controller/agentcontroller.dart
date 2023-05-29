@@ -35,7 +35,7 @@ class AgentController extends GetxController{
     }
   }
 
-  addAgent(String email,String username,String fullName,String phoneNum,String password1,String password2,String ownerCode)async{
+  addAgent(String email,String username,String fullName,String phoneNum,String password1,String password2,String ownerCode,String cName,String cNumber,String loc,String dAdd)async{
     const requestUrl = "https://fnetagents.xyz/auth/users/";
     final myLink = Uri.parse(requestUrl);
     final response = await http.post(myLink, headers: {
@@ -51,6 +51,10 @@ class AgentController extends GetxController{
       "re_password": password2,
       "user_type": "Agent",
       "owner": ownerCode,
+      "company_name": cName,
+      "company_number": cNumber,
+      "location": loc,
+      "digital_address": dAdd,
       "user_approved": "True",
     });
     if (response.statusCode == 201) {
@@ -66,8 +70,8 @@ class AgentController extends GetxController{
       update();
     }
     else{
-      Get.snackbar("Agent Error", "Agent with same details already exists or check your internet connection",
-        duration: const Duration(seconds:5),
+      Get.snackbar("Agent Error", response.body.toString(),
+        duration: const Duration(seconds:10),
         colorText: defaultWhite,
         backgroundColor: warning,
       );

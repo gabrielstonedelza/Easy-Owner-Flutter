@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 import '../../../widget/loadingui.dart';
 import '../agentscustomers.dart';
+import '../summaries/agentaccountsummary.dart';
 import '../summaries/bankdepositsummary.dart';
 import '../summaries/bankwithdrawalsummary.dart';
 import '../summaries/momocashinsummary.dart';
@@ -381,6 +382,74 @@ class _AgentDetailsState extends State<AgentDetails> {
                   ),
                   onTap: () {
                     Get.to(() => RebalancingSummary(username:username));
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Divider(),
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        "assets/images/mywallet.png",
+                        width: 70,
+                        height: 70,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text("Accounts"),
+                    ],
+                  ),
+                  onTap: () {
+                    Get.to(() => AgentAccountSummaryDetail(username: username,));
+                  },
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  child: Column(
+                    children: [
+                      // Image.asset(
+                      //   "assets/images/cash-payment.png",
+                      //   width: 70,
+                      //   height: 70,
+                      // ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+                      // const Text("Payment"),
+                    ],
+                  ),
+                  onTap: () {
+                    // Get.to(()=>PaymentSummary(username:username));
+                  },
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  child: Column(
+                    children: [
+                      // Image.asset(
+                      //   "assets/images/law.png",
+                      //   width: 70,
+                      //   height: 70,
+                      // ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+                      // const Text("Rebalancing"),
+                    ],
+                  ),
+                  onTap: () {
+                    // Get.to(() => RebalancingSummary(username:username));
                   },
                 ),
               ),

@@ -63,7 +63,7 @@ class _ApprovePaymentsState extends State<ApprovePayments> {
 
       Get.offAll(() => const Dashboard());
     } else {
-print(response.body);
+// print(response.body);
       Get.snackbar("Approve Error", "something happened. Please try again",
           colorText: defaultWhite,
           snackPosition: SnackPosition.BOTTOM,

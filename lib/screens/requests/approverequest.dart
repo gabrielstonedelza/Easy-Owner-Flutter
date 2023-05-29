@@ -1,10 +1,13 @@
+import 'package:device_apps/device_apps.dart';
 import 'package:easy_owner/constants.dart';
 import 'package:easy_owner/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';
+import 'package:ussd_advanced/ussd_advanced.dart';
 
 import '../../widget/loadingui.dart';
 
@@ -54,7 +57,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
       "owner": owner,
     });
     if (response.statusCode == 200) {
-      addToApprovedRequest()();
+      addToApprovedRequest();
       Get.snackbar("Success", "request was approved",
           colorText: defaultWhite,
           snackPosition: SnackPosition.BOTTOM,
@@ -62,6 +65,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
           backgroundColor: snackBackground);
 
       Get.offAll(() => const Dashboard());
+      showInstalled();
     } else {
 
       Get.snackbar("Approve Error", "something happened. Please try again",
@@ -97,6 +101,261 @@ class _ApproveRequestState extends State<ApproveRequest> {
 
     }
   }
+  Future<void> openFinancialServices() async {
+    await UssdAdvanced.multisessionUssd(code: "*171*6*1*1#", subscriptionId: 1);
+  }
+
+  Future<void> fetchAllInstalled() async {
+    List<Application> apps = await DeviceApps.getInstalledApplications(
+        onlyAppsWithLaunchIntent: true, includeSystemApps: true,includeAppIcons: true);
+    // if (kDebugMode) {
+    //   print(apps);
+    // }
+  }
+  void showInstalled() {
+    showMaterialModalBottomSheet(
+      context: context,
+      builder: (context) => Card(
+        elevation: 12,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(10),
+                topLeft: Radius.circular(10))),
+        child: SizedBox(
+          height: 450,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Center(
+                  child: Text("Continue with mtn's financial services",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold))),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment:
+                MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      openFinancialServices();
+                      // Get.back();
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          "assets/images/momo.png",
+                          width: 50,
+                          height: 50,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: Text("Push with USSD",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      DeviceApps.openApp('com.mtn.agentapp');
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          "assets/images/momo.png",
+                          width: 50,
+                          height: 50,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: Text("MTN App",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      openFinancialServices();
+                      // Get.back();
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          "assets/images/momo.png",
+                          width: 50,
+                          height: 50,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: Text("Pull with USSD",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Divider(),
+              const SizedBox(
+                height: 10,
+              ),
+              const Center(
+                  child: Text("Continue with apps",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold))),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment:
+                MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: () async{
+                      DeviceApps.openApp('com.ecobank.xpresspoint');
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          "assets/images/xpresspoint.png",
+                          width: 50,
+                          height: 50,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: Text("Express Point",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () async{
+                      DeviceApps.openApp('sg.android.fidelity');
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          "assets/images/fidelity-card.png",
+                          width: 50,
+                          height: 50,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: Text("Fidelity Bank",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () async{
+                      DeviceApps.openApp('calbank.com.ams');
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          "assets/images/calbank.png",
+                          width: 50,
+                          height: 50,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: Text("Cal Bank",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10,),
+              const Divider(),
+              const SizedBox(height: 10,),
+              Row(
+                mainAxisAlignment:
+                MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: () async{
+                      DeviceApps.openApp('accessmob.accessbank.com.accessghana');
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          "assets/images/accessbank.png",
+                          width: 50,
+                          height: 50,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: Text("Access Bank",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () async{
+                      DeviceApps.openApp('com.m2i.gtexpressbyod');
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          "assets/images/gtbank.jpg",
+                          width: 50,
+                          height: 50,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: Text("GT Bank",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () async{
+                      DeviceApps.openApp('firstmob.firstbank.com.fbnsubsidiary');
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          "assets/images/full-branch.jpg",
+                          width: 50,
+                          height: 50,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: Text("FBN Bank",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -108,6 +367,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
         uToken = storage.read("token");
       });
     }
+    fetchAllInstalled();
   }
 
   @override
