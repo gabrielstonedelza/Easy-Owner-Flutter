@@ -104,6 +104,9 @@ class _ApproveRequestState extends State<ApproveRequest> {
   Future<void> openFinancialServices() async {
     await UssdAdvanced.multisessionUssd(code: "*171*6*1*1#", subscriptionId: 1);
   }
+  Future<void> openForRequest() async {
+    await UssdAdvanced.multisessionUssd(code: "*171#", subscriptionId: 1);
+  }
 
   Future<void> fetchAllInstalled() async {
     List<Application> apps = await DeviceApps.getInstalledApplications(
@@ -139,6 +142,26 @@ class _ApproveRequestState extends State<ApproveRequest> {
                 children: [
                   GestureDetector(
                     onTap: () {
+                      openForRequest();
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          "assets/images/momo.png",
+                          width: 50,
+                          height: 50,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: Text("Request",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
                       openFinancialServices();
                       // Get.back();
                     },
@@ -151,7 +174,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
                         ),
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
-                          child: Text("Push with USSD",
+                          child: Text("Push",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold)),
                         )
@@ -171,7 +194,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
                         ),
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
-                          child: Text("MTN App",
+                          child: Text("App",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold)),
                         )
@@ -192,7 +215,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
                         ),
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
-                          child: Text("Pull with USSD",
+                          child: Text("Pull",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold)),
                         )

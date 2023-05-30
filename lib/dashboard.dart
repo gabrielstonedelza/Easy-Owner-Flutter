@@ -188,6 +188,10 @@ class _DashboardState extends State<Dashboard> {
   Future<void> openFinancialServicesPullFromBank() async {
     await UssdAdvanced.multisessionUssd(code: "*171*6*1*2#", subscriptionId: 1);
   }
+  Future<void> openForRequest() async {
+    await UssdAdvanced.multisessionUssd(code: "*171#", subscriptionId: 1);
+  }
+
   void showInstalled() {
     showMaterialModalBottomSheet(
       context: context,
@@ -215,6 +219,26 @@ class _DashboardState extends State<Dashboard> {
                 children: [
                   GestureDetector(
                     onTap: () {
+                      openForRequest();
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          "assets/images/momo.png",
+                          width: 50,
+                          height: 50,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: Text("Request",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
                       openFinancialServices();
                       // Get.back();
                     },
@@ -227,7 +251,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
-                          child: Text("Push with USSD",
+                          child: Text("Push",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold)),
                         )
@@ -247,7 +271,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
-                          child: Text("MTN App",
+                          child: Text("App",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold)),
                         )
@@ -268,7 +292,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
-                          child: Text("Pull with USSD",
+                          child: Text("Pull",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold)),
                         )
@@ -664,39 +688,39 @@ class _DashboardState extends State<Dashboard> {
               // IconButton(onPressed: () {
               //   NotificationService().showNotifications(title:"hi", body:"i am good ");
               // }, icon: const Icon(Icons.notifications),),
-              Padding(
-                padding: const EdgeInsets.only(right: 23.0),
-                child: Row(
-                  children: [
-                    GetBuilder<NotificationController>(
-                        builder: (controller) {
-                          return badges.Badge(
-                            position:
-                            badges.BadgePosition.topEnd(top: -10, end: -12),
-                            showBadge: true,
-                            badgeContent: Text(
-                                controller.notificationsUnread.length
-                                    .toString(),
-                                style: const TextStyle(color: defaultWhite)),
-                            badgeAnimation:
-                            const badges.BadgeAnimation.rotation(
-                              animationDuration: Duration(seconds: 1),
-                              colorChangeAnimationDuration:
-                              Duration(seconds: 1),
-                              loopAnimation: false,
-                              curve: Curves.fastOutSlowIn,
-                              colorChangeAnimationCurve: Curves.easeInCubic,
-                            ),
-                            child: GestureDetector(
-                                onTap: () {
-                                  Get.to(() => const Notifications());
-                                },
-                                child: const Icon(Icons.notifications)),
-                          );
-                        }),
-                  ],
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(right: 23.0),
+              //   child: Row(
+              //     children: [
+              //       GetBuilder<NotificationController>(
+              //           builder: (controller) {
+              //             return badges.Badge(
+              //               position:
+              //               badges.BadgePosition.topEnd(top: -10, end: -12),
+              //               showBadge: true,
+              //               badgeContent: Text(
+              //                   controller.notificationsUnread.length
+              //                       .toString(),
+              //                   style: const TextStyle(color: defaultWhite)),
+              //               badgeAnimation:
+              //               const badges.BadgeAnimation.rotation(
+              //                 animationDuration: Duration(seconds: 1),
+              //                 colorChangeAnimationDuration:
+              //                 Duration(seconds: 1),
+              //                 loopAnimation: false,
+              //                 curve: Curves.fastOutSlowIn,
+              //                 colorChangeAnimationCurve: Curves.easeInCubic,
+              //               ),
+              //               child: GestureDetector(
+              //                   onTap: () {
+              //                     Get.to(() => const Notifications());
+              //                   },
+              //                   child: const Icon(Icons.notifications)),
+              //             );
+              //           }),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
           body: accountApproved ? ListView(
@@ -710,11 +734,7 @@ class _DashboardState extends State<Dashboard> {
                     child: GestureDetector(
                       child: Column(
                         children: [
-                          Image.asset(
-                            "assets/images/agent.png",
-                            width: 70,
-                            height: 70,
-                          ),
+                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/2534/2534183.png",70,70),
                           const SizedBox(
                             height: 10,
                           ),
@@ -730,11 +750,7 @@ class _DashboardState extends State<Dashboard> {
                     child: GestureDetector(
                       child: Column(
                         children: [
-                          Image.asset(
-                            "assets/images/group.png",
-                            width: 70,
-                            height: 70,
-                          ),
+                        myOnlineImage("https://cdn-icons-png.flaticon.com/128/1165/1165674.png",70,70),
                           const SizedBox(
                             height: 10,
                           ),
@@ -750,11 +766,7 @@ class _DashboardState extends State<Dashboard> {
                     child: GestureDetector(
                       child: Column(
                         children: [
-                          Image.asset(
-                            "assets/images/groupchat.png",
-                            width: 70,
-                            height: 70,
-                          ),
+                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/9482/9482902.png",70,70),
                           const SizedBox(
                             height: 10,
                           ),
@@ -853,11 +865,7 @@ class _DashboardState extends State<Dashboard> {
                     child: GestureDetector(
                       child: Column(
                         children: [
-                          Image.asset(
-                            "assets/images/ewallet.png",
-                            width: 70,
-                            height: 70,
-                          ),
+                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/9532/9532823.png",70,70),
                           const SizedBox(
                             height: 10,
                           ),
@@ -873,11 +881,7 @@ class _DashboardState extends State<Dashboard> {
                     child: GestureDetector(
                       child: Column(
                         children: [
-                          Image.asset(
-                            "assets/images/cash-payment.png",
-                            width: 70,
-                            height: 70,
-                          ),
+                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/2331/2331941.png",70,70),
                           const SizedBox(
                             height: 10,
                           ),
@@ -893,11 +897,7 @@ class _DashboardState extends State<Dashboard> {
                     child: GestureDetector(
                       child: Column(
                         children: [
-                          Image.asset(
-                            "assets/images/law.png",
-                            width: 70,
-                            height: 70,
-                          ),
+                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/994/994377.png",70,70),
                           const SizedBox(
                             height: 10,
                           ),
@@ -927,11 +927,7 @@ class _DashboardState extends State<Dashboard> {
                     child: GestureDetector(
                       child: Column(
                         children: [
-                          Image.asset(
-                            "assets/images/mywallet.png",
-                            width: 70,
-                            height: 70,
-                          ),
+                  myOnlineImage("https://cdn-icons-png.flaticon.com/128/10318/10318009.png",70,70),
                           const SizedBox(
                             height: 10,
                           ),
@@ -947,11 +943,7 @@ class _DashboardState extends State<Dashboard> {
                     child: GestureDetector(
                       child: Column(
                         children: [
-                          Image.asset(
-                            "assets/images/coworking.png",
-                            width: 70,
-                            height: 70,
-                          ),
+                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/9238/9238143.png",70,70),
                           const SizedBox(
                             height: 10,
                           ),
@@ -967,11 +959,7 @@ class _DashboardState extends State<Dashboard> {
                     child: GestureDetector(
                       child: Column(
                         children: [
-                          Image.asset(
-                            "assets/images/live-stream.png",
-                            width: 70,
-                            height: 70,
-                          ),
+                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/5175/5175754.png",70,70),
                           const SizedBox(
                             height: 10,
                           ),
@@ -999,11 +987,7 @@ class _DashboardState extends State<Dashboard> {
                     child: GestureDetector(
                       child: Column(
                         children: [
-                          Image.asset(
-                            "assets/images/market-analysis.png",
-                            width: 70,
-                            height: 70,
-                          ),
+                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/10815/10815184.png",70,70),
                           const SizedBox(
                             height: 10,
                           ),

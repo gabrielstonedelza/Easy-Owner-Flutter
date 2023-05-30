@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:easy_owner/constants.dart';
 import 'package:flutter/material.dart';
 
+import '../../../getonlineimage.dart';
 import '../../../widget/loadingui.dart';
 import '../agentscustomers.dart';
 import '../summaries/agentaccountsummary.dart';
@@ -187,11 +188,7 @@ class _AgentDetailsState extends State<AgentDetails> {
                 child: GestureDetector(
                   child: Column(
                     children: [
-                      Image.asset(
-                        "assets/images/group.png",
-                        width: 70,
-                        height: 70,
-                      ),
+                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/3201/3201521.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),
@@ -207,11 +204,7 @@ class _AgentDetailsState extends State<AgentDetails> {
                 child: GestureDetector(
                   child: Column(
                     children: [
-                      Image.asset(
-                        "assets/images/bank.png",
-                        width: 70,
-                        height: 70,
-                      ),
+                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/2830/2830289.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),
@@ -227,11 +220,7 @@ class _AgentDetailsState extends State<AgentDetails> {
                 child: GestureDetector(
                   child: Column(
                     children: [
-                      Image.asset(
-                        "assets/images/bank.png",
-                        width: 70,
-                        height: 70,
-                      ),
+                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/2830/2830289.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),
@@ -329,11 +318,7 @@ class _AgentDetailsState extends State<AgentDetails> {
                 child: GestureDetector(
                   child: Column(
                     children: [
-                      Image.asset(
-                        "assets/images/ewallet.png",
-                        width: 70,
-                        height: 70,
-                      ),
+                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/10318/10318009.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),
@@ -349,11 +334,7 @@ class _AgentDetailsState extends State<AgentDetails> {
                 child: GestureDetector(
                   child: Column(
                     children: [
-                      Image.asset(
-                        "assets/images/cash-payment.png",
-                        width: 70,
-                        height: 70,
-                      ),
+                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/2331/2331941.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),
@@ -369,11 +350,7 @@ class _AgentDetailsState extends State<AgentDetails> {
                 child: GestureDetector(
                   child: Column(
                     children: [
-                      Image.asset(
-                        "assets/images/law.png",
-                        width: 70,
-                        height: 70,
-                      ),
+                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/994/994377.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),

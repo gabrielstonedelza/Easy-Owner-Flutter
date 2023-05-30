@@ -270,7 +270,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
                     },
                     decoration: const NeoPopTiltedButtonDecoration(
                       color: secondaryColor,
-                      plunkColor: Color.fromRGBO(255, 235, 52, 1),
+                      plunkColor: secondaryColor,
                       shadowColor: Color.fromRGBO(36, 36, 36, 1),
                       showShimmer: true,
                     ),
