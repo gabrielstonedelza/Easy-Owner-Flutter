@@ -181,7 +181,6 @@ class _AuthenticateByPhoneState extends State<AuthenticateByPhone> {
       body: isLoading  ? const LoadingUi() : Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          
           Expanded(
             flex: 3,
               child: Lottie.asset("assets/images/74569-two-factor-authentication.json",width: 300,height: 300)),
@@ -193,7 +192,6 @@ class _AuthenticateByPhoneState extends State<AuthenticateByPhone> {
               ),
             ),
           ),
-          
           Expanded(
             child: Center(
               child: Form(
