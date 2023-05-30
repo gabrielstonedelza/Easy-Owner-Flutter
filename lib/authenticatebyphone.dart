@@ -32,6 +32,7 @@ class _AuthenticateByPhoneState extends State<AuthenticateByPhone> {
   bool hasAccountsToday = false;
   bool isLoading = true;
   late String uToken = "";
+  late String agentUsername = "";
   final ProfileController controller = Get.find();
   late int oTP = 0;
   final SendSmsController sendSms = SendSmsController();
@@ -47,6 +48,7 @@ class _AuthenticateByPhoneState extends State<AuthenticateByPhone> {
     var rand = rng.nextInt(9000) + 1000;
     oTP = rand.toInt();
   }
+  late String userEmail = "";
 
   Future<void> getUserDetails(String token) async {
     const profileLink = "https://fnetagents.xyz/get_user_details/";
@@ -61,6 +63,7 @@ class _AuthenticateByPhoneState extends State<AuthenticateByPhone> {
       for(var i in profileDetails){
         userId = i['id'].toString();
         agentPhone = i['phone_number'];
+        userEmail = i['email'];
       }
 
       setState(() {
@@ -131,12 +134,28 @@ class _AuthenticateByPhoneState extends State<AuthenticateByPhone> {
     }
   }
 
+  Future<void> sendOtp() async {
+    final de_url = "https://fnetagents.xyz/send_otp/$oTP/$userEmail/$agentUsername/";
+    var link = Uri.parse(de_url);
+    http.Response response = await http.get(link, headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    });
+    if (response.statusCode == 200) {
+
+    }
+  }
+
   @override
   void initState(){
     super.initState();
     if (storage.read("token") != null) {
       setState(() {
         uToken = storage.read("token");
+      });
+    }
+    if (storage.read("agent_code") != null) {
+      setState(() {
+        agentUsername = storage.read("agent_code");
       });
     }
     getUserDetails(uToken);
@@ -148,6 +167,7 @@ class _AuthenticateByPhoneState extends State<AuthenticateByPhone> {
       if(authController.isAuthDevice){
         String num = agentPhone.replaceFirst("0", '+233');
         sendSms.sendMySms(num, "EasyAgent","Your code $oTP");
+        sendOtp();
       }
     }
     );
@@ -161,73 +181,78 @@ class _AuthenticateByPhoneState extends State<AuthenticateByPhone> {
       body: isLoading  ? const LoadingUi() : Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Lottie.asset("assets/images/74569-two-factor-authentication.json",width: 300,height: 300),
-          const SizedBox(
-            height: 20,
-          ),
-          const Center(
-              child:Text("A code was sent to your phone,please enter the code here.",style:TextStyle(color:defaultWhite))
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Center(
-            child: Form(
-              key: formKey,
-              child: Pinput(
-                defaultPinTheme: defaultPinTheme,
-                androidSmsAutofillMethod:  AndroidSmsAutofillMethod.smsRetrieverApi,
-                validator: (pin) {
-                  if (pin?.length == 4 && pin == oTP.toString()){
-                    storage.write("phoneAuthenticated", "Authenticated");
-                    storage.write("phoneId", authController.phoneId);
-                    storage.write("phoneModel", authController.phoneModel);
-                    storage.write("phoneBrand", authController.phoneBrand);
-                    storage.write("phoneFingerprint", authController.phoneFingerprint);
-                    // tpController.startFreeTrial(uToken);
-                    authController.authenticatePhone(uToken,authController.phoneId,authController.phoneModel,authController.phoneBrand,authController.phoneFingerprint);
-                    Get.offAll(()=> const Dashboard());
-                  }
-                  else{
-                    Get.snackbar("Code Error", "you entered an invalid code",
-                        colorText: defaultWhite,
-                        snackPosition: SnackPosition.TOP,
-                        backgroundColor: warning,
-                        duration: const Duration(seconds: 5));
-                  }
-                },
+          
+          Expanded(
+            flex: 3,
+              child: Lottie.asset("assets/images/74569-two-factor-authentication.json",width: 300,height: 300)),
+          const Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Center(
+                  child:Text("A code was sent to your phone and your email,please enter the code here.",style:TextStyle(color:defaultWhite))
               ),
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Didn't receive code?",style:TextStyle(color:defaultWhite)),
-                const SizedBox(width: 20,),
-                isCompleted ? TextButton(
-                  onPressed: (){
-                    String num = agentPhone.replaceFirst("0", '+233');
-                    sendSms.sendMySms(num, "EasyAgent","Your code $oTP");
-                    Get.snackbar(
-                        "Check Phone","code was sent again",
-                        backgroundColor: snackBackground,
-                        colorText: defaultWhite,
-                        duration: const Duration(seconds: 5)
-                    );
-                    startTimer();
-                    resetTimer();
-                    setState(() {
-                      isResent = true;
-                      isCompleted = false;
-                    });
+          
+          Expanded(
+            child: Center(
+              child: Form(
+                key: formKey,
+                child: Pinput(
+                  defaultPinTheme: defaultPinTheme,
+                  androidSmsAutofillMethod:  AndroidSmsAutofillMethod.smsRetrieverApi,
+                  validator: (pin) {
+                    if (pin?.length == 4 && pin == oTP.toString()){
+                      storage.write("phoneAuthenticated", "Authenticated");
+                      storage.write("phoneId", authController.phoneId);
+                      storage.write("phoneModel", authController.phoneModel);
+                      storage.write("phoneBrand", authController.phoneBrand);
+                      storage.write("phoneFingerprint", authController.phoneFingerprint);
+                      // tpController.startFreeTrial(uToken);
+                      authController.authenticatePhone(uToken,authController.phoneId,authController.phoneModel,authController.phoneBrand,authController.phoneFingerprint);
+                      Get.offAll(()=> const Dashboard());
+                    }
+                    else{
+                      Get.snackbar("Code Error", "you entered an invalid code",
+                          colorText: defaultWhite,
+                          snackPosition: SnackPosition.TOP,
+                          backgroundColor: warning,
+                          duration: const Duration(seconds: 5));
+                    }
                   },
-                  child: const Text("Resend Code",style:TextStyle(color:snackBackground)),
-                ) : Text("00:${seconds.toString()}",style:const TextStyle(color:defaultWhite)),
-              ],
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Didn't receive code?",style:TextStyle(color:defaultWhite)),
+                  const SizedBox(width: 20,),
+                  isCompleted ? TextButton(
+                    onPressed: (){
+                      String num = agentPhone.replaceFirst("0", '+233');
+                      sendSms.sendMySms(num, "EasyAgent","Your code $oTP");
+                      sendOtp();
+                      Get.snackbar(
+                          "Check Phone","code was sent again",
+                          backgroundColor: snackBackground,
+                          colorText: defaultWhite,
+                          duration: const Duration(seconds: 5)
+                      );
+                      startTimer();
+                      resetTimer();
+                      setState(() {
+                        isResent = true;
+                        isCompleted = false;
+                      });
+                    },
+                    child: const Text("Resend Code",style:TextStyle(color:snackBackground)),
+                  ) : Text("00:${seconds.toString()}",style:const TextStyle(color:defaultWhite)),
+                ],
+              ),
             ),
           )
         ],

@@ -9,6 +9,7 @@ class ProfileController extends GetxController{
   List profileDetails = [];
   late String userId = "";
   late String ownersCode = "";
+  late String myEmail = "";
   bool accountApproved = false;
 
   Future<void> getUserProfile(String token) async {
@@ -58,8 +59,10 @@ class ProfileController extends GetxController{
           userId = i['id'].toString();
           ownersCode = i['agent_unique_code'];
           accountApproved = i['user_approved'];
+          myEmail = i['email'];
         }
         update();
+        // print(myEmail);
       }
       else{
         if (kDebugMode) {

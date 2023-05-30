@@ -39,7 +39,6 @@ class LoginController extends GetxController {
           ownerUsernames.add(i['username']);
         }
         update();
-        print(ownerUsernames);
       }
     } catch (e) {
       Get.snackbar("Sorry",
