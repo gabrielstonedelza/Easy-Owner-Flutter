@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:easy_owner/screens/chats/privatechat.dart';
 import 'package:easy_owner/widget/loadingui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:device_apps/device_apps.dart';
 import 'package:easy_owner/screens/aboutpage.dart';
 import 'package:easy_owner/screens/agents/addnewagent.dart';
-import 'package:easy_owner/screens/agents/allagentrequestwithlimits.dart';
 import 'package:easy_owner/screens/agents/myagents.dart';
 import 'package:easy_owner/screens/agents/myagentsaccounts.dart';
 import 'package:easy_owner/screens/chats/agentsGroupchat.dart';
@@ -15,6 +14,7 @@ import 'package:easy_owner/screens/rebalancing/unapprovedrebalancing.dart';
 import 'package:easy_owner/screens/reportstoday.dart';
 import 'package:easy_owner/screens/requests/unapprovedrequests.dart';
 import 'package:easy_owner/widget/loadingui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -25,7 +25,6 @@ import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:ussd_advanced/ussd_advanced.dart';
 
-import 'allAgents.dart';
 import 'authenticatebyphone.dart';
 
 import 'constants.dart';
@@ -37,10 +36,8 @@ import 'controller/trialmonthlypayment.dart';
 import 'getonlineimage.dart';
 import 'join_screen.dart';
 import 'login.dart';
-import 'package:badges/badges.dart' as badges;
 
 import 'meetings.dart';
-import 'notifications.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -181,9 +178,9 @@ class _DashboardState extends State<Dashboard> {
   Future<void> fetchAllInstalled() async {
     List<Application> apps = await DeviceApps.getInstalledApplications(
         onlyAppsWithLaunchIntent: true, includeSystemApps: true,includeAppIcons: true);
-    // if (kDebugMode) {
-    //   print(apps);
-    // }
+    if (kDebugMode) {
+      print(apps);
+    }
   }
   Future<void> openFinancialServicesPullFromBank() async {
     await UssdAdvanced.multisessionUssd(code: "*171*6*1*2#", subscriptionId: 1);
@@ -507,8 +504,7 @@ class _DashboardState extends State<Dashboard> {
         unTriggerNotifications(e["id"]);
       }
     });
-    // localNotificationManager
-    //     .setOnShowNotificationReceive(onNotificationReceive);
+
   }
 
   logoutUser() async {
@@ -684,7 +680,7 @@ class _DashboardState extends State<Dashboard> {
             title: Text(ownersCode,
                 style: const TextStyle(fontWeight: FontWeight.bold)),
             backgroundColor: secondaryColor,
-            actions: [
+            actions: const [
               // IconButton(onPressed: () {
               //   NotificationService().showNotifications(title:"hi", body:"i am good ");
               // }, icon: const Icon(Icons.notifications),),
@@ -806,11 +802,7 @@ class _DashboardState extends State<Dashboard> {
                                     child: GestureDetector(
                                       child: Column(
                                         children: [
-                                          Image.asset(
-                                            "assets/images/cashier.png",
-                                            width: 70,
-                                            height: 70,
-                                          ),
+                                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/2534/2534183.png",70,70),
                                           const SizedBox(
                                             height: 10,
                                           ),
@@ -1018,7 +1010,7 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      child: Column(
+                      child: const Column(
                         children: [
                           // Image.asset(
                           //   "assets/images/live-stream.png",

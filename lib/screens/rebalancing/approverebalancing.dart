@@ -1,5 +1,6 @@
 import 'package:easy_owner/constants.dart';
 import 'package:easy_owner/dashboard.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -64,7 +65,9 @@ class _ApproveReBalancingState extends State<ApproveReBalancing> {
 
       Get.offAll(() => const Dashboard());
     } else {
-      print(response.body);
+      if (kDebugMode) {
+        print(response.body);
+      }
       Get.snackbar("Approve Error", "something happened. Please try again",
           colorText: defaultWhite,
           snackPosition: SnackPosition.BOTTOM,
@@ -84,7 +87,9 @@ class _ApproveReBalancingState extends State<ApproveReBalancing> {
     if(response.statusCode == 201){
 
     }else{
-      print(response.body);
+      if (kDebugMode) {
+        print(response.body);
+      }
     }
   }
 

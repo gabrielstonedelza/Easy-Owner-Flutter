@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:easy_owner/widget/loadingui.dart';
-import "package:get/get.dart";
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -99,10 +98,10 @@ class _MeetingsState extends State<Meetings> {
                         onTap: ()async{
                           await _launchInBrowser (items['meeting_link']);
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 18.0),
+                        child: const Padding(
+                          padding: EdgeInsets.only(bottom: 18.0),
                           child: Row(
-                            children: const [
+                            children: [
                               Text("Meeting Link  ",style:TextStyle(fontWeight: FontWeight.bold,color:Colors.blue)),
                             ],
                           ),

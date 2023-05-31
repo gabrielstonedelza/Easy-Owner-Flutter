@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:get/get.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -47,7 +47,9 @@ class _MomoCashInSummaryState extends State<MomoCashInSummary> {
           mtnDepositDates.add(i['date_deposited'].toString().split("T").first);
         }
       }
-      print(response.body);
+      if (kDebugMode) {
+        print(response.body);
+      }
     }
 
     setState(() {

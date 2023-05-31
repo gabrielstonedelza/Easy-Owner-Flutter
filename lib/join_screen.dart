@@ -82,6 +82,7 @@ class JoinScreen extends StatelessWidget {
                     if (value!.isEmpty) {
                       return "Please enter meeting id";
                     }
+                    return null;
                   },
                 ),
               ),

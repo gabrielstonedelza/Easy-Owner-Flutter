@@ -210,6 +210,7 @@ class _LoginViewState extends State<LoginView> {
                         if (value!.isEmpty) {
                           return "Please enter username";
                         }
+                        return null;
                       },
                     ),
                   ),
@@ -254,6 +255,7 @@ class _LoginViewState extends State<LoginView> {
                         if (value!.isEmpty) {
                           return "Please enter password";
                         }
+                        return null;
                       },
                     ),
                   ),

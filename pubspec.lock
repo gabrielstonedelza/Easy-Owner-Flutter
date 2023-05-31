@@ -97,14 +97,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-  csslib:
-    dependency: transitive
-    description:
-      name: csslib
-      sha256: "831883fb353c8bdc1d71979e5b342c7d88acfbc643113c14ae51e2442ea0f20f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.17.3"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -328,14 +320,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.0"
-  html:
-    dependency: transitive
-    description:
-      name: html
-      sha256: "58e3491f7bf0b6a4ea5110c0c688877460d1a6366731155c4a4580e7ded773e8"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.15.3"
   http:
     dependency: "direct main"
     description:
@@ -417,30 +401,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
-  os_detect:
-    dependency: transitive
-    description:
-      name: os_detect
-      sha256: faf3bcf39515e64da8ff76b2f2805b20a6ff47ae515393e535f8579ff91d6b7f
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
-  package_info_plus:
-    dependency: transitive
-    description:
-      name: package_info_plus
-      sha256: "28386bbe89ab5a7919a47cea99cdd1128e5a6e0bbd7eaafe20440ead84a15de3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.1"
-  package_info_plus_platform_interface:
-    dependency: transitive
-    description:
-      name: package_info_plus_platform_interface
-      sha256: "9bc8ba46813a4cc42c66ab781470711781940780fd8beddd0c3da62506d3a6c6"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
   path:
     dependency: transitive
     description:
@@ -505,14 +465,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.0"
-  pin_input_text_field:
-    dependency: transitive
-    description:
-      name: pin_input_text_field
-      sha256: "712ac2dbf5098443ce90a2e1e6850654037a471bdfc9333b4e0a15e678642e39"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.5.0"
   pinput:
     dependency: "direct main"
     description:
@@ -577,14 +529,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
-  rxdart:
-    dependency: "direct main"
-    description:
-      name: rxdart
-      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.27.7"
   sdp_transform:
     dependency: transitive
     description:
@@ -670,14 +614,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
-  sms_autofill:
-    dependency: "direct main"
-    description:
-      name: sms_autofill
-      sha256: "2eb159f53ed7d76002d6c15cad99e14dbd5f997f3bb7f9bcad9bd44ba5fcd6c3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.0"
   source_span:
     dependency: transitive
     description:
@@ -686,14 +622,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
-  splash_screen_view:
-    dependency: "direct main"
-    description:
-      name: splash_screen_view
-      sha256: "5453b403a753655173b7ee1405082ca5c40c3bcd8aa44cd00dc6890d2d7cd02a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
   stack_trace:
     dependency: transitive
     description:
@@ -774,14 +702,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0+1"
-  upgrader:
-    dependency: "direct main"
-    description:
-      name: upgrader
-      sha256: "0e5d309a4045a340098ecf48a6c225b484e1cf6939de90839d51dc42612fdc7d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.0.0"
   url_launcher:
     dependency: "direct main"
     description:
@@ -870,14 +790,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  version:
-    dependency: transitive
-    description:
-      name: version
-      sha256: "3d4140128e6ea10d83da32fef2fa4003fccbf6852217bb854845802f04191f94"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.2"
   videosdk:
     dependency: "direct main"
     description:
@@ -936,4 +848,4 @@ packages:
     version: "6.3.0"
 sdks:
   dart: ">=3.0.0-0 <4.0.0"
-  flutter: ">=3.10.0"
+  flutter: ">=3.7.0"

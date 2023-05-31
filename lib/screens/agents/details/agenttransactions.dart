@@ -37,7 +37,6 @@ class _AgentDetailsState extends State<AgentDetails> {
   final storage = GetStorage();
   late String uToken = "";
   late String agentCode = "";
-  late Timer _timer;
   bool isLoading = true;
   late List agentCustomers = [];
   late List agentBankDeposits = [];
@@ -318,7 +317,7 @@ class _AgentDetailsState extends State<AgentDetails> {
                 child: GestureDetector(
                   child: Column(
                     children: [
-                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/10318/10318009.png",70,70),
+                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/9532/9532823.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),
@@ -374,11 +373,7 @@ class _AgentDetailsState extends State<AgentDetails> {
                 child: GestureDetector(
                   child: Column(
                     children: [
-                      Image.asset(
-                        "assets/images/mywallet.png",
-                        width: 70,
-                        height: 70,
-                      ),
+                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/10318/10318009.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),
@@ -392,7 +387,7 @@ class _AgentDetailsState extends State<AgentDetails> {
               ),
               Expanded(
                 child: GestureDetector(
-                  child: Column(
+                  child: const Column(
                     children: [
                       // Image.asset(
                       //   "assets/images/cash-payment.png",
@@ -412,7 +407,7 @@ class _AgentDetailsState extends State<AgentDetails> {
               ),
               Expanded(
                 child: GestureDetector(
-                  child: Column(
+                  child: const Column(
                     children: [
                       // Image.asset(
                       //   "assets/images/law.png",

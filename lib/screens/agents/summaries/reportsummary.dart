@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 
 import '../../../constants.dart';
 import '../../../widget/loadingui.dart';
-import 'bankdepositsummarydetail.dart';
 
 
 class ReportSummary extends StatefulWidget {

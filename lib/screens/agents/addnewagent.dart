@@ -137,6 +137,7 @@ class _AddNewAgentState extends State<AddNewAgent> {
                                 backgroundColor: warning,
                                 duration: const Duration(seconds: 5));
                           }
+                          return null;
                         },
                       ),
                     ),
@@ -154,6 +155,7 @@ class _AddNewAgentState extends State<AddNewAgent> {
                           if (value!.isEmpty) {
                             return "Please enter email";
                           }
+                          return null;
                         },
                       ),
                     ),
@@ -171,6 +173,7 @@ class _AddNewAgentState extends State<AddNewAgent> {
                           if (value!.isEmpty) {
                             return "Please enter full name";
                           }
+                          return null;
                         },
                       ),
                     ),
@@ -188,6 +191,7 @@ class _AddNewAgentState extends State<AddNewAgent> {
                           if (value!.isEmpty) {
                             return "Please enter phone number";
                           }
+                          return null;
                         },
                       ),
                     ),
@@ -205,6 +209,7 @@ class _AddNewAgentState extends State<AddNewAgent> {
                           if (value!.isEmpty) {
                             return "Please enter company name";
                           }
+                          return null;
                         },
                       ),
                     ),
@@ -222,6 +227,7 @@ class _AddNewAgentState extends State<AddNewAgent> {
                           if (value!.isEmpty) {
                             return "Please enter company number";
                           }
+                          return null;
                         },
                       ),
                     ),
@@ -239,6 +245,7 @@ class _AddNewAgentState extends State<AddNewAgent> {
                           if (value!.isEmpty) {
                             return "Please enter location";
                           }
+                          return null;
                         },
                       ),
                     ),
@@ -256,6 +263,7 @@ class _AddNewAgentState extends State<AddNewAgent> {
                           if (value!.isEmpty) {
                             return "Please enter digital add";
                           }
+                          return null;
                         },
                       ),
                     ),
@@ -274,6 +282,7 @@ class _AddNewAgentState extends State<AddNewAgent> {
                           if (value!.isEmpty) {
                             return "Please enter password";
                           }
+                          return null;
                         },
                       ),
                     ),
@@ -302,6 +311,7 @@ class _AddNewAgentState extends State<AddNewAgent> {
                           if (value!.isEmpty) {
                             return "Please reenter password";
                           }
+                          return null;
                         },
                       ),
                     ),

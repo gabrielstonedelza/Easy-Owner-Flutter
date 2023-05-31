@@ -9,7 +9,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../constants.dart';
-import '../login.dart';
 
 class AuthPhoneController extends GetxController {
   late List authPhoneDetails = [];
@@ -73,7 +72,6 @@ class AuthPhoneController extends GetxController {
       } else {
         // print(res.body);
       }
-    } catch (e) {
     } finally {
       isLoading = false;
       update();

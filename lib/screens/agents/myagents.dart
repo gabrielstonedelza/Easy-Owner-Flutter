@@ -31,7 +31,6 @@ class _MyAgentsState extends State<MyAgents> {
   late List allMyAgents = [];
   late List allBlockedUsers = [];
   bool isPosting = false;
-  late Timer _timer;
 
   Future<void> getAllMyAgents() async {
     try {

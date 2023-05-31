@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -30,7 +29,6 @@ class _MyAgentsToAddAccountsState extends State<MyAgentsToAddAccounts> {
   var items;
   bool isLoading = true;
   late List allMyAgents = [];
-  late Timer _timer;
 
   Future<void> getAllMyAgents() async {
     final completedRides = "https://fnetagents.xyz/get_all_my_agents/${profileController.ownersCode}";

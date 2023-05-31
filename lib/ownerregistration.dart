@@ -150,6 +150,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
                               backgroundColor: warning,
                               duration: const Duration(seconds: 5));
                         }
+                        return null;
                       },
                     ),
                   ),
@@ -168,6 +169,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
                         if (value!.isEmpty) {
                           return "Please enter email";
                         }
+                        return null;
                       },
                     ),
                   ),
@@ -185,6 +187,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
                         if (value!.isEmpty) {
                           return "Please enter full name";
                         }
+                        return null;
                       },
                     ),
                   ),
@@ -202,6 +205,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
                         if (value!.isEmpty) {
                           return "Please enter phone number";
                         }
+                        return null;
                       },
                     ),
                   ),
@@ -220,6 +224,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
                         if (value!.isEmpty) {
                           return "Please enter password";
                         }
+                        return null;
                       },
                     ),
                   ),
@@ -248,6 +253,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
                         if (value!.isEmpty) {
                           return "Please reenter password";
                         }
+                        return null;
                       },
                     ),
                   ),

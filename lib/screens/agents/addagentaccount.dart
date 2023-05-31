@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -191,6 +190,7 @@ class _UserRegistration extends State<AgentAccountRegistration> {
                         if (value!.isEmpty) {
                           return "Please enter account number";
                         }
+                        return null;
                       },
                     ),
                   ),
@@ -208,6 +208,7 @@ class _UserRegistration extends State<AgentAccountRegistration> {
                         if (value!.isEmpty) {
                           return "Please enter account name";
                         }
+                        return null;
                       },
                     ),
                   ),
