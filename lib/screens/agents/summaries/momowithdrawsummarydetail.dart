@@ -169,7 +169,6 @@ class _MtnWithdrawalSummaryDetailState extends State<MtnWithdrawalSummaryDetail>
                   Get.back();
                 }, child: const Text("Close",style: TextStyle(color: Colors.white),)),
           );
-
         },
       ):Container(),
     );

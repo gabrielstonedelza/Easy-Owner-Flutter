@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 import '../../../getonlineimage.dart';
 import '../../../widget/loadingui.dart';
+import '../../commissions.dart';
 import '../agentscustomers.dart';
 import '../summaries/agentaccountsummary.dart';
 import '../summaries/bankdepositsummary.dart';
@@ -387,21 +388,17 @@ class _AgentDetailsState extends State<AgentDetails> {
               ),
               Expanded(
                 child: GestureDetector(
-                  child: const Column(
+                  child:  Column(
                     children: [
-                      // Image.asset(
-                      //   "assets/images/cash-payment.png",
-                      //   width: 70,
-                      //   height: 70,
-                      // ),
-                      // const SizedBox(
-                      //   height: 10,
-                      // ),
-                      // const Text("Payment"),
+                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/2405/2405293.png",70,70),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text("Commission"),
                     ],
                   ),
                   onTap: () {
-                    // Get.to(()=>PaymentSummary(username:username));
+                    Get.to(()=>AgentCommissions(username:username));
                   },
                 ),
               ),

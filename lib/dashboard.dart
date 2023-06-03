@@ -6,7 +6,6 @@ import 'package:easy_owner/screens/aboutpage.dart';
 import 'package:easy_owner/screens/agents/addnewagent.dart';
 import 'package:easy_owner/screens/agents/myagents.dart';
 import 'package:easy_owner/screens/agents/myagentsaccounts.dart';
-import 'package:easy_owner/screens/agents/summaries/paytosummary.dart';
 import 'package:easy_owner/screens/chats/agentsGroupchat.dart';
 import 'package:easy_owner/screens/chats/owersgroupchat.dart';
 import 'package:easy_owner/screens/chats/privatechat.dart';
@@ -757,44 +756,6 @@ class _DashboardState extends State<Dashboard> {
             title: Text(ownersCode,
                 style: const TextStyle(fontWeight: FontWeight.bold)),
             backgroundColor: secondaryColor,
-            actions: const [
-              // IconButton(onPressed: () {
-              //   NotificationService().showNotifications(title:"hi", body:"i am good ");
-              // }, icon: const Icon(Icons.notifications),),
-              // Padding(
-              //   padding: const EdgeInsets.only(right: 23.0),
-              //   child: Row(
-              //     children: [
-              //       GetBuilder<NotificationController>(
-              //           builder: (controller) {
-              //             return badges.Badge(
-              //               position:
-              //               badges.BadgePosition.topEnd(top: -10, end: -12),
-              //               showBadge: true,
-              //               badgeContent: Text(
-              //                   controller.notificationsUnread.length
-              //                       .toString(),
-              //                   style: const TextStyle(color: defaultWhite)),
-              //               badgeAnimation:
-              //               const badges.BadgeAnimation.rotation(
-              //                 animationDuration: Duration(seconds: 1),
-              //                 colorChangeAnimationDuration:
-              //                 Duration(seconds: 1),
-              //                 loopAnimation: false,
-              //                 curve: Curves.fastOutSlowIn,
-              //                 colorChangeAnimationCurve: Curves.easeInCubic,
-              //               ),
-              //               child: GestureDetector(
-              //                   onTap: () {
-              //                     Get.to(() => const Notifications());
-              //                   },
-              //                   child: const Icon(Icons.notifications)),
-              //             );
-              //           }),
-              //     ],
-              //   ),
-              // ),
-            ],
           ),
           body: accountApproved ? ListView(
             children: [
