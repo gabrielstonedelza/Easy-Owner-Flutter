@@ -164,11 +164,9 @@ class _AuthenticateByPhoneState extends State<AuthenticateByPhone> {
     authController.fetchAuthPhone(uToken);
 
     Timer(const Duration(seconds: 10), () {
-      if(authController.isAuthDevice){
-        String num = agentPhone.replaceFirst("0", '+233');
-        sendSms.sendMySms(num, "EasyAgent","Your code $oTP");
-        sendOtp();
-      }
+      String num = agentPhone.replaceFirst("0", '+233');
+      sendSms.sendMySms(num, "EasyAgent","Your code $oTP");
+      sendOtp();
     }
     );
   }

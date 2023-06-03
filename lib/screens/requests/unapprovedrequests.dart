@@ -77,7 +77,7 @@ class _AllUnApprovedRequestsState extends State<AllUnApprovedRequests> {
                   const EdgeInsets.only(top: 18.0, bottom: 18),
                   child: ListTile(
                     onTap: (){
-                      Get.to(() => ApproveRequest(id:allRequests[index]['id'].toString(),amount:allRequests[index]['amount'],agent:allRequests[index]['agent'].toString(),owner:allRequests[index]['owner'].toString()));
+                      Get.to(() => ApproveRequest(id:allRequests[index]['id'].toString(),amount:allRequests[index]['amount'],agent:allRequests[index]['agent'].toString(),owner:allRequests[index]['owner'].toString(), network:allRequests[index]['amount']));
                     },
                     title: buildRow("Amount: ", "amount"),
                     subtitle: Column(

@@ -21,7 +21,7 @@ class _ReportSummaryState extends State<ReportSummary> {
   final storage = GetStorage();
   bool hasToken = false;
   late String uToken = "";
-  late List allBankDeposits = [];
+  late List allReports = [];
   var items;
   bool isLoading = true;
   late List amounts = [];
@@ -38,9 +38,8 @@ class _ReportSummaryState extends State<ReportSummary> {
     if(response.statusCode ==200){
       final codeUnits = response.body.codeUnits;
       var jsonData = const Utf8Decoder().convert(codeUnits);
-      allBankDeposits = json.decode(jsonData);
-
-      for(var i in allBankDeposits){
+      allReports = json.decode(jsonData);
+      for(var i in allReports){
         if(!reportDates.contains(i['date_reported'].toString().split("T").first)){
           reportDates.add(i['date_reported'].toString().split("T").first);
         }

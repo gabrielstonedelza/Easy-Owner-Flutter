@@ -92,6 +92,9 @@ class _UserRegistration extends State<AgentAccountRegistration> {
     "Cal Bank",
     "Fidelity Bank",
     "Ecobank",
+    "Mtn",
+    "AirtelTigo",
+    "Vodafone"
   ];
 
   var _currentSelectedBank = "Select bank";

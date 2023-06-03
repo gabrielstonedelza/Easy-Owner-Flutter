@@ -9,6 +9,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';
 import 'package:ussd_advanced/ussd_advanced.dart';
 
+import '../../getonlineimage.dart';
 import '../../widget/loadingui.dart';
 
 class ApproveRequest extends StatefulWidget {
@@ -16,10 +17,11 @@ class ApproveRequest extends StatefulWidget {
   final amount;
   final agent;
   final owner;
-  const ApproveRequest({Key? key,required this.id,required this.amount,required this.agent,required this.owner}) : super(key: key);
+  final network;
+  const ApproveRequest({Key? key,required this.id,required this.amount,required this.agent,required this.owner,required this.network}) : super(key: key);
 
   @override
-  State<ApproveRequest> createState() => _ApproveRequestState(id:this.id,amount:this.amount,agent:this.agent,owner:this.owner);
+  State<ApproveRequest> createState() => _ApproveRequestState(id:this.id,amount:this.amount,agent:this.agent,owner:this.owner,network:this.network);
 }
 
 class _ApproveRequestState extends State<ApproveRequest> {
@@ -27,7 +29,8 @@ class _ApproveRequestState extends State<ApproveRequest> {
   final amount;
   final agent;
   final owner;
-  _ApproveRequestState({required this.id,required this.amount,required this.agent,required this.owner});
+  final network;
+  _ApproveRequestState({required this.id,required this.amount,required this.agent,required this.owner,required this.network});
   late String uToken = "";
   late List allRequests = [];
   final storage = GetStorage();
@@ -63,9 +66,14 @@ class _ApproveRequestState extends State<ApproveRequest> {
           snackPosition: SnackPosition.BOTTOM,
           duration: const Duration(seconds: 5),
           backgroundColor: snackBackground);
-
       Get.offAll(() => const Dashboard());
-      showInstalled();
+      if(network == "Mtn"){
+        dialPayTo();
+      }
+      else{
+        showInstalled();
+      }
+
     } else {
 
       Get.snackbar("Approve Error", "something happened. Please try again",
@@ -115,6 +123,89 @@ class _ApproveRequestState extends State<ApproveRequest> {
     //   print(apps);
     // }
   }
+
+  Future<void> dialPayToAgent(String agentNumber, String amount, String reference) async {
+    UssdAdvanced.multisessionUssd(
+        code: "*171*1*1*$agentNumber*$agentNumber*$amount*$reference#",
+        subscriptionId: 1);
+  }
+
+  void dialPayTo(){
+    showMaterialModalBottomSheet(
+      context: context,
+      builder: (context) => Card(
+        elevation: 12,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(10),
+                topLeft: Radius.circular(10))),
+        child: SizedBox(
+          height: 150,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Center(
+                  child: Text("Pay to",
+                      style: TextStyle(
+                          fontWeight:
+                          FontWeight.bold))),
+              Row(
+                mainAxisAlignment:
+                MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Future<void> dialPayToAgent(
+                          String agentNumber, String amount, String reference) async {
+                        UssdAdvanced.multisessionUssd(
+                            code: "*171*1*1*$agentNumber*$agentNumber*$amount*$reference#",
+                            subscriptionId: 1);
+                      }
+                      // Get.back();
+                    },
+                    child: Column(
+                      children: [
+                        myOnlineImage("https://cdn-icons-png.flaticon.com/128/2534/2534183.png",70,70),
+                        const Padding(
+                          padding: EdgeInsets.only(
+                              top: 10.0),
+                          child: Text("Agent",
+                              style: TextStyle(
+                                  fontWeight:
+                                  FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Future<void> dialPayToMerchant(String merchantId,String amount,String reference) async {
+                        UssdAdvanced.multisessionUssd(code: "*171*1*2*$merchantId*$amount*$reference#",subscriptionId: 1);
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        myOnlineImage("https://cdn-icons-png.flaticon.com/128/10701/10701763.png",70,70),
+                        const Padding(
+                          padding: EdgeInsets.only(
+                              top: 10.0),
+                          child: Text("Merchant",
+                              style: TextStyle(
+                                  fontWeight:
+                                  FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   void showInstalled() {
     showMaterialModalBottomSheet(
       context: context,

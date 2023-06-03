@@ -144,7 +144,7 @@ class _ReportsTodayState extends State<ReportsToday> {
             );
           }),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: snackBackground,
+        backgroundColor: secondaryColor,
         onPressed: (){
           Get.to(() => const ReportSummary());
         },

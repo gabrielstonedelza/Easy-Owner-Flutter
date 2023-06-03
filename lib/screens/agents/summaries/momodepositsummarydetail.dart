@@ -183,7 +183,7 @@ class _MtnDepositSummaryDetailState extends State<MtnDepositSummaryDetail> {
                                       padding: const EdgeInsets.only(left: 8.0,top: 2),
                                       child: Row(
                                         children: [
-                                          const Text("Date Deposited: ", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+                                          const Text("Date : ", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
                                           ),
                                           Text(items['date_deposited'].toString().split("T").first, style: const TextStyle(
                                               fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
@@ -214,7 +214,7 @@ class _MtnDepositSummaryDetailState extends State<MtnDepositSummaryDetail> {
                   })),
       floatingActionButton: !isLoading
           ? FloatingActionButton(
-              backgroundColor: snackBackground,
+              backgroundColor: secondaryColor,
               child: const Text("Total"),
               onPressed: () {
                 Get.defaultDialog(

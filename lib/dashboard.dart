@@ -6,9 +6,11 @@ import 'package:easy_owner/screens/aboutpage.dart';
 import 'package:easy_owner/screens/agents/addnewagent.dart';
 import 'package:easy_owner/screens/agents/myagents.dart';
 import 'package:easy_owner/screens/agents/myagentsaccounts.dart';
+import 'package:easy_owner/screens/agents/summaries/paytosummary.dart';
 import 'package:easy_owner/screens/chats/agentsGroupchat.dart';
 import 'package:easy_owner/screens/chats/owersgroupchat.dart';
 import 'package:easy_owner/screens/chats/privatechat.dart';
+import 'package:easy_owner/screens/ownerpayto/paytosummary.dart';
 import 'package:easy_owner/screens/payments/unapprovedpayments.dart';
 import 'package:easy_owner/screens/rebalancing/unapprovedrebalancing.dart';
 import 'package:easy_owner/screens/reportstoday.dart';
@@ -178,9 +180,9 @@ class _DashboardState extends State<Dashboard> {
   Future<void> fetchAllInstalled() async {
     List<Application> apps = await DeviceApps.getInstalledApplications(
         onlyAppsWithLaunchIntent: true, includeSystemApps: true,includeAppIcons: true);
-    if (kDebugMode) {
-      print(apps);
-    }
+    // if (kDebugMode) {
+    //   print(apps);
+    // }
   }
   Future<void> openFinancialServicesPullFromBank() async {
     await UssdAdvanced.multisessionUssd(code: "*171*6*1*2#", subscriptionId: 1);
@@ -441,6 +443,81 @@ class _DashboardState extends State<Dashboard> {
                           child: Text("FBN Bank",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  void dialPayTo(){
+    showMaterialModalBottomSheet(
+      context: context,
+      builder: (context) => Card(
+        elevation: 12,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(10),
+                topLeft: Radius.circular(10))),
+        child: SizedBox(
+          height: 150,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Center(
+                  child: Text("Pay to",
+                      style: TextStyle(
+                          fontWeight:
+                          FontWeight.bold))),
+              Row(
+                mainAxisAlignment:
+                MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Future<void> dialPayToAgent(
+                          String agentNumber, String amount, String reference) async {
+                        UssdAdvanced.multisessionUssd(
+                            code: "*171*1*1*$agentNumber*$agentNumber*$amount*$reference#",
+                            subscriptionId: 1);
+                      }
+                      // Get.back();
+                    },
+                    child: Column(
+                      children: [
+                        myOnlineImage("https://cdn-icons-png.flaticon.com/128/2534/2534183.png",70,70),
+                        const Padding(
+                          padding: EdgeInsets.only(
+                              top: 10.0),
+                          child: Text("Agent",
+                              style: TextStyle(
+                                  fontWeight:
+                                  FontWeight.bold)),
+                        )
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Future<void> dialPayToMerchant(String merchantId,String amount,String reference) async {
+                        UssdAdvanced.multisessionUssd(code: "*171*1*2*$merchantId*$amount*$reference#",subscriptionId: 1);
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        myOnlineImage("https://cdn-icons-png.flaticon.com/128/10701/10701763.png",70,70),
+                        const Padding(
+                          padding: EdgeInsets.only(
+                              top: 10.0),
+                          child: Text("Merchant",
+                              style: TextStyle(
+                                  fontWeight:
+                                  FontWeight.bold)),
                         )
                       ],
                     ),
@@ -750,7 +827,7 @@ class _DashboardState extends State<Dashboard> {
                           const SizedBox(
                             height: 10,
                           ),
-                          const Text("Your Agents"),
+                          const Text("My Agents"),
                         ],
                       ),
                       onTap: () {
@@ -758,6 +835,155 @@ class _DashboardState extends State<Dashboard> {
                       },
                     ),
                   ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/10815/10815184.png",70,70),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("Reports"),
+                        ],
+                      ),
+                      onTap: () {
+                        Get.to(() => const ReportsToday());
+                      },
+                    ),
+                  ),
+
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Divider(),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/9532/9532823.png",70,70),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("Requests"),
+                        ],
+                      ),
+                      onTap: () {
+                        Get.to(() => const AllUnApprovedRequests());
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/2331/2331941.png",70,70),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("Payments"),
+                        ],
+                      ),
+                      onTap: () {
+                        Get.to(() => const AllUnApprovedPayments());
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/994/994377.png",70,70),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("ReBalancing"),
+                          const Text("Requests"),
+                        ],
+                      ),
+                      onTap: () {
+                        Get.to(() => const AllUnApprovedReBalancing());
+
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Divider(),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/5776/5776487.png",70,70),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("Pay To"),
+                        ],
+                      ),
+                      onTap: () {
+                        Get.to(() => const OwnerPayToSummary());
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/2830/2830289.png",70,70),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("Financial"),
+                          const Text("Services"),
+                        ],
+                      ),
+                      onTap: () {
+                        showInstalled();
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: Column(
+                        children: [
+                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/10318/10318009.png",70,70),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text("Agent Accounts"),
+                        ],
+                      ),
+                      onTap: () {
+                        Get.to(() => const MyAgentsAccounts());
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Divider(),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
                   Expanded(
                     child: GestureDetector(
                       child: Column(
@@ -842,95 +1068,6 @@ class _DashboardState extends State<Dashboard> {
                       },
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Divider(),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/9532/9532823.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("Requests"),
-                        ],
-                      ),
-                      onTap: () {
-                        Get.to(() => const AllUnApprovedRequests());
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/2331/2331941.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("Payments"),
-                        ],
-                      ),
-                      onTap: () {
-                        Get.to(() => const AllUnApprovedPayments());
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/994/994377.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("ReBalancing"),
-                          const Text("Requests"),
-                        ],
-                      ),
-                      onTap: () {
-                        Get.to(() => const AllUnApprovedReBalancing());
-
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Divider(),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: [
-
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                  myOnlineImage("https://cdn-icons-png.flaticon.com/128/10318/10318009.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("Agent Accounts"),
-                        ],
-                      ),
-                      onTap: () {
-                        Get.to(() => const MyAgentsAccounts());
-                      },
-                    ),
-                  ),
                   Expanded(
                     child: GestureDetector(
                       child: Column(
@@ -960,71 +1097,6 @@ class _DashboardState extends State<Dashboard> {
                       ),
                       onTap: () {
                         Get.to(() => JoinScreen());
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Divider(),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: [
-
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/10815/10815184.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("Reports"),
-                        ],
-                      ),
-                      onTap: () {
-                        Get.to(() => const ReportsToday());
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("https://cdn-icons-png.flaticon.com/128/2830/2830289.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("Financial"),
-                          const Text("Services"),
-                        ],
-                      ),
-                      onTap: () {
-                        showInstalled();
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      child: const Column(
-                        children: [
-                          // Image.asset(
-                          //   "assets/images/live-stream.png",
-                          //   width: 70,
-                          //   height: 70,
-                          // ),
-                          // const SizedBox(
-                          //   height: 10,
-                          // ),
-                          // const Text("Live Meeting"),
-                        ],
-                      ),
-                      onTap: () {
-                        // Get.to(() => JoinScreen());
                       },
                     ),
                   ),
