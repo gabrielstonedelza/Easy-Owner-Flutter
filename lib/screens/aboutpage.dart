@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../constants.dart';
 import '../dashboard.dart';
+import '../getonlineimage.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({Key? key}) : super(key: key);
@@ -111,7 +112,7 @@ class _AboutPageState extends State<AboutPage> {
                         onPressed: (){
                           _callNumber();
                         },
-                        icon: Image.asset("assets/images/telephone-call.png",width: 40,height: 40,),
+                        icon: myOnlineImage("assets/images/phone-call.png",40,40),
                       ),
                     ],
                   ),
@@ -125,7 +126,7 @@ class _AboutPageState extends State<AboutPage> {
               )
           );
         },
-        child: Image.asset("assets/images/customer-care.png"),
+        child: myOnlineImage("assets/images/customer-cares.png",40,40),
       ),
     );
   }

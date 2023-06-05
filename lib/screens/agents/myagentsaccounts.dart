@@ -89,12 +89,13 @@ class _MyAgentsAccountsState extends State<MyAgentsAccounts> {
                 onTap: (){
                   Get.to(()=>AgentDetails(username:controller.allMyAgents[i]['username']));
                 },
-                title: buildRow("Account No: ", "account_number"),
+                title: items['bank'] == "Mtn" || items['bank'] == "Vodafone" || items['bank'] == "AirtelTigo" ? buildRow("Phone: ", "account_number") : buildRow("Account No: ", "account_number"),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    buildRow("Account Name : ", "account_name"),
-                    buildRow("Bank : ", "bank"),
+                    buildRow("Account Name: ", "account_name"),
+                    items['bank'] == "Mtn" || items['bank'] == "Vodafone" || items['bank'] == "AirtelTigo" ?
+                    buildRow("Network: ", "bank") : buildRow("Bank: ", "bank"),
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0,top: 2),
                       child: Row(
@@ -113,7 +114,7 @@ class _MyAgentsAccountsState extends State<MyAgentsAccounts> {
             );
           }),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: snackBackground,
+        backgroundColor: secondaryColor,
         onPressed: (){
           Get.to(() => const MyAgentsToAddAccounts());
         },
