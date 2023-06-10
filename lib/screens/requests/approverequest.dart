@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:device_apps/device_apps.dart';
 import 'package:easy_owner/constants.dart';
 import 'package:easy_owner/dashboard.dart';
@@ -18,10 +19,11 @@ class ApproveRequest extends StatefulWidget {
   final agent;
   final owner;
   final network;
-  const ApproveRequest({Key? key,required this.id,required this.amount,required this.agent,required this.owner,required this.network}) : super(key: key);
+  final username;
+  const ApproveRequest({Key? key,required this.id,required this.amount,required this.agent,required this.owner,required this.network,required this.username}) : super(key: key);
 
   @override
-  State<ApproveRequest> createState() => _ApproveRequestState(id:this.id,amount:this.amount,agent:this.agent,owner:this.owner,network:this.network);
+  State<ApproveRequest> createState() => _ApproveRequestState(id:this.id,amount:this.amount,agent:this.agent,owner:this.owner,network:this.network,username:this.username);
 }
 
 class _ApproveRequestState extends State<ApproveRequest> {
@@ -30,7 +32,8 @@ class _ApproveRequestState extends State<ApproveRequest> {
   final agent;
   final owner;
   final network;
-  _ApproveRequestState({required this.id,required this.amount,required this.agent,required this.owner,required this.network});
+  final username;
+  _ApproveRequestState({required this.id,required this.amount,required this.agent,required this.owner,required this.network,required this.username});
   late String uToken = "";
   late List allRequests = [];
   final storage = GetStorage();
@@ -60,13 +63,13 @@ class _ApproveRequestState extends State<ApproveRequest> {
       "owner": owner,
     });
     if (response.statusCode == 200) {
-      addToApprovedRequest();
+      updateAccountsToday();
       Get.snackbar("Success", "request was approved",
           colorText: defaultWhite,
           snackPosition: SnackPosition.BOTTOM,
           duration: const Duration(seconds: 5),
-          backgroundColor: snackBackground);
-      Get.offAll(() => const Dashboard());
+          backgroundColor: secondaryColor);
+
       if(network == "Mtn"){
         dialPayTo();
       }
@@ -80,21 +83,6 @@ class _ApproveRequestState extends State<ApproveRequest> {
           colorText: defaultWhite,
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: warning);
-    }
-  }
-  addToApprovedRequest()async{
-    const addToApproveUrl = "https://fnetagents.xyz/add_to_approve_request/";
-    final myLink = Uri.parse(addToApproveUrl);
-    final response = await http.post(myLink, headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      'Accept': 'application/json',
-    },body: {
-      "agent_request": id,
-    });
-    if(response.statusCode == 201){
-
-    }else{
-      // print(response.body);
     }
   }
 
@@ -118,10 +106,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
 
   Future<void> fetchAllInstalled() async {
     List<Application> apps = await DeviceApps.getInstalledApplications(
-        onlyAppsWithLaunchIntent: true, includeSystemApps: true,includeAppIcons: true);
-    // if (kDebugMode) {
-    //   print(apps);
-    // }
+        onlyAppsWithLaunchIntent: true, includeSystemApps: true,includeAppIcons: false);
   }
 
   Future<void> dialPayToAgent(String agentNumber, String amount, String reference) async {
@@ -471,17 +456,102 @@ class _ApproveRequestState extends State<ApproveRequest> {
     );
   }
 
+  late List accountBalanceDetailsToday = [];
+  late List lastItem = [];
+  late double physical = 0.0;
+  late double mtn = 0.0;
+  late double airteltigo = 0.0;
+  late double vodafone = 0.0;
+  late double mtnNow = 0.0;
+  late double airtelTigoNow = 0.0;
+  late double vodafoneNow = 0.0;
+  late double physicalNow = 0.0;
+  bool isLoading = true;
+  late double total = 0.0;
+
+  updateAccountsToday() async {
+    const accountUrl = "https://fnetagents.xyz/add_balance_to_start/";
+    final myLink = Uri.parse(accountUrl);
+    http.Response response = await http.post(myLink, headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Authorization": "Token $uToken"
+    }, body: {
+      "physical": physicalNow.toString(),
+      "mtn_e_cash": mtnNow.toString(),
+      "tigo_airtel_e_cash":  airtelTigoNow.toString(),
+      "vodafone_e_cash": vodafoneNow.toString(),
+      "isStarted": "True",
+      "agent" : agent
+    });
+    if (response.statusCode == 201) {
+      Get.snackbar("Success", "agent accounts was updated",
+          colorText: defaultWhite,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: secondaryColor);
+
+      Get.offAll(() => const Dashboard());
+    } else {
+      // print(response.body);
+      Get.snackbar("Account", "something happened",
+          colorText: defaultWhite,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: warning);
+    }
+  }
+
+  Future<void> fetchAccountBalance() async {
+    final postUrl = "https://fnetagents.xyz/get_my_agent_account_started_with/$username/";
+    final pLink = Uri.parse(postUrl);
+    http.Response res = await http.get(pLink, headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      'Accept': 'application/json',
+      "Authorization": "Token $uToken"
+    });
+    if (res.statusCode == 200) {
+      final codeUnits = res.body;
+      var jsonData = jsonDecode(codeUnits);
+      var allPosts = jsonData;
+      // print(res.body);
+      accountBalanceDetailsToday.assignAll(allPosts);
+      setState(() {
+        isLoading = false;
+        lastItem.assign(accountBalanceDetailsToday.last);
+        physicalNow = double.parse(lastItem[0]['physical']);
+        mtnNow = double.parse(lastItem[0]['mtn_e_cash']);
+        airtelTigoNow = double.parse(lastItem[0]['tigo_airtel_e_cash']);
+        vodafoneNow = double.parse(lastItem[0]['vodafone_e_cash']);
+      });
+      if(network == "Mtn"){
+        setState(() {
+          mtnNow = mtnNow + double.parse(amount);
+        });
+      }
+      if(network == "AirtelTigo"){
+        setState(() {
+          airtelTigoNow = airtelTigoNow + amount;
+        });
+      }
+      if(network == "Vodafone"){
+        setState(() {
+          vodafoneNow = vodafoneNow + amount;
+        });
+      }
+    } else {
+      // print(res.body);
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
     if (storage.read("token") != null) {
       setState(() {
         uToken = storage.read("token");
       });
     }
     fetchAllInstalled();
+    fetchAccountBalance();
   }
 
   @override
@@ -491,7 +561,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
         title: const Text("Approve Request"),
         backgroundColor: secondaryColor,
       ),
-      body: Column(
+      body:isLoading ? const LoadingUi() : Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(

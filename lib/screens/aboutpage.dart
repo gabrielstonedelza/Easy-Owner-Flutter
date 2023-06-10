@@ -116,12 +116,12 @@ class _AboutPageState extends State<AboutPage> {
                       ),
                     ],
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top:18.0),
-                    child: Center(
-                      child: Text("Reach us on Whatsapp 0550222888"),
-                    ),
-                  )
+                  IconButton(
+                    onPressed: () async{
+                      launchWhatsapp(number: "+233550222888", message: "Hello 😀");
+                    },
+                    icon: myOnlineImage("assets/images/whatsapp.png",40,40),
+                  ),
                 ],
               )
           );

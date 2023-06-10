@@ -166,6 +166,14 @@ class _MyAgentsState extends State<MyAgents> {
       appBar: AppBar(
         title: const Text("My Agents"),
         backgroundColor: secondaryColor,
+        actions: [
+          IconButton(
+            onPressed: (){
+              controller.getAllMyAgents(uToken,profileController.ownersCode);
+            },
+            icon: const Icon(Icons.refresh,size: 30,),
+          )
+        ],
       ),
       body: GetBuilder<AgentController>(builder: (controller){
         return ListView.builder(

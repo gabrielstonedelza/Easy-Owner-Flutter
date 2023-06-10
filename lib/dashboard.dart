@@ -15,7 +15,6 @@ import 'package:easy_owner/screens/rebalancing/unapprovedrebalancing.dart';
 import 'package:easy_owner/screens/reportstoday.dart';
 import 'package:easy_owner/screens/requests/unapprovedrequests.dart';
 import 'package:easy_owner/widget/loadingui.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -24,6 +23,7 @@ import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:lottie/lottie.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:ussd_advanced/ussd_advanced.dart';
 
 import 'authenticatebyphone.dart';
@@ -178,10 +178,7 @@ class _DashboardState extends State<Dashboard> {
   }
   Future<void> fetchAllInstalled() async {
     List<Application> apps = await DeviceApps.getInstalledApplications(
-        onlyAppsWithLaunchIntent: true, includeSystemApps: true,includeAppIcons: true);
-    // if (kDebugMode) {
-    //   print(apps);
-    // }
+        onlyAppsWithLaunchIntent: true, includeSystemApps: true,includeAppIcons: false);
   }
   Future<void> openFinancialServicesPullFromBank() async {
     await UssdAdvanced.multisessionUssd(code: "*171*6*1*2#", subscriptionId: 1);
@@ -613,6 +610,13 @@ class _DashboardState extends State<Dashboard> {
     _timer.cancel();
   }
 
+  final Uri _url = Uri.parse('https://chat.whatsapp.com/KnKFdtuBwLx5VyI3hnoO96');
+  Future<void> _launchInBrowser() async {
+    if (!await launchUrl(_url)) {
+      throw 'Could not launch $_url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return  isLoading  ? const Scaffold(body: LoadingUi(),) : phoneNotAuthenticated ?  AdvancedDrawer(
@@ -756,6 +760,14 @@ class _DashboardState extends State<Dashboard> {
             title: Text(ownersCode,
                 style: const TextStyle(fontWeight: FontWeight.bold)),
             backgroundColor: secondaryColor,
+            actions: [
+              IconButton(
+                onPressed: () async{
+                  await _launchInBrowser();
+                },
+                icon: Image.asset("assets/images/abaglogo.png",width: 30,height: 30,)
+              )
+            ],
           ),
           body: accountApproved ? ListView(
             children: [

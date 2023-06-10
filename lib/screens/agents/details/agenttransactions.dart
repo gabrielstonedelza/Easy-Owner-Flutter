@@ -11,6 +11,7 @@ import '../../../getonlineimage.dart';
 import '../../../widget/loadingui.dart';
 import '../../commissions.dart';
 import '../agentscustomers.dart';
+import '../summaries/agentaccountstartedsummary.dart';
 import '../summaries/agentaccountsummary.dart';
 import '../summaries/bankdepositsummary.dart';
 import '../summaries/bankwithdrawalsummary.dart';
@@ -188,7 +189,7 @@ class _AgentDetailsState extends State<AgentDetails> {
                 child: GestureDetector(
                   child: Column(
                     children: [
-                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/3201/3201521.png",70,70),
+                      myOnlineImage("assets/images/group.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),
@@ -204,7 +205,7 @@ class _AgentDetailsState extends State<AgentDetails> {
                 child: GestureDetector(
                   child: Column(
                     children: [
-                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/2830/2830289.png",70,70),
+                      myOnlineImage("assets/images/bank.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),
@@ -220,7 +221,7 @@ class _AgentDetailsState extends State<AgentDetails> {
                 child: GestureDetector(
                   child: Column(
                     children: [
-                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/2830/2830289.png",70,70),
+                      myOnlineImage("assets/images/bank.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),
@@ -318,7 +319,7 @@ class _AgentDetailsState extends State<AgentDetails> {
                 child: GestureDetector(
                   child: Column(
                     children: [
-                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/9532/9532823.png",70,70),
+                      myOnlineImage("assets/images/ewallet.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),
@@ -334,7 +335,7 @@ class _AgentDetailsState extends State<AgentDetails> {
                 child: GestureDetector(
                   child: Column(
                     children: [
-                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/2331/2331941.png",70,70),
+                      myOnlineImage("assets/images/cash-payment.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),
@@ -350,7 +351,7 @@ class _AgentDetailsState extends State<AgentDetails> {
                 child: GestureDetector(
                   child: Column(
                     children: [
-                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/994/994377.png",70,70),
+                      myOnlineImage("assets/images/balance.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),
@@ -374,7 +375,7 @@ class _AgentDetailsState extends State<AgentDetails> {
                 child: GestureDetector(
                   child: Column(
                     children: [
-                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/10318/10318009.png",70,70),
+                      myOnlineImage("assets/images/wallet.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),
@@ -388,9 +389,25 @@ class _AgentDetailsState extends State<AgentDetails> {
               ),
               Expanded(
                 child: GestureDetector(
+                  child: Column(
+                    children: [
+                      myOnlineImage("assets/images/wallet.png",70,70),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text("Accounts Started"),
+                    ],
+                  ),
+                  onTap: () {
+                    Get.to(() => AgentAccountStartedBalanceSummary(username: username,));
+                  },
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
                   child:  Column(
                     children: [
-                      myOnlineImage("https://cdn-icons-png.flaticon.com/128/2405/2405293.png",70,70),
+                      myOnlineImage("assets/images/commissions.png",70,70),
                       const SizedBox(
                         height: 10,
                       ),
@@ -399,26 +416,6 @@ class _AgentDetailsState extends State<AgentDetails> {
                   ),
                   onTap: () {
                     Get.to(()=>AgentCommissions(username:username));
-                  },
-                ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  child: const Column(
-                    children: [
-                      // Image.asset(
-                      //   "assets/images/law.png",
-                      //   width: 70,
-                      //   height: 70,
-                      // ),
-                      // const SizedBox(
-                      //   height: 10,
-                      // ),
-                      // const Text("Rebalancing"),
-                    ],
-                  ),
-                  onTap: () {
-                    // Get.to(() => RebalancingSummary(username:username));
                   },
                 ),
               ),
