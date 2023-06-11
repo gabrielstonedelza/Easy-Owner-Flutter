@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -8,36 +9,36 @@ import '../../../constants.dart';
 import '../../../widget/loadingui.dart';
 
 
-class AgentAccountStartedBalanceSummaryDetail extends StatefulWidget {
+class MtnDepositSummaryDetail extends StatefulWidget {
   final username;
-  final date_posted;
-  const AgentAccountStartedBalanceSummaryDetail({Key? key, this.date_posted,required this.username})
+  final deposit_date;
+  const MtnDepositSummaryDetail({Key? key, this.deposit_date,required this.username})
       : super(key: key);
 
   @override
-  _AgentAccountStartedBalanceSummaryDetailState createState() =>
-      _AgentAccountStartedBalanceSummaryDetailState(date_posted: this.date_posted,username:this.username);
+  _MtnDepositSummaryDetailState createState() =>
+      _MtnDepositSummaryDetailState(deposit_date: this.deposit_date,username:this.username);
 }
 
-class _AgentAccountStartedBalanceSummaryDetailState extends State<AgentAccountStartedBalanceSummaryDetail> {
-  final date_posted;
+class _MtnDepositSummaryDetailState extends State<MtnDepositSummaryDetail> {
+  final deposit_date;
   final username;
-  _AgentAccountStartedBalanceSummaryDetailState({required this.date_posted,required this.username});
+  _MtnDepositSummaryDetailState({required this.deposit_date,required this.username});
+
   final storage = GetStorage();
   bool hasToken = false;
   late String uToken = "";
-  late List allBalancing = [];
-  late List reversedAccountBalanceToday = List.of(allBalancing.reversed);
+  late List allMtnDeposits = [];
   bool isLoading = true;
   late var items;
-  late var itemsClosed;
   late List amounts = [];
   late List amountResults = [];
-  late List balancingDates = [];
+  late List depositsDates = [];
   double sum = 0.0;
+  double cashReceived = 0.0;
 
-  Future<void>fetchAllAccountBalance() async {
-    final url = "https://fnetagents.xyz/get_my_agent_account_started_with/$username/";
+  fetchUserMtnDeposits() async {
+    final url = "https://fnetagents.xyz/get_agents_momo_deposits/$username/";
     var myLink = Uri.parse(url);
     final response =
     await http.get(myLink, headers: {"Authorization": "Token $uToken"});
@@ -45,22 +46,22 @@ class _AgentAccountStartedBalanceSummaryDetailState extends State<AgentAccountSt
     if (response.statusCode == 200) {
       final codeUnits = response.body.codeUnits;
       var jsonData = const Utf8Decoder().convert(codeUnits);
-      allBalancing = json.decode(jsonData);
-      for (var i in allBalancing) {
-        if (i['date_posted'].toString().split("T").first == date_posted) {
-          balancingDates.add(i);
-          sum = sum + double.parse(i['e_cash_total']);
+      allMtnDeposits = json.decode(jsonData);
+      for (var i in allMtnDeposits) {
+        if (i['date_deposited'].toString().split("T").first == deposit_date) {
+          depositsDates.add(i);
+          sum = sum + double.parse(i['amount_sent']);
+          cashReceived = cashReceived + double.parse(i['cash_received']);
         }
       }
     }
 
     setState(() {
       isLoading = false;
-      allBalancing = allBalancing;
-      balancingDates = balancingDates;
+      allMtnDeposits = allMtnDeposits;
+      depositsDates = depositsDates;
     });
   }
-
 
   @override
   void initState() {
@@ -73,7 +74,7 @@ class _AgentAccountStartedBalanceSummaryDetailState extends State<AgentAccountSt
         uToken = storage.read("token");
       });
     }
-    fetchAllAccountBalance();
+    fetchUserMtnDeposits();
   }
 
   @override
@@ -81,16 +82,15 @@ class _AgentAccountStartedBalanceSummaryDetailState extends State<AgentAccountSt
     return Scaffold(
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: Text("Account for $date_posted"),
+        title: const Text("Mtn deposits"),
       ),
       body: SafeArea(
           child: isLoading
               ? const LoadingUi()
               : ListView.builder(
-              reverse: true,
-              itemCount: balancingDates != null ? balancingDates.length : 0,
+              itemCount: depositsDates != null ? depositsDates.length : 0,
               itemBuilder: (context, i) {
-                items = balancingDates[i];
+                items = depositsDates[i];
                 return Column(
                   children: [
                     const SizedBox(
@@ -108,21 +108,28 @@ class _AgentAccountStartedBalanceSummaryDetailState extends State<AgentAccountSt
                           padding:
                           const EdgeInsets.only(top: 18.0, bottom: 18),
                           child: ListTile(
-                            title: buildRow("Total: ", "e_cash_total"),
+                            title: buildRow("Customer: ", "customer"),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                buildRow("Physical : ", "physical"),
-                                buildRow("Mtn : ", "mtn_e_cash"),
-                                buildRow("AirtelTigo : ", "tigo_airtel_e_cash"),
-                                buildRow("Vodafone : ", "vodafone_e_cash"),
+                                buildRow("Amount Sent: ", "amount_sent"),
+                                buildRow("Cash Received: ", "cash_received"),
+                                buildRow("Network: ", "network"),
+                                buildRow("Type: ", "type"),
+                                items['type'] == "Direct" ? Column(
+                                  children: [
+                                    buildRow("Depositor : ", "depositor_name"),
+                                    buildRow("Depositor Num: ", "depositor_number"),
+                                  ],
+                                ): Container(),
+
                                 Padding(
                                   padding: const EdgeInsets.only(left: 8.0,top: 2),
                                   child: Row(
                                     children: [
                                       const Text("Date : ", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
                                       ),
-                                      Text(items['date_posted'].toString().split("T").first, style: const TextStyle(
+                                      Text(items['date_deposited'].toString().split("T").first, style: const TextStyle(
                                           fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
                                       ),
                                     ],
@@ -134,7 +141,7 @@ class _AgentAccountStartedBalanceSummaryDetailState extends State<AgentAccountSt
                                     children: [
                                       const Text("Time : ", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
                                       ),
-                                      Text(items['time_posted'].toString().split(".").first, style: const TextStyle(
+                                      Text(items['date_deposited'].toString().split("T").last.toString().split(".").first, style: const TextStyle(
                                           fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
                                       ),
                                     ],
@@ -145,7 +152,7 @@ class _AgentAccountStartedBalanceSummaryDetailState extends State<AgentAccountSt
                           ),
                         ),
                       ),
-                    ),
+                    )
                   ],
                 );
               })),
@@ -157,7 +164,13 @@ class _AgentAccountStartedBalanceSummaryDetailState extends State<AgentAccountSt
           Get.defaultDialog(
             buttonColor: secondaryColor,
             title: "Total",
-            middleText: "$sum",
+            content: Column(
+              children: [
+                Text("Amount Sent = $sum"),
+                Text("Cash Received = $cashReceived"),
+                Text("Commission = ${cashReceived - sum}"),
+              ],
+            ),
             confirm: RawMaterialButton(
                 shape: const StadiumBorder(),
                 fillColor: secondaryColor,
@@ -183,21 +196,6 @@ class _AgentAccountStartedBalanceSummaryDetailState extends State<AgentAccountSt
           Text(mainTitle, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           Text(items[subtitle].toString(), style: const TextStyle(
-              fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Padding buildClosedRow(String mainTitle,String subtitle) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Text(mainTitle, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          Text(itemsClosed[subtitle].toString(), style: const TextStyle(
               fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
           ),
         ],

@@ -8,6 +8,7 @@ import '../../../constants.dart';
 import '../widget/loadingui.dart';
 import 'agents/commissions/cashincommission.dart';
 import 'agents/commissions/cashoutcommission.dart';
+import 'agents/commissionsummary/cashinsummarycommission.dart';
 
 
 
@@ -238,7 +239,8 @@ class _AgentCommissionsState extends State<AgentCommissions> {
             ],
           )
         ],
-      )
+      ),
+
     );
   }
 }

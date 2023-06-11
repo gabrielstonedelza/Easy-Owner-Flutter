@@ -31,7 +31,7 @@ class _MomoCashInSummaryState extends State<MomoCashInSummary> {
   late List bankAmounts = [];
   late List mtnDepositDates = [];
 
-  fetchAllAgentsMtnDeposits()async{
+  Future<void>fetchAllAgentsMtnDeposits()async{
     final url = "https://fnetagents.xyz/get_agents_momo_deposits/$username/";
     var myLink = Uri.parse(url);
     final response = await http.get(myLink, headers: {

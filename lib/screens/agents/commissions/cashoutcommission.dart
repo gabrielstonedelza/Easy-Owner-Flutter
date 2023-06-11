@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
+import '../summaries/momowithdrawsummary.dart';
+
 class FetchCashOutCommissionMonthly extends StatefulWidget {
   final username;
   const FetchCashOutCommissionMonthly({Key? key,required this.username}) : super(key: key);
@@ -392,6 +394,13 @@ class _FetchCashOutCommissionMonthlyState extends State<FetchCashOutCommissionMo
                 ],
               ),)
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: secondaryColor,
+          onPressed: (){
+            Get.to(() => MomoCashOutSummary(username: username,));
+          },
+          child: const Text("All"),
         ),
       ),
     );
