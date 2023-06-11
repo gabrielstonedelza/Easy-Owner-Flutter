@@ -212,26 +212,26 @@ class _DashboardState extends State<Dashboard> {
                 mainAxisAlignment:
                 MainAxisAlignment.spaceEvenly,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      openForRequest();
-                    },
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          "assets/images/momo.png",
-                          width: 50,
-                          height: 50,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 10.0),
-                          child: Text("Request",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold)),
-                        )
-                      ],
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     openForRequest();
+                  //   },
+                  //   child: Column(
+                  //     children: [
+                  //       Image.asset(
+                  //         "assets/images/momo.png",
+                  //         width: 50,
+                  //         height: 50,
+                  //       ),
+                  //       const Padding(
+                  //         padding: EdgeInsets.only(top: 10.0),
+                  //         child: Text("Request",
+                  //             style: TextStyle(
+                  //                 fontWeight: FontWeight.bold)),
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
                   GestureDetector(
                     onTap: () {
                       openFinancialServices();
@@ -610,6 +610,15 @@ class _DashboardState extends State<Dashboard> {
     _timer.cancel();
   }
 
+  void launchWhatsapp()async{
+    String url = "https://chat.whatsapp.com/KnKFdtuBwLx5VyI3hnoO96";
+    await canLaunch(url) ? launch(url) : Get.snackbar("Sorry", "Cannot open whatsapp",
+        colorText: defaultWhite,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: snackBackground
+    );
+  }
+
   final Uri _url = Uri.parse('https://chat.whatsapp.com/KnKFdtuBwLx5VyI3hnoO96');
   Future<void> _launchInBrowser() async {
     if (!await launchUrl(_url)) {
@@ -761,11 +770,27 @@ class _DashboardState extends State<Dashboard> {
                 style: const TextStyle(fontWeight: FontWeight.bold)),
             backgroundColor: secondaryColor,
             actions: [
-              IconButton(
-                onPressed: () async{
-                  await _launchInBrowser();
+              GestureDetector(
+                onTap: (){
+                  launchWhatsapp();
                 },
-                icon: Image.asset("assets/images/abaglogo.png",width: 30,height: 30,)
+                child: Card(
+                  elevation: 12,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)
+                  ),
+                  child:
+                  Padding(
+                    padding: const EdgeInsets.only(left:8.0,right: 8),
+                    child: Row(
+                      children: [
+                        Image.asset("assets/images/abaglogo.png",width: 30,height: 30,),
+                        const SizedBox(width: 10,),
+                        const Text("Abag",style:TextStyle(color: secondaryColor,fontWeight: FontWeight.bold))
+                      ],
+                    ),
+                  ),
+                ),
               )
             ],
           ),

@@ -37,8 +37,10 @@ class _MtnDepositSummaryDetailState extends State<MtnDepositSummaryDetail> {
   late List depositsDates = [];
   double sum = 0.0;
   double cashReceived = 0.0;
+  bool isDeleting = false;
 
-  fetchAgentMtnDeposits() async {
+
+  Future<void>fetchAgentMtnDeposits() async {
     final url = "https://fnetagents.xyz/get_agents_momo_deposits/$username/";
     var myLink = Uri.parse(url);
     final response = await http.get(myLink, headers: {"Authorization": "Token $uToken"});
@@ -59,6 +61,19 @@ class _MtnDepositSummaryDetailState extends State<MtnDepositSummaryDetail> {
       });
     }
     else{
+
+    }
+  }
+
+  deleteDeposit(String id) async {
+    final url = "https://fnetagents.xyz/delete_agent_momo_deposit/$id";
+    var myLink = Uri.parse(url);
+    final response = await http.get(myLink);
+
+    if (response.statusCode == 204) {
+      fetchAgentMtnDeposits();
+      Get.back();
+    } else {
 
     }
   }
@@ -122,63 +137,63 @@ class _MtnDepositSummaryDetailState extends State<MtnDepositSummaryDetail> {
                                         buildRow("Depositor Num: ", "depositor_number"),
                                       ],
                                     ): Container(),
-                                    items["d_200"] == 0 ? Container():
-                                    Row(
-                                      children: [
-                                        buildRow("200 GHC Notes: ", "d_200"),
-                                        Text("(${items['d_200'] * 200})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
-                                      ],
-                                    ),
-                                    items["d_100"] == 0 ? Container():
-                                    Row(
-                                      children: [
-                                        buildRow("100 GHC Notes: ", "d_100"),
-                                        Text("(${items['d_100'] * 100})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
-                                      ],
-                                    ),
-                                    items["d_50"] == 0 ? Container():
-                                    Row(
-                                      children: [
-                                        buildRow("50 GHC Notes: ", "d_50"),
-                                        Text("(${items['d_50'] * 50})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
-                                      ],
-                                    ),
-                                    items["d_20"] == 0 ? Container():
-                                    Row(
-                                      children: [
-                                        buildRow("20 GHC Notes: ", "d_20"),
-                                        Text("(${items['d_20'] * 20})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
-                                      ],
-                                    ),
-                                    items["d_10"] == 0 ? Container():
-                                    Row(
-                                      children: [
-                                        buildRow("10 GHC Notes: ", "d_10"),
-                                        Text("(${items['d_10'] * 10})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
-                                      ],
-                                    ),
-                                    items["d_5"] == 0 ? Container():
-                                    Row(
-                                      children: [
-                                        buildRow("5 GHC Notes: ", "d_5"),
-                                        Text("(${items['d_5'] * 5})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
-                                      ],
-                                    ),
-                                    items["d_2"] == 0 ? Container():
-                                    Row(
-                                      children: [
-                                        buildRow("2 GHC Notes: ", "d_2"),
-                                        Text("(${items['d_2'] * 2})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
-                                      ],
-                                    ),
-                                    items["d_1"] == 0 ? Container():
-                                    Row(
-                                      children: [
-                                        buildRow("1 GHC Notes: ", "d_1"),
-                                        Text("(${items['d_1'] * 1})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
-                                      ],
-                                    ),
-                                    buildRow("Total: ", "total",),
+                                    // items["d_200"] == 0 ? Container():
+                                    // Row(
+                                    //   children: [
+                                    //     buildRow("200 GHC Notes: ", "d_200"),
+                                    //     Text("(${items['d_200'] * 200})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
+                                    //   ],
+                                    // ),
+                                    // items["d_100"] == 0 ? Container():
+                                    // Row(
+                                    //   children: [
+                                    //     buildRow("100 GHC Notes: ", "d_100"),
+                                    //     Text("(${items['d_100'] * 100})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
+                                    //   ],
+                                    // ),
+                                    // items["d_50"] == 0 ? Container():
+                                    // Row(
+                                    //   children: [
+                                    //     buildRow("50 GHC Notes: ", "d_50"),
+                                    //     Text("(${items['d_50'] * 50})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
+                                    //   ],
+                                    // ),
+                                    // items["d_20"] == 0 ? Container():
+                                    // Row(
+                                    //   children: [
+                                    //     buildRow("20 GHC Notes: ", "d_20"),
+                                    //     Text("(${items['d_20'] * 20})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
+                                    //   ],
+                                    // ),
+                                    // items["d_10"] == 0 ? Container():
+                                    // Row(
+                                    //   children: [
+                                    //     buildRow("10 GHC Notes: ", "d_10"),
+                                    //     Text("(${items['d_10'] * 10})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
+                                    //   ],
+                                    // ),
+                                    // items["d_5"] == 0 ? Container():
+                                    // Row(
+                                    //   children: [
+                                    //     buildRow("5 GHC Notes: ", "d_5"),
+                                    //     Text("(${items['d_5'] * 5})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
+                                    //   ],
+                                    // ),
+                                    // items["d_2"] == 0 ? Container():
+                                    // Row(
+                                    //   children: [
+                                    //     buildRow("2 GHC Notes: ", "d_2"),
+                                    //     Text("(${items['d_2'] * 2})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
+                                    //   ],
+                                    // ),
+                                    // items["d_1"] == 0 ? Container():
+                                    // Row(
+                                    //   children: [
+                                    //     buildRow("1 GHC Notes: ", "d_1"),
+                                    //     Text("(${items['d_1'] * 1})",style: const TextStyle(fontWeight: FontWeight.bold,color: snackBackground),)
+                                    //   ],
+                                    // ),
+                                    // buildRow("Total: ", "total",),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 8.0,top: 2),
                                       child: Row(
@@ -204,6 +219,12 @@ class _MtnDepositSummaryDetailState extends State<MtnDepositSummaryDetail> {
                                       ),
                                     ),
                                   ],
+                                ),
+                                trailing: IconButton(
+                                  onPressed: (){
+                                    deleteDeposit(depositsDates[i]['id'].toString());
+                                  },
+                                  icon: const Icon(Icons.delete_forever,size: 30,color: warning,),
                                 ),
                               ),
                             ),

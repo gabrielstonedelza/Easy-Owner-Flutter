@@ -46,7 +46,7 @@ class _OwnerPayToSummaryState extends State<OwnerPayToSummary> {
       final codeUnits = response.body.codeUnits;
       var jsonData = const Utf8Decoder().convert(codeUnits);
       allPayToForAgent = json.decode(jsonData);
-      print(allPayToForAgent);
+      // print(allPayToForAgent);
 
       for(var i in allPayToForAgent){
         if(i['pay_to_type'] == "Agent"){
@@ -223,7 +223,7 @@ class _OwnerPayToSummaryState extends State<OwnerPayToSummary> {
                               },
                               child: Column(
                                 children: [
-                                  myOnlineImage("https://cdn-icons-png.flaticon.com/128/2534/2534183.png",70,70),
+                                  myOnlineImage("assets/images/employee.png",70,70),
                                   const Padding(
                                     padding: EdgeInsets.only(
                                         top: 10.0),
@@ -242,7 +242,7 @@ class _OwnerPayToSummaryState extends State<OwnerPayToSummary> {
                               },
                               child: Column(
                                 children: [
-                                  myOnlineImage("https://cdn-icons-png.flaticon.com/128/10701/10701763.png",70,70),
+                                  myOnlineImage("assets/images/cashier.png",70,70),
                                   const Padding(
                                     padding: EdgeInsets.only(
                                         top: 10.0),

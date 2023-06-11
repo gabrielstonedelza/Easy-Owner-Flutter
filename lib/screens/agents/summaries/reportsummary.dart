@@ -29,7 +29,7 @@ class _ReportSummaryState extends State<ReportSummary> {
   late List reportDates = [];
 
   fetchAllAgentsReports()async{
-    const url = "https://fnetagents.xyz/get_reports_today/";
+    const url = "https://fnetagents.xyz/get_all_reports/";
     var myLink = Uri.parse(url);
     final response = await http.get(myLink, headers: {
       "Authorization": "Token $uToken"

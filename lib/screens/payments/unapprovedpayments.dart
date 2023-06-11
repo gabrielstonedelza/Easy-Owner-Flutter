@@ -77,7 +77,7 @@ class _AllUnApprovedPaymentsState extends State<AllUnApprovedPayments> {
                   const EdgeInsets.only(top: 18.0, bottom: 18),
                   child: ListTile(
                     onTap: (){
-                      Get.to(() => ApprovePayments(id:allPayments[index]['id'].toString(),amount:allPayments[index]['amount'],agent:allPayments[index]['agent'].toString(),owner:allPayments[index]['owner'].toString()));
+                      Get.to(() => ApprovePayments(id:allPayments[index]['id'].toString(),amount:allPayments[index]['amount'],agent:allPayments[index]['agent'].toString(),owner:allPayments[index]['owner'].toString(),reference:allPayments[index]['reference']));
                     },
                     title: buildRow("Amount: ", "amount"),
                     subtitle: Column(
@@ -85,7 +85,7 @@ class _AllUnApprovedPaymentsState extends State<AllUnApprovedPayments> {
                       children: [
                         buildRow("Payment Approved: ", "payment_approved"),
                         items["reference"] == "" ? Container():
-                        buildRow("Reference: ", "reference"),
+                        // buildRow("Reference: ", "reference"),
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0,top: 2),
                           child: Row(

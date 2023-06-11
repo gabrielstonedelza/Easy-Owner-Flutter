@@ -35,7 +35,7 @@ class _MtnWithdrawalSummaryDetailState extends State<MtnWithdrawalSummaryDetail>
   double sum = 0.0;
   double amountReceived = 0.0;
 
-  fetchAgentMtnWithdrawals()async{
+  Future<void>fetchAgentMtnWithdrawals()async{
     final url = "https://fnetagents.xyz/get_agents_momo_withdrawals/$username/";
     var myLink = Uri.parse(url);
     final response = await http.get(myLink, headers: {
@@ -60,6 +60,19 @@ class _MtnWithdrawalSummaryDetailState extends State<MtnWithdrawalSummaryDetail>
       allMtnDeposits = allMtnDeposits;
       withdrawalDates = withdrawalDates;
     });
+  }
+
+  deleteWithdrawal(String id) async {
+    final url = "https://fnetagents.xyz/delete_agent_momo_withdrawals/$id";
+    var myLink = Uri.parse(url);
+    final response = await http.get(myLink);
+
+    if (response.statusCode == 204) {
+      fetchAgentMtnWithdrawals();
+      Get.back();
+    } else {
+
+    }
   }
 
   @override
@@ -138,6 +151,12 @@ class _MtnWithdrawalSummaryDetailState extends State<MtnWithdrawalSummaryDetail>
                                 ),
                               ],
                             ),
+                              trailing: IconButton(
+                                onPressed: (){
+                                  deleteWithdrawal(withdrawalDates[i]['id'].toString());
+                                },
+                                icon: const Icon(Icons.delete_forever,size: 30,color: warning,),
+                              )
                           ),
                         ),
                       ),
