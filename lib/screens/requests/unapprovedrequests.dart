@@ -77,15 +77,19 @@ class _AllUnApprovedRequestsState extends State<AllUnApprovedRequests> {
                   const EdgeInsets.only(top: 18.0, bottom: 18),
                   child: ListTile(
                     onTap: (){
-                      Get.to(() => ApproveRequest(id:allRequests[index]['id'].toString(),amount:allRequests[index]['amount'],agent:allRequests[index]['agent'].toString(),owner:allRequests[index]['owner'].toString(), network:allRequests[index]['network'],username:allRequests[index]['get_agent_username']));
+                      Get.to(() => ApproveRequest(id:allRequests[index]['id'].toString(),amount:allRequests[index]['amount'],agent:allRequests[index]['agent'].toString(),owner:allRequests[index]['owner'].toString(), network:allRequests[index]['network'],username:allRequests[index]['get_agent_username'],
+                      cash:allRequests[index]['cash']));
                     },
-                    title: buildRow("Amount: ", "amount"),
+                    title: buildRow("Agent: ", "get_agent_username"),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        items["bank"] == "Select bank" ? Container():
+                        buildRow("Amount: ", "amount"),
+                        items["cash"] != 0.0 ? buildRow("Cash: ", "cash"):
+                        Container(),
+                        items["bank"] == "" ? Container():
                         buildRow("Bank: ", "bank"),
-                        items["network"] == "Select Network" ? Container():
+                        items["network"] == "" ? Container():
                         buildRow("Network: ", "network"),
                         buildRow("Approved: ", "request_approved"),
                         buildRow("Paid: ", "request_paid"),

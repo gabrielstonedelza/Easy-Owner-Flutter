@@ -20,10 +20,11 @@ class ApproveRequest extends StatefulWidget {
   final owner;
   final network;
   final username;
-  const ApproveRequest({Key? key,required this.id,required this.amount,required this.agent,required this.owner,required this.network,required this.username}) : super(key: key);
+  final cash;
+  const ApproveRequest({Key? key,required this.id,required this.amount,required this.agent,required this.owner,required this.network,required this.username,required this.cash}) : super(key: key);
 
   @override
-  State<ApproveRequest> createState() => _ApproveRequestState(id:this.id,amount:this.amount,agent:this.agent,owner:this.owner,network:this.network,username:this.username);
+  State<ApproveRequest> createState() => _ApproveRequestState(id:this.id,amount:this.amount,agent:this.agent,owner:this.owner,network:this.network,username:this.username,cash:this.cash);
 }
 
 class _ApproveRequestState extends State<ApproveRequest> {
@@ -33,7 +34,8 @@ class _ApproveRequestState extends State<ApproveRequest> {
   final owner;
   final network;
   final username;
-  _ApproveRequestState({required this.id,required this.amount,required this.agent,required this.owner,required this.network,required this.username});
+  final cash;
+  _ApproveRequestState({required this.id,required this.amount,required this.agent,required this.owner,required this.network,required this.username,required this.cash});
   late String uToken = "";
   late List allRequests = [];
   final storage = GetStorage();
@@ -150,7 +152,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
                     },
                     child: Column(
                       children: [
-                        myOnlineImage("https://cdn-icons-png.flaticon.com/128/2534/2534183.png",70,70),
+                        myOnlineImage("assets/images/employee.png",70,70),
                         const Padding(
                           padding: EdgeInsets.only(
                               top: 10.0),
@@ -170,7 +172,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
                     },
                     child: Column(
                       children: [
-                        myOnlineImage("https://cdn-icons-png.flaticon.com/128/10701/10701763.png",70,70),
+                        myOnlineImage("assets/images/cashier.png",70,70),
                         const Padding(
                           padding: EdgeInsets.only(
                               top: 10.0),
@@ -515,7 +517,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
       accountBalanceDetailsToday.assignAll(allPosts);
       setState(() {
         isLoading = false;
-        lastItem.assign(accountBalanceDetailsToday.last);
+        lastItem.assign(accountBalanceDetailsToday.first);
         physicalNow = double.parse(lastItem[0]['physical']);
         mtnNow = double.parse(lastItem[0]['mtn_e_cash']);
         airtelTigoNow = double.parse(lastItem[0]['tigo_airtel_e_cash']);
@@ -536,6 +538,12 @@ class _ApproveRequestState extends State<ApproveRequest> {
           vodafoneNow = vodafoneNow + amount;
         });
       }
+      if(double.parse(cash) != 0.0){
+        setState(() {
+          physicalNow = physicalNow + double.parse(cash);
+        });
+      }
+
     } else {
       // print(res.body);
     }
