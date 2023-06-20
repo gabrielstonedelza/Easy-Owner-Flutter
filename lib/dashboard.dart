@@ -607,6 +607,7 @@ class _DashboardState extends State<Dashboard> {
     });
 
     _timer = Timer.periodic(const Duration(seconds: 15), (timer) {
+      getLatestAppVersion();
       tpController.fetchFreeTrial(uToken);
       tpController.fetchAccountBalance(uToken);
       tpController.fetchMonthlyPayment(uToken);
