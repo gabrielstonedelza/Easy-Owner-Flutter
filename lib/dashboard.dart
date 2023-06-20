@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:device_apps/device_apps.dart';
+import 'package:easy_owner/requestnewappversion.dart';
 import 'package:easy_owner/screens/aboutpage.dart';
 import 'package:easy_owner/screens/agents/addnewagent.dart';
 import 'package:easy_owner/screens/agents/myagents.dart';
@@ -55,6 +56,8 @@ class _DashboardState extends State<Dashboard> {
   late String agentCode = "";
   late Timer _timer;
   bool isLoading = true;
+  late int appVersion = 0;
+  late int latestAppVersion = 0;
 
   final _advancedDrawerController = AdvancedDrawerController();
   SmsQuery query = SmsQuery();
@@ -68,6 +71,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   late List notRead = [];
+  late List appVersions = [];
 
   late List triggered = [];
 
@@ -84,6 +88,7 @@ class _DashboardState extends State<Dashboard> {
 
   bool isAuthenticated = false;
   bool isAuthenticatedAlready = false;
+  bool isLatestAppVersion = false;
 
 
   Future<void> getAllTriggeredNotifications() async {
@@ -149,6 +154,34 @@ class _DashboardState extends State<Dashboard> {
     }, body: {
     });
     if (response.statusCode == 200) {}
+  }
+
+  Future<void> getLatestAppVersion() async {
+    const url = "https://fnetagents.xyz/check_app_version/";
+    var link = Uri.parse(url);
+    http.Response response = await http.get(link, headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    });
+    if (response.statusCode == 200) {
+      var jsonData = jsonDecode(response.body);
+      appVersions.assignAll(jsonData);
+      for(var i in appVersions){
+        appVersion = i['app_version'];
+        if(latestAppVersion ==  i['app_version']){
+          setState(() {
+            isLatestAppVersion = true;
+          });
+        }
+        else{
+          setState(() {
+            isLatestAppVersion = false;
+          });
+        }
+      }
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   List profileDetails = [];
@@ -547,6 +580,11 @@ class _DashboardState extends State<Dashboard> {
         agentCode = storage.read("agent_code");
       });
     }
+    if (storage.read("AppVersion") != null) {
+      setState(() {
+        latestAppVersion = int.parse(storage.read("AppVersion"));
+      });
+    }
 
     tpController.fetchFreeTrial(uToken);
     tpController.fetchAccountBalance(uToken);
@@ -558,6 +596,7 @@ class _DashboardState extends State<Dashboard> {
     profileController.getUserProfile(uToken);
     getAllTriggeredNotifications();
     getUserDetails();
+    getLatestAppVersion();
 
 
     _timer = Timer.periodic(const Duration(seconds: 12), (timer) {
@@ -585,6 +624,7 @@ class _DashboardState extends State<Dashboard> {
     storage.remove("agent_code");
     storage.remove("phoneAuthenticated");
     storage.remove("IsAuthDevice");
+    storage.remove("AppVersion");
     Get.offAll(() => const LoginView());
     const logoutUrl = "https://www.fnetagents.xyz/auth/token/logout";
     final myLink = Uri.parse(logoutUrl);
@@ -600,6 +640,7 @@ class _DashboardState extends State<Dashboard> {
           backgroundColor: snackBackground);
       storage.remove("token");
       storage.remove("agent_code");
+      storage.remove("AppVersion");
       Get.offAll(() => const LoginView());
     }
   }
@@ -799,308 +840,327 @@ class _DashboardState extends State<Dashboard> {
               const SizedBox(
                 height: 30,
               ),
-              Row(
+              isLatestAppVersion ?  Column(
                 children: [
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("assets/images/employee.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("Register Agent"),
-                        ],
-                      ),
-                      onTap: () {
-                        Get.to(() => const AddNewAgent());
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                        myOnlineImage("assets/images/group.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("My Agents"),
-                        ],
-                      ),
-                      onTap: () {
-                        Get.to(() => const MyAgents());
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("assets/images/business-report.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("Reports"),
-                        ],
-                      ),
-                      onTap: () {
-                        Get.to(() => const ReportsToday());
-                      },
-                    ),
-                  ),
-
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Divider(),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("assets/images/ewallet.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("Requests"),
-                        ],
-                      ),
-                      onTap: () {
-                        Get.to(() => const AllUnApprovedRequests());
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("assets/images/payment-method.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("Payments"),
-                        ],
-                      ),
-                      onTap: () {
-                        Get.to(() => const AllUnApprovedPayments());
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("assets/images/balance.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("ReBalancing"),
-                          const Text("Requests"),
-                        ],
-                      ),
-                      onTap: () {
-                        Get.to(() => const AllUnApprovedReBalancing());
-
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Divider(),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("assets/images/cash-on-delivery.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("Pay To"),
-                        ],
-                      ),
-                      onTap: () {
-                        Get.to(() => const OwnerPayToSummary());
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("assets/images/bank.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("Financial"),
-                          const Text("Services"),
-                        ],
-                      ),
-                      onTap: () {
-                        showInstalled();
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("assets/images/wallet.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("Agent Accounts"),
-                        ],
-                      ),
-                      onTap: () {
-                        Get.to(() => const MyAgentsAccounts());
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Divider(),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("assets/images/conversation.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("Chat"),
-                        ],
-                      ),
-                      onTap: () {
-                        showMaterialModalBottomSheet(
-                          context: context,
-                          builder: (context) => SizedBox(
-                            height: 200,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top:25.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: GestureDetector(
-                                      child: Column(
-                                        children: [
-                                          myOnlineImage("assets/images/manager.png",70,70),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          const Text("Admin"),
-                                        ],
-                                      ),
-                                      onTap: () {
-                                        Get.to(()=>const PrivateChat());
-                                      },
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: GestureDetector(
-                                      child: Column(
-                                        children: [
-                                          myOnlineImage("assets/images/cashier.png",70,70),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          const Text("Owners"),
-                                        ],
-                                      ),
-                                      onTap: () {
-                                        Get.to(()=> const OwnersGroupChat());
-                                      },
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: GestureDetector(
-                                      child: Column(
-                                        children: [
-                                          myOnlineImage("assets/images/group.png",70,70),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          const Text("Agent Chat"),
-                                        ],
-                                      ),
-                                      onTap: () {
-                                        Get.to(() => const AgentsGroupChat());
-                                      },
-                                    ),
-                                  ),
-                                ],
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          child: Column(
+                            children: [
+                              myOnlineImage("assets/images/employee.png",70,70),
+                              const SizedBox(
+                                height: 10,
                               ),
-                            ),
+                              const Text("Register Agent"),
+                            ],
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("assets/images/meeting.png",70,70),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text("Meetings"),
-                        ],
+                          onTap: () {
+                            Get.to(() => const AddNewAgent());
+                          },
+                        ),
                       ),
-                      onTap: () {
-                        Get.to(() => const Meetings());
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      child: Column(
-                        children: [
-                          myOnlineImage("assets/images/live-streaming.png",70,70),
-                          const SizedBox(
-                            height: 10,
+                      Expanded(
+                        child: GestureDetector(
+                          child: Column(
+                            children: [
+                            myOnlineImage("assets/images/group.png",70,70),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text("My Agents"),
+                            ],
                           ),
-                          const Text("Live Meeting"),
-                        ],
+                          onTap: () {
+                            Get.to(() => const MyAgents());
+                          },
+                        ),
                       ),
-                      onTap: () {
-                        Get.to(() => JoinScreen());
-                      },
-                    ),
+                      Expanded(
+                        child: GestureDetector(
+                          child: Column(
+                            children: [
+                              myOnlineImage("assets/images/business-report.png",70,70),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text("Reports"),
+                            ],
+                          ),
+                          onTap: () {
+                            Get.to(() => const ReportsToday());
+                          },
+                        ),
+                      ),
+
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Divider(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          child: Column(
+                            children: [
+                              myOnlineImage("assets/images/ewallet.png",70,70),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text("Requests"),
+                            ],
+                          ),
+                          onTap: () {
+                            Get.to(() => const AllUnApprovedRequests());
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          child: Column(
+                            children: [
+                              myOnlineImage("assets/images/payment-method.png",70,70),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text("Payments"),
+                            ],
+                          ),
+                          onTap: () {
+                            Get.to(() => const AllUnApprovedPayments());
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          child: Column(
+                            children: [
+                              myOnlineImage("assets/images/balance.png",70,70),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text("ReBalancing"),
+                              const Text("Requests"),
+                            ],
+                          ),
+                          onTap: () {
+                            Get.to(() => const AllUnApprovedReBalancing());
+
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Divider(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          child: Column(
+                            children: [
+                              myOnlineImage("assets/images/cash-on-delivery.png",70,70),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text("Pay To"),
+                            ],
+                          ),
+                          onTap: () {
+                            Get.to(() => const OwnerPayToSummary());
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          child: Column(
+                            children: [
+                              myOnlineImage("assets/images/bank.png",70,70),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text("Financial"),
+                              const Text("Services"),
+                            ],
+                          ),
+                          onTap: () {
+                            showInstalled();
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          child: Column(
+                            children: [
+                              myOnlineImage("assets/images/wallet.png",70,70),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text("Agent Accounts"),
+                            ],
+                          ),
+                          onTap: () {
+                            Get.to(() => const MyAgentsAccounts());
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Divider(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          child: Column(
+                            children: [
+                              myOnlineImage("assets/images/conversation.png",70,70),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text("Chat"),
+                            ],
+                          ),
+                          onTap: () {
+                            showMaterialModalBottomSheet(
+                              context: context,
+                              builder: (context) => SizedBox(
+                                height: 200,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top:25.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: GestureDetector(
+                                          child: Column(
+                                            children: [
+                                              myOnlineImage("assets/images/manager.png",70,70),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              const Text("Admin"),
+                                            ],
+                                          ),
+                                          onTap: () {
+                                            Get.to(()=>const PrivateChat());
+                                          },
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: GestureDetector(
+                                          child: Column(
+                                            children: [
+                                              myOnlineImage("assets/images/cashier.png",70,70),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              const Text("Owners"),
+                                            ],
+                                          ),
+                                          onTap: () {
+                                            Get.to(()=> const OwnersGroupChat());
+                                          },
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: GestureDetector(
+                                          child: Column(
+                                            children: [
+                                              myOnlineImage("assets/images/group.png",70,70),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              const Text("Agent Chat"),
+                                            ],
+                                          ),
+                                          onTap: () {
+                                            Get.to(() => const AgentsGroupChat());
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          child: Column(
+                            children: [
+                              myOnlineImage("assets/images/meeting.png",70,70),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text("Meetings"),
+                            ],
+                          ),
+                          onTap: () {
+                            Get.to(() => const Meetings());
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          child: Column(
+                            children: [
+                              myOnlineImage("assets/images/live-streaming.png",70,70),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text("Live Meeting"),
+                            ],
+                          ),
+                          onTap: () {
+                            Get.to(() => JoinScreen());
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Divider(),
+                  const SizedBox(
+                    height: 20,
                   ),
                 ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Divider(),
-              const SizedBox(
-                height: 20,
+              ) : const Padding(
+                padding: EdgeInsets.only(top:18.0,left: 18),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(child: Text("Please update",style: TextStyle(fontWeight: FontWeight.bold),)),
+                    Padding(
+                      padding: EdgeInsets.only(top:8.0,bottom:8),
+                      child: Center(child: Text("Contact the admin for the latest app update",style: TextStyle(fontWeight: FontWeight.bold),)),
+                    ),
+                    SizedBox(height: 10,),
+                    Center(child: Text("Make sure to logout before installing the latest one",style: TextStyle(fontWeight: FontWeight.bold),)),
+                  ],
+                ),
               ),
             ],
-          ) : Column(
+          ) :
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
