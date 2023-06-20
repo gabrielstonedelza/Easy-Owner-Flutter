@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:device_apps/device_apps.dart';
-import 'package:easy_owner/requestnewappversion.dart';
 import 'package:easy_owner/screens/aboutpage.dart';
 import 'package:easy_owner/screens/agents/addnewagent.dart';
 import 'package:easy_owner/screens/agents/myagents.dart';
