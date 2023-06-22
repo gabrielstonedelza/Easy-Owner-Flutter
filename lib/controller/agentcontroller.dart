@@ -79,7 +79,7 @@ class AgentController extends GetxController{
     }
   }
 
-  registerOwner(String email,String username,String fullName,String phoneNum,String password1,String password2,String ownerCode,String cName,String cNumber,String loc,String dAdd)async{
+  registerOwner(String email,String username,String fullName,String phoneNum,String password1,String password2,String ownerCode,String cName,String cNumber,String loc,String dAdd,String abagCode)async{
     const requestUrl = "https://fnetagents.xyz/auth/users/";
     final myLink = Uri.parse(requestUrl);
     final response = await http.post(myLink, headers: {
@@ -99,6 +99,7 @@ class AgentController extends GetxController{
       "company_number": cNumber,
       "location": loc,
       "digital_address": dAdd,
+      "abag_code": abagCode,
     });
     if (response.statusCode == 201) {
       sendSms.sendMySms("+233244529353", "EasyAgent","Hi Mr Frank Fordjour,a new owner with the name  $fullName has registered on the Easy Portal,please login and check.");

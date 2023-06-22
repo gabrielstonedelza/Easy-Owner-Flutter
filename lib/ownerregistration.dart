@@ -29,6 +29,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
   late final TextEditingController _companyNumberController;
   late final TextEditingController _locationController;
   late final TextEditingController _digitalAddressController;
+  late final TextEditingController _abagCodeController;
 
   final _formKey = GlobalKey<FormState>();
   bool isObscured = true;
@@ -42,6 +43,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
   final FocusNode _companyNumberFocusNode = FocusNode();
   final FocusNode _locationFocusNode = FocusNode();
   final FocusNode _digitalAddressFocusNode = FocusNode();
+  final FocusNode _abagCodeFocusNode = FocusNode();
 
   final storage = GetStorage();
   late String username = "";
@@ -110,6 +112,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
     _companyNumberController = TextEditingController();
     _locationController = TextEditingController();
     _digitalAddressController = TextEditingController();
+    _abagCodeController = TextEditingController();
     fetchAdminDetails();
   }
 
@@ -126,6 +129,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
     _companyNumberController.dispose();
     _locationController.dispose();
     _digitalAddressController.dispose();
+    _abagCodeController.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -298,6 +302,24 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: TextFormField(
+                      controller: _abagCodeController,
+                      focusNode: _abagCodeFocusNode,
+                      cursorRadius: const Radius.elliptical(10, 10),
+                      cursorWidth: 10,
+                      cursorColor: secondaryColor,
+                      decoration: buildInputDecoration("Enter ABAG Code"),
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Please enter Abag Code";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: TextFormField(
                       controller: _passwordController,
                       focusNode: _passwordFocusNode,
                       cursorRadius: const Radius.elliptical(10, 10),
@@ -357,7 +379,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
                       if (!_formKey.currentState!.validate()) {
                         return;
                       } else {
-                        agentController.registerOwner(_emailController.text.trim(), _usernameController.text.trim(), _fullNameController.text.trim(), _phoneNumberController.text.trim(), _passwordController.text.trim(), _rePasswordController.text.trim(),adminUsername,_companyNameController.text.trim(),_companyNumberController.text.trim(),_locationController.text.trim(),_digitalAddressController.text.trim());
+                        agentController.registerOwner(_emailController.text.trim(), _usernameController.text.trim(), _fullNameController.text.trim(), _phoneNumberController.text.trim(), _passwordController.text.trim(), _rePasswordController.text.trim(),adminUsername,_companyNameController.text.trim(),_companyNumberController.text.trim(),_locationController.text.trim(),_digitalAddressController.text.trim(),_abagCodeController.text.trim());
                       }
                     },
                     decoration: const NeoPopTiltedButtonDecoration(
