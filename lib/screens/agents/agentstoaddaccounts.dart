@@ -31,7 +31,7 @@ class _MyAgentsToAddAccountsState extends State<MyAgentsToAddAccounts> {
   late List allMyAgents = [];
 
   Future<void> getAllMyAgents() async {
-    final completedRides = "https://fnetagents.xyz/get_all_my_agents/${profileController.ownersCode}";
+    final completedRides = "https://fnetagents.xyz/get_all_my_agents/${profileController.ownersUsername}";
     var link = Uri.parse(completedRides);
     http.Response response = await http.get(link, headers: {
       "Content-Type": "application/x-www-form-urlencoded",

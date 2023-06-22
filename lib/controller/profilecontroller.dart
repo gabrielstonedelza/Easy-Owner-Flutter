@@ -8,7 +8,7 @@ class ProfileController extends GetxController{
   bool isLoading = false;
   List profileDetails = [];
   late String userId = "";
-  late String ownersCode = "";
+  late String ownersUsername = "";
   late String myEmail = "";
   bool accountApproved = false;
 
@@ -57,7 +57,7 @@ class ProfileController extends GetxController{
         profileDetails = jsonData;
         for(var i in profileDetails){
           userId = i['id'].toString();
-          ownersCode = i['agent_unique_code'];
+          ownersUsername = i['username'];
           accountApproved = i['user_approved'];
           myEmail = i['email'];
         }

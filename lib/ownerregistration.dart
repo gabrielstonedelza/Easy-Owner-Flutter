@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:get/get.dart';
@@ -26,6 +25,10 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
   late final TextEditingController _passwordController;
   late final TextEditingController _rePasswordController;
   late final TextEditingController _phoneNumberController;
+  late final TextEditingController _companyNameController;
+  late final TextEditingController _companyNumberController;
+  late final TextEditingController _locationController;
+  late final TextEditingController _digitalAddressController;
 
   final _formKey = GlobalKey<FormState>();
   bool isObscured = true;
@@ -35,6 +38,10 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
   final FocusNode _passwordFocusNode = FocusNode();
   final FocusNode _rePasswordFocusNode = FocusNode();
   final FocusNode _phoneNumberFocusNode = FocusNode();
+  final FocusNode _companyNameFocusNode = FocusNode();
+  final FocusNode _companyNumberFocusNode = FocusNode();
+  final FocusNode _locationFocusNode = FocusNode();
+  final FocusNode _digitalAddressFocusNode = FocusNode();
 
   final storage = GetStorage();
   late String username = "";
@@ -99,6 +106,10 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
     _passwordController = TextEditingController();
     _rePasswordController = TextEditingController();
     _phoneNumberController = TextEditingController();
+    _companyNameController = TextEditingController();
+    _companyNumberController = TextEditingController();
+    _locationController = TextEditingController();
+    _digitalAddressController = TextEditingController();
     fetchAdminDetails();
   }
 
@@ -111,6 +122,10 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
     _passwordController.dispose();
     _rePasswordController.dispose();
     _phoneNumberController.dispose();
+    _companyNameController.dispose();
+    _companyNumberController.dispose();
+    _locationController.dispose();
+    _digitalAddressController.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -154,7 +169,6 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
                       },
                     ),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: TextFormField(
@@ -204,6 +218,78 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Please enter phone number";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: TextFormField(
+                      controller: _companyNameController,
+                      focusNode: _companyNameFocusNode,
+                      cursorRadius: const Radius.elliptical(10, 10),
+                      cursorWidth: 10,
+                      cursorColor: secondaryColor,
+                      decoration: buildInputDecoration("Company Name"),
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Please enter company name";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: TextFormField(
+                      controller: _companyNumberController,
+                      focusNode: _companyNumberFocusNode,
+                      cursorRadius: const Radius.elliptical(10, 10),
+                      cursorWidth: 10,
+                      cursorColor: secondaryColor,
+                      decoration: buildInputDecoration("Company Number"),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Please enter company number";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: TextFormField(
+                      controller: _locationController,
+                      focusNode: _locationFocusNode,
+                      cursorRadius: const Radius.elliptical(10, 10),
+                      cursorWidth: 10,
+                      cursorColor: secondaryColor,
+                      decoration: buildInputDecoration("Location"),
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Please enter location";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: TextFormField(
+                      controller: _digitalAddressController,
+                      focusNode: _digitalAddressFocusNode,
+                      cursorRadius: const Radius.elliptical(10, 10),
+                      cursorWidth: 10,
+                      cursorColor: secondaryColor,
+                      decoration: buildInputDecoration("Digital Add"),
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Please enter digital add";
                         }
                         return null;
                       },
@@ -271,7 +357,7 @@ class _OwnerRegistrationState extends State<OwnerRegistration> {
                       if (!_formKey.currentState!.validate()) {
                         return;
                       } else {
-                        agentController.registerOwner(_emailController.text.trim(), _usernameController.text.trim(), _fullNameController.text.trim(), _phoneNumberController.text.trim(), _passwordController.text.trim(), _rePasswordController.text.trim(),uniqueCode);
+                        agentController.registerOwner(_emailController.text.trim(), _usernameController.text.trim(), _fullNameController.text.trim(), _phoneNumberController.text.trim(), _passwordController.text.trim(), _rePasswordController.text.trim(),adminUsername,_companyNameController.text.trim(),_companyNumberController.text.trim(),_locationController.text.trim(),_digitalAddressController.text.trim());
                       }
                     },
                     decoration: const NeoPopTiltedButtonDecoration(

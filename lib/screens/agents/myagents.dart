@@ -35,7 +35,7 @@ class _MyAgentsState extends State<MyAgents> {
   Future<void> getAllMyAgents() async {
     try {
       isLoading = true;
-      final completedRides = "https://fnetagents.xyz/get_all_my_agents/${profileController.ownersCode}";
+      final completedRides = "https://fnetagents.xyz/get_all_my_agents/${profileController.ownersUsername}";
       var link = Uri.parse(completedRides);
       http.Response response = await http.get(link, headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -154,7 +154,7 @@ class _MyAgentsState extends State<MyAgents> {
         agentCode = storage.read("agent_code");
       });
     }
-    controller.getAllMyAgents(uToken,profileController.ownersCode);
+    controller.getAllMyAgents(uToken,profileController.ownersUsername);
     // _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
     //   controller.getAllMyAgents(uToken,profileController.ownersCode);
     // });
@@ -169,7 +169,7 @@ class _MyAgentsState extends State<MyAgents> {
         actions: [
           IconButton(
             onPressed: (){
-              controller.getAllMyAgents(uToken,profileController.ownersCode);
+              controller.getAllMyAgents(uToken,profileController.ownersUsername);
             },
             icon: const Icon(Icons.refresh,size: 30,),
           )
@@ -211,7 +211,7 @@ class _MyAgentsState extends State<MyAgents> {
                             backgroundColor: snackBackground);
                         removeFromBlockedList(controller.allMyAgents[i]['id'].toString(),controller.allMyAgents[i]['email'],controller.allMyAgents[i]['username'],controller.allMyAgents[i]['phone_number'],controller.allMyAgents[i]['full_name'],controller.allMyAgents[i]['owner'],controller.allMyAgents[i]['agent_unique_code'],);
                         await Future.delayed(const Duration(seconds: 3));
-                        controller.getAllMyAgents(uToken,profileController.ownersCode);
+                        controller.getAllMyAgents(uToken,profileController.ownersUsername);
                       },
                       icon:Image.asset("assets/images/blocked.png",width:100,height:100)
                   ) : IconButton(
@@ -223,7 +223,7 @@ class _MyAgentsState extends State<MyAgents> {
                             backgroundColor: snackBackground);
                         addToBlockedList(controller.allMyAgents[i]['id'].toString(),controller.allMyAgents[i]['email'],controller.allMyAgents[i]['username'],controller.allMyAgents[i]['phone_number'],controller.allMyAgents[i]['full_name'],controller.allMyAgents[i]['owner'],controller.allMyAgents[i]['agent_unique_code']);
                         await Future.delayed(const Duration(seconds: 3));
-                        controller.getAllMyAgents(uToken,profileController.ownersCode);
+                        controller.getAllMyAgents(uToken,profileController.ownersUsername);
                       },
                       icon:Image.asset("assets/images/block.png",width:100,height:100)
                   ),

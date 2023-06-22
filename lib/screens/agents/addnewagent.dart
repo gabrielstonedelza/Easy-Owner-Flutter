@@ -329,7 +329,7 @@ class _AddNewAgentState extends State<AddNewAgent> {
                         if (!_formKey.currentState!.validate()) {
                           return;
                         } else {
-                          agentController.addAgent(_emailController.text.trim(), _usernameController.text.trim(), _fullNameController.text.trim(), _phoneNumberController.text.trim(), _passwordController.text.trim(), _rePasswordController.text.trim(), profileController.ownersCode,_companyNameController.text.trim(),_companyNumberController.text.trim(),_locationController.text.trim(),_digitalAddressController.text.trim());
+                          agentController.addAgent(_emailController.text.trim(), _usernameController.text.trim(), _fullNameController.text.trim(), _phoneNumberController.text.trim(), _passwordController.text.trim(), _rePasswordController.text.trim(), profileController.ownersUsername,_companyNameController.text.trim(),_companyNumberController.text.trim(),_locationController.text.trim(),_digitalAddressController.text.trim());
                         }
                       },
                       decoration: const NeoPopTiltedButtonDecoration(

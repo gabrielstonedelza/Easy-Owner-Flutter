@@ -69,7 +69,7 @@ class _OwnersGroupChatState extends State<OwnersGroupChat> {
     }
   }
   fetchOwnerWithCode() async {
-    final url = "https://fnetagents.xyz/get_supervisor_with_code/${controller.ownersCode}/";
+    final url = "https://fnetagents.xyz/get_supervisor_with_code/${controller.ownersUsername}/";
     var myLink = Uri.parse(url);
     final response =
     await http.get(myLink, headers: {"Authorization": "Token $uToken"});

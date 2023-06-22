@@ -33,7 +33,7 @@ class _AllAgentsState extends State<AllAgents> {
   late List lastMessage = [];
 
   fetchAllAgents()async{
-    final url = "https://fnetagents.xyz/get_supervisor_agents/${profileController.ownersCode}/";
+    final url = "https://fnetagents.xyz/get_supervisor_agents/${profileController.ownersUsername}/";
     var myLink = Uri.parse(url);
     final response = await http.get(myLink,headers: {"Authorization": "Token $uToken"});
 
