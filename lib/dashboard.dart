@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:device_apps/device_apps.dart';
 import 'package:easy_owner/screens/aboutpage.dart';
 import 'package:easy_owner/screens/agents/addnewagent.dart';
@@ -15,6 +15,7 @@ import 'package:easy_owner/screens/rebalancing/unapprovedrebalancing.dart';
 import 'package:easy_owner/screens/reportstoday.dart';
 import 'package:easy_owner/screens/requests/unapprovedrequests.dart';
 import 'package:easy_owner/widget/loadingui.dart';
+import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -37,7 +38,6 @@ import 'controller/trialmonthlypayment.dart';
 import 'getonlineimage.dart';
 import 'join_screen.dart';
 import 'login.dart';
-
 import 'meetings.dart';
 
 class Dashboard extends StatefulWidget {
@@ -667,6 +667,13 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
+
+
+  Future<Uint8List> _readImageData(String name) async {
+    final data = await rootBundle.load('assets/images/$name');
+    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  }
+
   @override
   Widget build(BuildContext context) {
     return  isLoading  ? const Scaffold(body: LoadingUi(),) : phoneNotAuthenticated ?  AdvancedDrawer(
@@ -812,7 +819,7 @@ class _DashboardState extends State<Dashboard> {
             backgroundColor: secondaryColor,
             actions: [
               GestureDetector(
-                onTap: (){
+                onTap: () async {
                   launchWhatsapp();
                 },
                 child: Card(
@@ -832,7 +839,7 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
           body: accountApproved ? ListView(

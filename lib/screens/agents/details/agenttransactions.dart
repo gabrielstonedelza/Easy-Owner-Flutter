@@ -21,6 +21,7 @@ import '../summaries/paymentsummary.dart';
 import '../summaries/paytosummary.dart';
 import '../summaries/rebalancingsummary.dart';
 import '../summaries/requestsummary.dart';
+import '../transactionscsv/viewandsavetransactions.dart';
 
 class AgentDetails extends StatefulWidget {
   final username;
@@ -416,6 +417,62 @@ class _AgentDetailsState extends State<AgentDetails> {
                   ),
                   onTap: () {
                     Get.to(()=>AgentCommissions(username:username));
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Divider(),
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  child: Column(
+                    children: [
+                      myOnlineImage("assets/images/upload.png",70,70),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text("All Transactions"),
+                    ],
+                  ),
+                  onTap: () {
+                    Get.to(() => ViewAndSaveTransactions(username: username,));
+                  },
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  child: Column(
+                    children: [
+                      // myOnlineImage("assets/images/wallet.png",70,70),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+                      // const Text("Accounts Started"),
+                    ],
+                  ),
+                  onTap: () {
+                    // Get.to(() => AgentAccountStartedBalanceSummary(username: username,));
+                  },
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  child:  Column(
+                    children: [
+                      // myOnlineImage("assets/images/commissions.png",70,70),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+                      // const Text("Commission"),
+                    ],
+                  ),
+                  onTap: () {
+                    // Get.to(()=>AgentCommissions(username:username));
                   },
                 ),
               ),
