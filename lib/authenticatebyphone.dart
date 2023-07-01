@@ -162,7 +162,9 @@ class _AuthenticateByPhoneState extends State<AuthenticateByPhone> {
     startTimer();
     generate5digit();
     authController.fetchAuthPhone(uToken);
-    print(oTP);
+    if (kDebugMode) {
+      print(oTP);
+    }
     Timer(const Duration(seconds: 10), () {
       String num = agentPhone.replaceFirst("0", '+233');
       sendSms.sendMySms(num, "EasyAgent","Your code $oTP");

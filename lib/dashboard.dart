@@ -584,6 +584,7 @@ class _DashboardState extends State<Dashboard> {
         latestAppVersion = int.parse(storage.read("AppVersion"));
       });
     }
+    checkTheTime();
 
     tpController.fetchFreeTrial(uToken);
     tpController.fetchAccountBalance(uToken);
@@ -608,6 +609,7 @@ class _DashboardState extends State<Dashboard> {
 
     _timer = Timer.periodic(const Duration(seconds: 15), (timer) {
       getLatestAppVersion();
+      checkTheTime();
       tpController.fetchFreeTrial(uToken);
       tpController.fetchAccountBalance(uToken);
       tpController.fetchMonthlyPayment(uToken);
@@ -672,6 +674,41 @@ class _DashboardState extends State<Dashboard> {
   Future<Uint8List> _readImageData(String name) async {
     final data = await rootBundle.load('assets/images/$name');
     return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  }
+
+  bool isClosingTime = false;
+  bool isClosingTimeNow = false;
+
+  void checkTheTime(){
+    var hour = DateTime.now().hour;
+    switch (hour) {
+      case 00:
+        setState(() {
+          isClosingTimeNow = true;
+        });
+        logoutUser();
+        break;
+      // case 01:
+      //   setState(() {
+      //     isMidNight = true;
+      //   });
+      //   break;
+      // case 02:
+      //   setState(() {
+      //     isMidNight = true;
+      //   });
+      //   break;
+      // case 03:
+      //   setState(() {
+      //     isMidNight = true;
+      //   });
+      //   break;
+      // case 04:
+      //   setState(() {
+      //     isMidNight = false;
+      //   });
+      //   break;
+    }
   }
 
   @override
@@ -1182,10 +1219,8 @@ class _DashboardState extends State<Dashboard> {
                 child: Text("Thank you.",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
               ),
             ],
-          ),
-
-        )
-    ) : Scaffold(
+          ),)) :
+    Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
