@@ -21,10 +21,26 @@ class ApproveRequest extends StatefulWidget {
   final network;
   final username;
   final cash;
-  const ApproveRequest({Key? key,required this.id,required this.amount,required this.agent,required this.owner,required this.network,required this.username,required this.cash}) : super(key: key);
+  const ApproveRequest(
+      {Key? key,
+      required this.id,
+      required this.amount,
+      required this.agent,
+      required this.owner,
+      required this.network,
+      required this.username,
+      required this.cash})
+      : super(key: key);
 
   @override
-  State<ApproveRequest> createState() => _ApproveRequestState(id:this.id,amount:this.amount,agent:this.agent,owner:this.owner,network:this.network,username:this.username,cash:this.cash);
+  State<ApproveRequest> createState() => _ApproveRequestState(
+      id: this.id,
+      amount: this.amount,
+      agent: this.agent,
+      owner: this.owner,
+      network: this.network,
+      username: this.username,
+      cash: this.cash);
 }
 
 class _ApproveRequestState extends State<ApproveRequest> {
@@ -35,13 +51,20 @@ class _ApproveRequestState extends State<ApproveRequest> {
   final network;
   final username;
   final cash;
-  _ApproveRequestState({required this.id,required this.amount,required this.agent,required this.owner,required this.network,required this.username,required this.cash});
+  _ApproveRequestState(
+      {required this.id,
+      required this.amount,
+      required this.agent,
+      required this.owner,
+      required this.network,
+      required this.username,
+      required this.cash});
   late String uToken = "";
   late List allRequests = [];
   final storage = GetStorage();
   bool isPosting = false;
 
-  void _startPosting()async{
+  void _startPosting() async {
     setState(() {
       isPosting = true;
     });
@@ -51,43 +74,6 @@ class _ApproveRequestState extends State<ApproveRequest> {
     });
   }
 
-  approveRequest() async {
-    final requestUrl = "https://fnetagents.xyz/update_agent_request/$id/";
-    final myLink = Uri.parse(requestUrl);
-    final response = await http.put(myLink, headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      'Accept': 'application/json',
-      "Authorization": "Token $uToken"
-    }, body: {
-      "request_approved": "Approved",
-      "amount": amount,
-      "agent": agent,
-      "owner": owner,
-    });
-    if (response.statusCode == 200) {
-      updateAccountsToday();
-      Get.snackbar("Success", "request was approved",
-          colorText: defaultWhite,
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 5),
-          backgroundColor: secondaryColor);
-
-      if(network == "Mtn"){
-        dialPayTo();
-      }
-      else{
-        showInstalled();
-      }
-
-    } else {
-
-      Get.snackbar("Approve Error", "something happened. Please try again",
-          colorText: defaultWhite,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: warning);
-    }
-  }
-
   deleteRequest() async {
     final url = "https://fnetagents.xyz/delete_agent_request/$id";
     var myLink = Uri.parse(url);
@@ -95,37 +81,39 @@ class _ApproveRequestState extends State<ApproveRequest> {
 
     if (response.statusCode == 204) {
       Get.offAll(() => const Dashboard());
-    } else {
-
-    }
+    } else {}
   }
+
   Future<void> openFinancialServices() async {
     await UssdAdvanced.multisessionUssd(code: "*171*6*1*1#", subscriptionId: 1);
   }
+
   Future<void> openForRequest() async {
     await UssdAdvanced.multisessionUssd(code: "*171#", subscriptionId: 1);
   }
 
   Future<void> fetchAllInstalled() async {
     List<Application> apps = await DeviceApps.getInstalledApplications(
-        onlyAppsWithLaunchIntent: true, includeSystemApps: true,includeAppIcons: false);
+        onlyAppsWithLaunchIntent: true,
+        includeSystemApps: true,
+        includeAppIcons: false);
   }
 
-  Future<void> dialPayToAgent(String agentNumber, String amount, String reference) async {
+  Future<void> dialPayToAgent(
+      String agentNumber, String amount, String reference) async {
     UssdAdvanced.multisessionUssd(
         code: "*171*1*1*$agentNumber*$agentNumber*$amount*$reference#",
         subscriptionId: 1);
   }
 
-  void dialPayTo(){
+  void dialPayTo() {
     showMaterialModalBottomSheet(
       context: context,
       builder: (context) => Card(
         elevation: 12,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topRight: Radius.circular(10),
-                topLeft: Radius.circular(10))),
+                topRight: Radius.circular(10), topLeft: Radius.circular(10))),
         child: SizedBox(
           height: 150,
           child: Column(
@@ -133,53 +121,48 @@ class _ApproveRequestState extends State<ApproveRequest> {
             children: [
               const Center(
                   child: Text("Pay to",
-                      style: TextStyle(
-                          fontWeight:
-                          FontWeight.bold))),
+                      style: TextStyle(fontWeight: FontWeight.bold))),
               Row(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Future<void> dialPayToAgent(
-                          String agentNumber, String amount, String reference) async {
+                      Future<void> dialPayToAgent(String agentNumber,
+                          String amount, String reference) async {
                         UssdAdvanced.multisessionUssd(
-                            code: "*171*1*1*$agentNumber*$agentNumber*$amount*$reference#",
+                            code:
+                                "*171*1*1*$agentNumber*$agentNumber*$amount*$reference#",
                             subscriptionId: 1);
                       }
                       // Get.back();
                     },
                     child: Column(
                       children: [
-                        myOnlineImage("assets/images/employee.png",70,70),
+                        myOnlineImage("assets/images/employee.png", 70, 70),
                         const Padding(
-                          padding: EdgeInsets.only(
-                              top: 10.0),
+                          padding: EdgeInsets.only(top: 10.0),
                           child: Text("Agent",
-                              style: TextStyle(
-                                  fontWeight:
-                                  FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         )
                       ],
                     ),
                   ),
                   GestureDetector(
                     onTap: () {
-                      Future<void> dialPayToMerchant(String merchantId,String amount,String reference) async {
-                        UssdAdvanced.multisessionUssd(code: "*171*1*2*$merchantId*$amount*$reference#",subscriptionId: 1);
+                      Future<void> dialPayToMerchant(String merchantId,
+                          String amount, String reference) async {
+                        UssdAdvanced.multisessionUssd(
+                            code: "*171*1*2*$merchantId*$amount*$reference#",
+                            subscriptionId: 1);
                       }
                     },
                     child: Column(
                       children: [
-                        myOnlineImage("assets/images/cashier.png",70,70),
+                        myOnlineImage("assets/images/cashier.png", 70, 70),
                         const Padding(
-                          padding: EdgeInsets.only(
-                              top: 10.0),
+                          padding: EdgeInsets.only(top: 10.0),
                           child: Text("Merchant",
-                              style: TextStyle(
-                                  fontWeight:
-                                  FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         )
                       ],
                     ),
@@ -200,8 +183,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
         elevation: 12,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topRight: Radius.circular(10),
-                topLeft: Radius.circular(10))),
+                topRight: Radius.circular(10), topLeft: Radius.circular(10))),
         child: SizedBox(
           height: 450,
           child: Column(
@@ -209,14 +191,12 @@ class _ApproveRequestState extends State<ApproveRequest> {
             children: [
               const Center(
                   child: Text("Continue with mtn's financial services",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold))),
+                      style: TextStyle(fontWeight: FontWeight.bold))),
               const SizedBox(
                 height: 20,
               ),
               Row(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
                     onTap: () {
@@ -232,8 +212,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
                           child: Text("Request",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         )
                       ],
                     ),
@@ -253,8 +232,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
                           child: Text("Push",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         )
                       ],
                     ),
@@ -273,8 +251,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
                           child: Text("App",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         )
                       ],
                     ),
@@ -294,8 +271,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
                           child: Text("Pull",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         )
                       ],
                     ),
@@ -311,17 +287,15 @@ class _ApproveRequestState extends State<ApproveRequest> {
               ),
               const Center(
                   child: Text("Continue with apps",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold))),
+                      style: TextStyle(fontWeight: FontWeight.bold))),
               const SizedBox(
                 height: 20,
               ),
               Row(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
-                    onTap: () async{
+                    onTap: () async {
                       DeviceApps.openApp('com.ecobank.xpresspoint');
                     },
                     child: Column(
@@ -334,14 +308,13 @@ class _ApproveRequestState extends State<ApproveRequest> {
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
                           child: Text("Express Point",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         )
                       ],
                     ),
                   ),
                   GestureDetector(
-                    onTap: () async{
+                    onTap: () async {
                       DeviceApps.openApp('sg.android.fidelity');
                     },
                     child: Column(
@@ -354,14 +327,13 @@ class _ApproveRequestState extends State<ApproveRequest> {
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
                           child: Text("Fidelity Bank",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         )
                       ],
                     ),
                   ),
                   GestureDetector(
-                    onTap: () async{
+                    onTap: () async {
                       DeviceApps.openApp('calbank.com.ams');
                     },
                     child: Column(
@@ -374,24 +346,27 @@ class _ApproveRequestState extends State<ApproveRequest> {
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
                           child: Text("Cal Bank",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         )
                       ],
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               const Divider(),
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               Row(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
-                    onTap: () async{
-                      DeviceApps.openApp('accessmob.accessbank.com.accessghana');
+                    onTap: () async {
+                      DeviceApps.openApp(
+                          'accessmob.accessbank.com.accessghana');
                     },
                     child: Column(
                       children: [
@@ -403,14 +378,13 @@ class _ApproveRequestState extends State<ApproveRequest> {
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
                           child: Text("Access Bank",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         )
                       ],
                     ),
                   ),
                   GestureDetector(
-                    onTap: () async{
+                    onTap: () async {
                       DeviceApps.openApp('com.m2i.gtexpressbyod');
                     },
                     child: Column(
@@ -423,15 +397,15 @@ class _ApproveRequestState extends State<ApproveRequest> {
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
                           child: Text("GT Bank",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         )
                       ],
                     ),
                   ),
                   GestureDetector(
-                    onTap: () async{
-                      DeviceApps.openApp('firstmob.firstbank.com.fbnsubsidiary');
+                    onTap: () async {
+                      DeviceApps.openApp(
+                          'firstmob.firstbank.com.fbnsubsidiary');
                     },
                     child: Column(
                       children: [
@@ -443,8 +417,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
                         const Padding(
                           padding: EdgeInsets.only(top: 10.0),
                           child: Text("FBN Bank",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         )
                       ],
                     ),
@@ -468,22 +441,32 @@ class _ApproveRequestState extends State<ApproveRequest> {
   late double airtelTigoNow = 0.0;
   late double vodafoneNow = 0.0;
   late double physicalNow = 0.0;
+  late double physicalNew = 0.0;
+  late double mtnNew = 0.0;
+  late double airteltigoNew = 0.0;
+  late double vodafoneNew = 0.0;
   bool isLoading = true;
   late double total = 0.0;
 
-  updateAccountsToday() async {
+  updateAndAddAccountsToday() async {
     const accountUrl = "https://fnetagents.xyz/add_balance_to_start/";
     final myLink = Uri.parse(accountUrl);
     http.Response response = await http.post(myLink, headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       "Authorization": "Token $uToken"
     }, body: {
-      "physical": physicalNow.toString(),
-      "mtn_e_cash": mtnNow.toString(),
-      "tigo_airtel_e_cash":  airtelTigoNow.toString(),
-      "vodafone_e_cash": vodafoneNow.toString(),
+      "physical": double.parse(cash) != 0.0
+          ? physicalNew.toString()
+          : physicalNow.toString(),
+      "mtn_e_cash": network == "Mtn" ? mtnNew.toString() : mtnNow.toString(),
+      "tigo_airtel_e_cash": network == "AirtelTigo"
+          ? airteltigoNew.toString()
+          : airtelTigoNow.toString(),
+      "vodafone_e_cash": network == "Vodafone"
+          ? vodafoneNew.toString()
+          : vodafoneNow.toString(),
       "isStarted": "True",
-      "agent" : agent
+      "agent": agent
     });
     if (response.statusCode == 201) {
       Get.snackbar("Success", "agent accounts was updated",
@@ -502,7 +485,8 @@ class _ApproveRequestState extends State<ApproveRequest> {
   }
 
   Future<void> fetchAccountBalance() async {
-    final postUrl = "https://fnetagents.xyz/get_my_agent_account_started_with/$username/";
+    final postUrl =
+        "https://fnetagents.xyz/get_my_agent_account_started_with/$username/";
     final pLink = Uri.parse(postUrl);
     http.Response res = await http.get(pLink, headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -517,35 +501,83 @@ class _ApproveRequestState extends State<ApproveRequest> {
       accountBalanceDetailsToday.assignAll(allPosts);
       setState(() {
         isLoading = false;
-        lastItem.assign(accountBalanceDetailsToday.first);
-        physicalNow = double.parse(lastItem[0]['physical']);
-        mtnNow = double.parse(lastItem[0]['mtn_e_cash']);
-        airtelTigoNow = double.parse(lastItem[0]['tigo_airtel_e_cash']);
-        vodafoneNow = double.parse(lastItem[0]['vodafone_e_cash']);
+        lastItem.assign(accountBalanceDetailsToday.last);
+        physicalNow = double.parse(accountBalanceDetailsToday[0]['physical']);
+        mtnNow = double.parse(accountBalanceDetailsToday[0]['mtn_e_cash']);
+        airtelTigoNow = double.parse(accountBalanceDetailsToday[0]['tigo_airtel_e_cash']);
+        vodafoneNow = double.parse(accountBalanceDetailsToday[0]['vodafone_e_cash']);
       });
-      if(network == "Mtn"){
-        setState(() {
-          mtnNow = mtnNow + double.parse(amount);
-        });
-      }
-      if(network == "AirtelTigo"){
-        setState(() {
-          airtelTigoNow = airtelTigoNow + amount;
-        });
-      }
-      if(network == "Vodafone"){
-        setState(() {
-          vodafoneNow = vodafoneNow + amount;
-        });
-      }
-      if(double.parse(cash) != 0.0){
-        setState(() {
-          physicalNow = physicalNow + double.parse(cash);
-        });
-      }
-
+      // print(physicalNow);
+      // print(mtnNow);
+      // print(airtelTigoNow);
+      // print(vodafoneNow);
     } else {
       // print(res.body);
+    }
+  }
+
+  approveRequest() async {
+    final requestUrl = "https://fnetagents.xyz/update_agent_request/$id/";
+    final myLink = Uri.parse(requestUrl);
+    final response = await http.put(myLink, headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      'Accept': 'application/json',
+      "Authorization": "Token $uToken"
+    }, body: {
+      "request_approved": "Approved",
+      "amount": amount,
+      "agent": agent,
+      "owner": owner,
+    });
+    if (response.statusCode == 200) {
+      //   if(network == "Mtn"){
+      //     mtnNew = mtnNow + double.parse(amount);
+      //   }
+      //   if(network == "AirtelTigo"){
+      //     airteltigoNew = airtelTigoNow + amount;
+      //   }
+      //   if(network == "Vodafone"){
+      //     vodafoneNew = vodafoneNow + amount;
+      //   }
+      //   if(double.parse(cash) != 0.0){
+      //     physicalNew = physicalNow + double.parse(cash);
+      //   }
+      //
+      //   if(network == "Mtn"){
+      //     dialPayTo();
+      //   }
+      //   else{
+      //     showInstalled();
+      //   }
+      //   updateAndAddAccountsToday();
+      //   Get.snackbar("Success", "request was approved",
+      //       colorText: defaultWhite,
+      //       snackPosition: SnackPosition.BOTTOM,
+      //       duration: const Duration(seconds: 5),
+      //       backgroundColor: secondaryColor);
+      // }
+      //
+      if (network == "Mtn") {
+        mtnNew = mtnNow + double.parse(amount);
+        dialPayTo();
+      } else if (network == "AirtelTigo") {
+        airteltigoNew = airtelTigoNow + amount;
+        showInstalled();
+      } else if (network == "Vodafone") {
+        vodafoneNew = vodafoneNow + amount;
+        showInstalled();
+      }
+
+      if (double.parse(cash) != 0.0) {
+        physicalNew = physicalNow + double.parse(cash);
+      }
+      updateAndAddAccountsToday();
+    }
+    else {
+      Get.snackbar("Approve Error", "something happened. Please try again",
+          colorText: defaultWhite,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: warning);
     }
   }
 
@@ -569,74 +601,84 @@ class _ApproveRequestState extends State<ApproveRequest> {
         title: const Text("Approve Request"),
         backgroundColor: secondaryColor,
       ),
-      body:isLoading ? const LoadingUi() : Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom:18.0),
-            child: Center(
-              child: Text("Approve request of GHC$amount",style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-            ),
-          ),
-          isPosting  ? const LoadingUi() :  Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
+      body: isLoading
+          ? const LoadingUi()
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                 Expanded(
-                  child: NeoPopTiltedButton(
-                    isFloating: true,
-                    onTapUp: () {
-                      _startPosting();
-                      approveRequest();
-                    },
-                    decoration: const NeoPopTiltedButtonDecoration(
-                      color: secondaryColor,
-                      plunkColor: secondaryColor,
-                      shadowColor: Color.fromRGBO(36, 36, 36, 1),
-                      showShimmer: true,
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 40.0,
-                        vertical: 10,
-                      ),
-                      child: Text('Approve',style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.white)),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 18.0),
+                  child: Center(
+                    child: Text(
+                      "Approve request of GHC$amount",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   ),
                 ),
-                 Expanded(
-                  child: NeoPopTiltedButton(
-                    isFloating: true,
-                    onTapUp: () {
-                      _startPosting();
-                      deleteRequest();
-                    },
-                    decoration: const NeoPopTiltedButtonDecoration(
-                      color: warning,
-                      plunkColor: warning,
-                      shadowColor: Color.fromRGBO(36, 36, 36, 1),
-                      showShimmer: true,
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 40.0,
-                        vertical: 10,
+                isPosting
+                    ? const LoadingUi()
+                    : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: NeoPopTiltedButton(
+                                isFloating: true,
+                                onTapUp: () {
+                                  _startPosting();
+                                  approveRequest();
+                                },
+                                decoration: const NeoPopTiltedButtonDecoration(
+                                  color: secondaryColor,
+                                  plunkColor: secondaryColor,
+                                  shadowColor: Color.fromRGBO(36, 36, 36, 1),
+                                  showShimmer: true,
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 40.0,
+                                    vertical: 10,
+                                  ),
+                                  child: Text('Approve',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          color: Colors.white)),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: NeoPopTiltedButton(
+                                isFloating: true,
+                                onTapUp: () {
+                                  _startPosting();
+                                  deleteRequest();
+                                },
+                                decoration: const NeoPopTiltedButtonDecoration(
+                                  color: warning,
+                                  plunkColor: warning,
+                                  shadowColor: Color.fromRGBO(36, 36, 36, 1),
+                                  showShimmer: true,
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 40.0,
+                                    vertical: 10,
+                                  ),
+                                  child: Text('Delete',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          color: Colors.white)),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      child: Text('Delete',style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.white)),
-                    ),
-                  ),
-                ),
               ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -138,7 +138,7 @@ class _ApprovePaymentsState extends State<ApprovePayments> {
             const EdgeInsets.only(bottom: 18.0,left: 18,right: 18),
             child: TextFormField(
               onChanged: (value){
-                if(value.length == reference.length){
+                if(value == reference){
                   setState(() {
                     isReference = true;
                   });

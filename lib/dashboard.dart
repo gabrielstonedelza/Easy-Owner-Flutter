@@ -57,6 +57,7 @@ class _DashboardState extends State<Dashboard> {
   bool isLoading = true;
   late int appVersion = 0;
   late int latestAppVersion = 0;
+  int appVersionNow = 1;
 
   final _advancedDrawerController = AdvancedDrawerController();
   SmsQuery query = SmsQuery();
@@ -156,7 +157,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Future<void> getLatestAppVersion() async {
-    const url = "https://fnetagents.xyz/check_app_version/";
+    const url = "https://fnetagents.xyz/check_owner_app_version/";
     var link = Uri.parse(url);
     http.Response response = await http.get(link, headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -166,7 +167,7 @@ class _DashboardState extends State<Dashboard> {
       appVersions.assignAll(jsonData);
       for(var i in appVersions){
         appVersion = i['app_version'];
-        if(latestAppVersion ==  i['app_version']){
+        if(appVersionNow ==  appVersion){
           setState(() {
             isLatestAppVersion = true;
           });
@@ -626,7 +627,6 @@ class _DashboardState extends State<Dashboard> {
     storage.remove("agent_code");
     storage.remove("phoneAuthenticated");
     storage.remove("IsAuthDevice");
-    storage.remove("AppVersion");
     Get.offAll(() => const LoginView());
     const logoutUrl = "https://www.fnetagents.xyz/auth/token/logout";
     final myLink = Uri.parse(logoutUrl);
@@ -642,7 +642,6 @@ class _DashboardState extends State<Dashboard> {
           backgroundColor: snackBackground);
       storage.remove("token");
       storage.remove("agent_code");
-      storage.remove("AppVersion");
       Get.offAll(() => const LoginView());
     }
   }
