@@ -85,12 +85,7 @@ class _AllUnApprovedRequestsState extends State<AllUnApprovedRequests> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         buildRow("Amount: ", "amount"),
-                       double.parse(items["cash"]) == 0.00 ? Container() : buildRow("Cash: ", "cash")
-                        ,
-                        items["bank"] == "" ? Container():
-                        buildRow("Bank: ", "bank"),
-                        items["network"] == "" ? Container():
-                        buildRow("Network: ", "network"),
+                        buildRow("Request Type: ", "request_type"),
                         buildRow("Approved: ", "request_approved"),
                         buildRow("Paid: ", "request_paid"),
                         items["reference"] == "" ? Container():

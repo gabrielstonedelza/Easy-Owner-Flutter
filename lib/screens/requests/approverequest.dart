@@ -501,16 +501,17 @@ class _ApproveRequestState extends State<ApproveRequest> {
       accountBalanceDetailsToday.assignAll(allPosts);
       setState(() {
         isLoading = false;
-        lastItem.assign(accountBalanceDetailsToday.last);
-        physicalNow = double.parse(accountBalanceDetailsToday[0]['physical']);
-        mtnNow = double.parse(accountBalanceDetailsToday[0]['mtn_e_cash']);
-        airtelTigoNow = double.parse(accountBalanceDetailsToday[0]['tigo_airtel_e_cash']);
-        vodafoneNow = double.parse(accountBalanceDetailsToday[0]['vodafone_e_cash']);
+        // lastItem.assign(accountBalanceDetailsToday.last);
+        physicalNow = double.parse(accountBalanceDetailsToday[1]['physical']);
+        mtnNow = double.parse(accountBalanceDetailsToday[1]['mtn_e_cash']);
+        airtelTigoNow = double.parse(accountBalanceDetailsToday[1]['tigo_airtel_e_cash']);
+        vodafoneNow = double.parse(accountBalanceDetailsToday[1]['vodafone_e_cash']);
       });
-      // print(physicalNow);
-      // print(mtnNow);
-      // print(airtelTigoNow);
-      // print(vodafoneNow);
+      print(physicalNow);
+      print(mtnNow);
+      print(airtelTigoNow);
+      print(vodafoneNow);
+      print(accountBalanceDetailsToday[1]);
     } else {
       // print(res.body);
     }
