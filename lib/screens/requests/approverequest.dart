@@ -21,6 +21,7 @@ class ApproveRequest extends StatefulWidget {
   final network;
   final username;
   final cash;
+  final reqType;
   const ApproveRequest(
       {Key? key,
       required this.id,
@@ -29,7 +30,7 @@ class ApproveRequest extends StatefulWidget {
       required this.owner,
       required this.network,
       required this.username,
-      required this.cash})
+      required this.cash, required this.reqType})
       : super(key: key);
 
   @override
@@ -40,7 +41,8 @@ class ApproveRequest extends StatefulWidget {
       owner: this.owner,
       network: this.network,
       username: this.username,
-      cash: this.cash);
+      cash: this.cash,
+      reqType:this.reqType);
 }
 
 class _ApproveRequestState extends State<ApproveRequest> {
@@ -51,6 +53,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
   final network;
   final username;
   final cash;
+  final reqType;
   _ApproveRequestState(
       {required this.id,
       required this.amount,
@@ -58,7 +61,8 @@ class _ApproveRequestState extends State<ApproveRequest> {
       required this.owner,
       required this.network,
       required this.username,
-      required this.cash});
+      required this.cash,
+      required this.reqType});
   late String uToken = "";
   late List allRequests = [];
   final storage = GetStorage();
@@ -501,17 +505,12 @@ class _ApproveRequestState extends State<ApproveRequest> {
       accountBalanceDetailsToday.assignAll(allPosts);
       setState(() {
         isLoading = false;
-        // lastItem.assign(accountBalanceDetailsToday.last);
-        physicalNow = double.parse(accountBalanceDetailsToday[1]['physical']);
-        mtnNow = double.parse(accountBalanceDetailsToday[1]['mtn_e_cash']);
-        airtelTigoNow = double.parse(accountBalanceDetailsToday[1]['tigo_airtel_e_cash']);
-        vodafoneNow = double.parse(accountBalanceDetailsToday[1]['vodafone_e_cash']);
+        lastItem.assign(accountBalanceDetailsToday.last);
+        physicalNow = double.parse(lastItem[0]['physical']);
+        mtnNow = double.parse(lastItem[0]['mtn_e_cash']);
+        airtelTigoNow = double.parse(lastItem[0]['tigo_airtel_e_cash']);
+        vodafoneNow = double.parse(lastItem[0]['vodafone_e_cash']);
       });
-      print(physicalNow);
-      print(mtnNow);
-      print(airtelTigoNow);
-      print(vodafoneNow);
-      print(accountBalanceDetailsToday[1]);
     } else {
       // print(res.body);
     }
@@ -558,20 +557,24 @@ class _ApproveRequestState extends State<ApproveRequest> {
       //       backgroundColor: secondaryColor);
       // }
       //
-      if (network == "Mtn") {
-        mtnNew = mtnNow + double.parse(amount);
-        dialPayTo();
-      } else if (network == "AirtelTigo") {
-        airteltigoNew = airtelTigoNow + amount;
-        showInstalled();
-      } else if (network == "Vodafone") {
-        vodafoneNew = vodafoneNow + amount;
-        showInstalled();
+
+      if(reqType == "Network"){
+        if (network == "Mtn") {
+          mtnNew = mtnNow + double.parse(amount);
+          dialPayTo();
+        } else if (network == "AirtelTigo") {
+          airteltigoNew = airtelTigoNow + amount;
+          showInstalled();
+        } else if (network == "Vodafone") {
+          vodafoneNew = vodafoneNow + amount;
+          showInstalled();
+        }
       }
 
-      if (double.parse(cash) != 0.0) {
+      if(reqType == "Cash"){
         physicalNew = physicalNow + double.parse(cash);
       }
+
       updateAndAddAccountsToday();
     }
     else {
@@ -593,6 +596,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
     }
     fetchAllInstalled();
     fetchAccountBalance();
+    print(reqType);
   }
 
   @override

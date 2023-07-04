@@ -78,7 +78,7 @@ class _AllUnApprovedRequestsState extends State<AllUnApprovedRequests> {
                   child: ListTile(
                     onTap: (){
                       Get.to(() => ApproveRequest(id:allRequests[index]['id'].toString(),amount:allRequests[index]['amount'],agent:allRequests[index]['agent'].toString(),owner:allRequests[index]['owner'].toString(), network:allRequests[index]['network'],username:allRequests[index]['get_agent_username'],
-                      cash:allRequests[index]['cash']));
+                      cash:allRequests[index]['cash'],reqType:allRequests[index]['request_type']));
                     },
                     title: buildRow("Agent: ", "get_agent_username"),
                     subtitle: Column(
