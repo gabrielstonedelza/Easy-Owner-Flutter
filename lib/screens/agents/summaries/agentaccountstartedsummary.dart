@@ -31,7 +31,7 @@ class _AgentAccountStartedBalanceSummaryState extends State<AgentAccountStartedB
   late List accountDates = [];
 
   fetchAllAccountBalance()async{
-    final url = "https://fnetagents.xyz/get_my_agent_account_started_with/$username";
+    final url = "https://fnetagents.xyz/get_my_agent_account_started_with_latest/$username";
     var myLink = Uri.parse(url);
     final response = await http.get(myLink, headers: {
       "Authorization": "Token $uToken"

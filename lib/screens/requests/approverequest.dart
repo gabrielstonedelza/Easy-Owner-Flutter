@@ -596,7 +596,7 @@ class _ApproveRequestState extends State<ApproveRequest> {
     }
     fetchAllInstalled();
     fetchAccountBalance();
-    print(reqType);
+    // print(reqType);
   }
 
   @override

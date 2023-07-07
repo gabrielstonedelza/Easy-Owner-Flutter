@@ -86,6 +86,7 @@ class _AllUnApprovedRequestsState extends State<AllUnApprovedRequests> {
                       children: [
                         buildRow("Amount: ", "amount"),
                         buildRow("Request Type: ", "request_type"),
+                        items['network'] != "" ? buildRow("Network: ", "network") : Container(),
                         buildRow("Approved: ", "request_approved"),
                         buildRow("Paid: ", "request_paid"),
                         items["reference"] == "" ? Container():
