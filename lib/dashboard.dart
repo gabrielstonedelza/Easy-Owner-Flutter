@@ -57,7 +57,7 @@ class _DashboardState extends State<Dashboard> {
   bool isLoading = true;
   late int appVersion = 0;
   late int latestAppVersion = 0;
-  int appVersionNow = 2;
+  int appVersionNow = 3;
 
   final _advancedDrawerController = AdvancedDrawerController();
   SmsQuery query = SmsQuery();

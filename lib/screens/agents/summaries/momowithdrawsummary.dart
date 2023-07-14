@@ -81,7 +81,7 @@ class _MomoCashOutSummaryState extends State<MomoCashOutSummary> {
               items = mtnWithdrawalsDates[i];
               return Column(
                 children: [
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 10,),
                   GestureDetector(
                     onTap: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context){
