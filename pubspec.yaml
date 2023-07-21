@@ -66,10 +66,7 @@ dependencies:
   videosdk: ^1.1.0
   flutter_vlc_player: ^7.2.0
   device_apps: ^2.2.0
-  pdf: ^3.10.4
-  path_provider: ^2.0.15
-  open_file: ^3.1.0
-  csv:
+
 #  syncfusion_flutter_pdf: ^22.1.34
 
 

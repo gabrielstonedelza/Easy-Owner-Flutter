@@ -9,10 +9,7 @@ import 'package:easy_owner/screens/chats/agentsGroupchat.dart';
 import 'package:easy_owner/screens/chats/owersgroupchat.dart';
 import 'package:easy_owner/screens/chats/privatechat.dart';
 import 'package:easy_owner/screens/ownerpayto/paytosummary.dart';
-import 'package:easy_owner/screens/payments/unapprovedpayments.dart';
-import 'package:easy_owner/screens/rebalancing/unapprovedrebalancing.dart';
 import 'package:easy_owner/screens/reportstoday.dart';
-import 'package:easy_owner/screens/requests/unapprovedrequests.dart';
 import 'package:easy_owner/widget/loadingui.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
@@ -882,7 +879,7 @@ class _DashboardState extends State<Dashboard> {
               const SizedBox(
                 height: 30,
               ),
-              isLatestAppVersion ?  Column(
+              Column(
                 children: [
                   Row(
                     children: [
@@ -935,67 +932,6 @@ class _DashboardState extends State<Dashboard> {
                         ),
                       ),
 
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Divider(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          child: Column(
-                            children: [
-                              myOnlineImage("assets/images/ewallet.png",70,70),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              const Text("Requests"),
-                            ],
-                          ),
-                          onTap: () {
-                            Get.to(() => const AllUnApprovedRequests());
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          child: Column(
-                            children: [
-                              myOnlineImage("assets/images/payment-method.png",70,70),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              const Text("Payments"),
-                            ],
-                          ),
-                          onTap: () {
-                            Get.to(() => const AllUnApprovedPayments());
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          child: Column(
-                            children: [
-                              myOnlineImage("assets/images/balance.png",70,70),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              const Text("ReBalancing"),
-                              const Text("Requests"),
-                            ],
-                          ),
-                          onTap: () {
-                            Get.to(() => const AllUnApprovedReBalancing());
-
-                          },
-                        ),
-                      ),
                     ],
                   ),
                   const SizedBox(
@@ -1185,21 +1121,7 @@ class _DashboardState extends State<Dashboard> {
                     height: 20,
                   ),
                 ],
-              ) : const Padding(
-                padding: EdgeInsets.only(top:18.0,left: 18),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(child: Text("Please update",style: TextStyle(fontWeight: FontWeight.bold),)),
-                    Padding(
-                      padding: EdgeInsets.only(top:8.0,bottom:8),
-                      child: Center(child: Text("Contact the admin for the latest app update",style: TextStyle(fontWeight: FontWeight.bold),)),
-                    ),
-                    SizedBox(height: 10,),
-                    Center(child: Text("Make sure to logout before installing the latest one",style: TextStyle(fontWeight: FontWeight.bold),)),
-                  ],
-                ),
-              ),
+              )
             ],
           ) :
           Column(
