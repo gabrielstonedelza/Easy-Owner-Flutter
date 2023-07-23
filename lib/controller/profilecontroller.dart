@@ -8,6 +8,7 @@ class ProfileController extends GetxController{
   bool isLoading = false;
   List profileDetails = [];
   late String userId = "";
+  late String phoneNumber = "";
   late String ownersUsername = "";
   late String myEmail = "";
   bool accountApproved = false;
@@ -60,6 +61,7 @@ class ProfileController extends GetxController{
           ownersUsername = i['username'];
           accountApproved = i['user_approved'];
           myEmail = i['email'];
+          phoneNumber = i['phone_number'];
         }
         update();
         // print(myEmail);

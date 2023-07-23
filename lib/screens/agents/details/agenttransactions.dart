@@ -314,118 +314,7 @@ class _AgentDetailsState extends State<AgentDetails> {
           const SizedBox(
             height: 10,
           ),
-          Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  child: Column(
-                    children: [
-                      myOnlineImage("assets/images/ewallet.png",70,70),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text("Requests"),
-                    ],
-                  ),
-                  onTap: () {
-                    Get.to(() => RequestSummary(username: username,));
-                  },
-                ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  child: Column(
-                    children: [
-                      myOnlineImage("assets/images/cash-payment.png",70,70),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text("Payment"),
-                    ],
-                  ),
-                  onTap: () {
-                    Get.to(()=>PaymentSummary(username:username));
-                  },
-                ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  child: Column(
-                    children: [
-                      myOnlineImage("assets/images/balance.png",70,70),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text("Rebalancing"),
-                    ],
-                  ),
-                  onTap: () {
-                    Get.to(() => RebalancingSummary(username:username));
-                  },
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          const Divider(),
-          Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  child: Column(
-                    children: [
-                      myOnlineImage("assets/images/wallet.png",70,70),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text("Accounts"),
-                    ],
-                  ),
-                  onTap: () {
-                    Get.to(() => AgentAccountSummaryDetail(username: username,));
-                  },
-                ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  child: Column(
-                    children: [
-                      myOnlineImage("assets/images/wallet.png",70,70),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text("Accounts Started"),
-                    ],
-                  ),
-                  onTap: () {
-                    Get.to(() => AgentAccountStartedBalanceSummary(username: username,));
-                  },
-                ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  child:  Column(
-                    children: [
-                      myOnlineImage("assets/images/commissions.png",70,70),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text("Commission"),
-                    ],
-                  ),
-                  onTap: () {
-                    Get.to(()=>AgentCommissions(username:username));
-                  },
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          const Divider(),
+
           Row(
             children: [
               Expanded(
@@ -446,6 +335,22 @@ class _AgentDetailsState extends State<AgentDetails> {
               ),
               Expanded(
                 child: GestureDetector(
+                  child:  Column(
+                    children: [
+                      myOnlineImage("assets/images/commissions.png",70,70),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text("Commission"),
+                    ],
+                  ),
+                  onTap: () {
+                    Get.to(()=>AgentCommissions(username:username));
+                  },
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
                   child: Column(
                     children: [
                       // myOnlineImage("assets/images/wallet.png",70,70),
@@ -460,28 +365,12 @@ class _AgentDetailsState extends State<AgentDetails> {
                   },
                 ),
               ),
-              Expanded(
-                child: GestureDetector(
-                  child:  Column(
-                    children: [
-                      // myOnlineImage("assets/images/commissions.png",70,70),
-                      // const SizedBox(
-                      //   height: 10,
-                      // ),
-                      // const Text("Commission"),
-                    ],
-                  ),
-                  onTap: () {
-                    // Get.to(()=>AgentCommissions(username:username));
-                  },
-                ),
-              ),
+
             ],
           ),
           const SizedBox(
             height: 10,
           ),
-          const Divider(),
         ],
       ),
     );
