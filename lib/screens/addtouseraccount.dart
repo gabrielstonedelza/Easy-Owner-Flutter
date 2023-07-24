@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:easy_owner/constants.dart';
 import 'package:easy_owner/controller/profilecontroller.dart';
+import 'package:easy_owner/dashboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -113,11 +114,7 @@ class _AddToUserAccount extends State<AddToMyAccount> {
           snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 10),
           backgroundColor: snackBackground);
-      setState(() {
-        _accountNumberController.text = "";
-        accountName.text = "";
-        _currentSelectedBank = "Select bank";
-      });
+      Get.offAll(() => const Dashboard());
     }
     else{
       if (kDebugMode) {

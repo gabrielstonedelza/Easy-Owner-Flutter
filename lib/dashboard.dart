@@ -965,22 +965,7 @@ class _DashboardState extends State<Dashboard> {
                           },
                         ),
                       ),
-                      // Expanded(
-                      //   child: GestureDetector(
-                      //     child: Column(
-                      //       children: [
-                      //         myOnlineImage("assets/images/wallet.png",70,70),
-                      //         const SizedBox(
-                      //           height: 10,
-                      //         ),
-                      //         const Text("Agent Accounts"),
-                      //       ],
-                      //     ),
-                      //     onTap: () {
-                      //       Get.to(() => const MyAgentsAccounts());
-                      //     },
-                      //   ),
-                      // ),
+
                       Expanded(
                         child: GestureDetector(
                           child: Column(
@@ -1105,19 +1090,19 @@ class _DashboardState extends State<Dashboard> {
                         child: GestureDetector(
                           child: Column(
                             children: [
-                              myOnlineImage("assets/images/bank-account.png",70,70),
+                              myOnlineImage("assets/images/wallet.png",70,70),
                               const SizedBox(
                                 height: 10,
                               ),
-                              const Text("Bank"),
-                              const Text("Linkage"),
+                              const Text("Agent Accounts"),
                             ],
                           ),
                           onTap: () {
-                            Get.to(()=> const AddToMyAccount());
+                            Get.to(() => const MyAgentsAccounts());
                           },
                         ),
                       ),
+
                     ],
                   ),
                   const SizedBox(
@@ -1151,15 +1136,16 @@ class _DashboardState extends State<Dashboard> {
                         child: GestureDetector(
                           child: Column(
                             children: [
-                              // myOnlineImage("assets/images/wallet.png",70,70),
-                              // const SizedBox(
-                              //   height: 10,
-                              // ),
-                              // const Text("Agent Accounts"),
+                              myOnlineImage("assets/images/bank-account.png",70,70),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text("Bank"),
+                              const Text("Linkage"),
                             ],
                           ),
                           onTap: () {
-                            // Get.to(() => const MyAgentsAccounts());
+                            Get.to(()=> const AddToMyAccount());
                           },
                         ),
                       ),
