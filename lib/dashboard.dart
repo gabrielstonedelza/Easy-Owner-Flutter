@@ -9,7 +9,9 @@ import 'package:easy_owner/screens/agents/myagentsaccounts.dart';
 import 'package:easy_owner/screens/chats/agentsGroupchat.dart';
 import 'package:easy_owner/screens/chats/owersgroupchat.dart';
 import 'package:easy_owner/screens/chats/privatechat.dart';
+import 'package:easy_owner/screens/getmyaccountsandpull.dart';
 import 'package:easy_owner/screens/getmyaccountsandpush.dart';
+import 'package:easy_owner/screens/mybankaccounts.dart';
 import 'package:easy_owner/screens/ownerpayto/paytosummary.dart';
 import 'package:easy_owner/screens/reportstoday.dart';
 import 'package:easy_owner/widget/loadingui.dart';
@@ -64,6 +66,9 @@ class _DashboardState extends State<Dashboard> {
   late List allNotifications = [];
 
   late List yourNotifications = [];
+
+
+
   Future<void> openFinancialServices() async {
     await UssdAdvanced.multisessionUssd(code: "*171*6*1*1#", subscriptionId: 1);
   }
@@ -287,7 +292,8 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      openFinancialServicesPullFromBank();
+                      // openFinancialServicesPullFromBank();
+                      Get.to(() => const GetMyAccountsAndPull());
                       // Get.back();
                     },
                     child: Column(
@@ -959,33 +965,22 @@ class _DashboardState extends State<Dashboard> {
                           },
                         ),
                       ),
-                      Expanded(
-                        child: GestureDetector(
-                          child: Column(
-                            children: [
-                              myOnlineImage("assets/images/wallet.png",70,70),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              const Text("Agent Accounts"),
-                            ],
-                          ),
-                          onTap: () {
-                            Get.to(() => const MyAgentsAccounts());
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Divider(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
+                      // Expanded(
+                      //   child: GestureDetector(
+                      //     child: Column(
+                      //       children: [
+                      //         myOnlineImage("assets/images/wallet.png",70,70),
+                      //         const SizedBox(
+                      //           height: 10,
+                      //         ),
+                      //         const Text("Agent Accounts"),
+                      //       ],
+                      //     ),
+                      //     onTap: () {
+                      //       Get.to(() => const MyAgentsAccounts());
+                      //     },
+                      //   ),
+                      // ),
                       Expanded(
                         child: GestureDetector(
                           child: Column(
@@ -1062,6 +1057,18 @@ class _DashboardState extends State<Dashboard> {
                           },
                         ),
                       ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Divider(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+
                       Expanded(
                         child: GestureDetector(
                           child: Column(
@@ -1094,6 +1101,23 @@ class _DashboardState extends State<Dashboard> {
                           },
                         ),
                       ),
+                      Expanded(
+                        child: GestureDetector(
+                          child: Column(
+                            children: [
+                              myOnlineImage("assets/images/bank-account.png",70,70),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text("Bank"),
+                              const Text("Linkage"),
+                            ],
+                          ),
+                          onTap: () {
+                            Get.to(()=> const AddToMyAccount());
+                          },
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(
@@ -1105,20 +1129,21 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   Row(
                     children: [
+
                       Expanded(
                         child: GestureDetector(
                           child: Column(
                             children: [
-                              myOnlineImage("assets/images/profile.png",70,70),
+                              myOnlineImage("assets/images/bank-account.png",70,70),
                               const SizedBox(
                                 height: 10,
                               ),
-                              const Text("Add"),
+                              const Text("My Bank"),
                               const Text("Accounts"),
                             ],
                           ),
                           onTap: () {
-                            Get.to(()=> const AddToMyAccount());
+                            Get.to(()=> const MyBankAccounts());
                           },
                         ),
                       ),
@@ -1126,15 +1151,15 @@ class _DashboardState extends State<Dashboard> {
                         child: GestureDetector(
                           child: Column(
                             children: [
-                              // myOnlineImage("assets/images/cash-on-delivery.png",70,70),
+                              // myOnlineImage("assets/images/wallet.png",70,70),
                               // const SizedBox(
                               //   height: 10,
                               // ),
-                              // const Text("Pay To"),
+                              // const Text("Agent Accounts"),
                             ],
                           ),
                           onTap: () {
-                            // Get.to(() => const OwnerPayToSummary());
+                            // Get.to(() => const MyAgentsAccounts());
                           },
                         ),
                       ),

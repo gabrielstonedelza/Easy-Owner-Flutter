@@ -34,7 +34,7 @@ class _MyAgentsAccountsState extends State<MyAgentsAccounts> {
   Future<void> getAllMyAgentsAccounts() async {
     try {
       isLoading = true;
-      const completedRides = "https://fnetagents.xyz/get_all_my_agents_accounts/";
+      const completedRides = "https://fnetagents.xyz/get_my_agents_accounts_detail/";
       var link = Uri.parse(completedRides);
       http.Response response = await http.get(link, headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -86,16 +86,15 @@ class _MyAgentsAccountsState extends State<MyAgentsAccounts> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               child: ListTile(
-                onTap: (){
-                  Get.to(()=>AgentDetails(username:controller.allMyAgents[i]['username']));
-                },
-                title: items['bank'] == "Mtn" || items['bank'] == "Vodafone" || items['bank'] == "AirtelTigo" ? buildRow("Phone: ", "account_number") : buildRow("Account No: ", "account_number"),
+
+                title: buildRow("Agent: ", "get_agent_username"),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    buildRow("Account Name: ", "account_name"),
-                    items['bank'] == "Mtn" || items['bank'] == "Vodafone" || items['bank'] == "AirtelTigo" ?
-                    buildRow("Network: ", "bank") : buildRow("Bank: ", "bank"),
+                    buildRow("Bank: ", "bank"),
+                    buildRow("Acc Name: ", "account_name"),
+                    buildRow("Acc No: ", "account_number"),
+                    buildRow("Phone : ", "phone"),
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0,top: 2),
                       child: Row(
@@ -113,13 +112,6 @@ class _MyAgentsAccountsState extends State<MyAgentsAccounts> {
               ),
             );
           }),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: secondaryColor,
-        onPressed: (){
-          Get.to(() => const MyAgentsToAddAccounts());
-        },
-        child: const Icon(Icons.add,size: 30,),
-      ),
 
     );
   }

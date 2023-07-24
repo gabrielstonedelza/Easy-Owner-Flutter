@@ -14,14 +14,14 @@ import '../sendsms.dart';
 import '../widget/loadingui.dart';
 
 
-class GetMyAccountsAndPush extends StatefulWidget {
-  const GetMyAccountsAndPush({Key? key}) : super(key: key);
+class GetMyAccountsAndPull extends StatefulWidget {
+  const GetMyAccountsAndPull({Key? key}) : super(key: key);
 
   @override
-  _GetMyAccountsAndPushState createState() => _GetMyAccountsAndPushState();
+  _GetMyAccountsAndPullState createState() => _GetMyAccountsAndPullState();
 }
 
-class _GetMyAccountsAndPushState extends State<GetMyAccountsAndPush> {
+class _GetMyAccountsAndPullState extends State<GetMyAccountsAndPull> {
 
   late List allMyAccounts = [];
   bool isLoading = true;
@@ -70,21 +70,15 @@ class _GetMyAccountsAndPushState extends State<GetMyAccountsAndPush> {
   bool isAboveFiveThousand = false;
   late List allUserRequests = [];
   late List amounts = [];
-  double sum = 0.0;
-  late List bankNotPaid = [];
-  bool hasUnpaidBankRequests = false;
-  late String customerName = "";
-  late String idType = "";
-  late String idNumber = "";
-  late List customer = [];
+
   bool accountNumberSelected = false;
   late List allAccountsWithPoints = [];
   late List accountsWithPoints = [];
   late List accountNumbers = [];
   final ProfileController controller = Get.find();
 
-  Future<void>openOwnerFinancialServicesPushToBank(String bankNum,String linkedNum,String amount) async {
-    await UssdAdvanced.multisessionUssd(code: "*171*6*1*1*$bankNum*$linkedNum*$amount#", subscriptionId: 1);
+  Future<void>openOwnerFinancialServicesPullFromBank(String bankNum,String linkedNum,String amount) async {
+    await UssdAdvanced.multisessionUssd(code: "*171*6*1*2*$bankNum*$linkedNum*$amount#", subscriptionId: 1);
   }
 
   Future<void> openFinancialServicesPullFromBank() async {
@@ -220,7 +214,7 @@ class _GetMyAccountsAndPushState extends State<GetMyAccountsAndPush> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Push to Bank"),
+        title: const Text("Pull from Bank"),
         backgroundColor: secondaryColor,
       ),
       body:isLoading ? const LoadingUi() : ListView(
@@ -228,9 +222,7 @@ class _GetMyAccountsAndPushState extends State<GetMyAccountsAndPush> {
           const SizedBox(height: 30),
           Padding(
             padding: const EdgeInsets.all(18.0),
-            child: hasUnpaidBankRequests ? const Center(
-                child: Text("Sorry you have an unpaid deposit")
-            ) : Form(
+            child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -501,58 +493,58 @@ class _GetMyAccountsAndPushState extends State<GetMyAccountsAndPush> {
                       } else {
                         switch(_currentSelectedBank){
                           case "Zenith Bank":
-                            openOwnerFinancialServicesPushToBank("1",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("1",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "ADB":
-                            openOwnerFinancialServicesPushToBank("2",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("2",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "GN Bank":
-                            openOwnerFinancialServicesPushToBank("3",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("3",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "GT Bank":
-                            openOwnerFinancialServicesPushToBank("4",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("4",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "Fidelity Bank":
-                            openOwnerFinancialServicesPushToBank("5",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("5",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "Access Bank":
-                            openOwnerFinancialServicesPushToBank("6",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("6",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "CalBank":
-                            openOwnerFinancialServicesPushToBank("7",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("7",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "Ecobank":
-                            openOwnerFinancialServicesPushToBank("8",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("8",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "UBA":
-                            openOwnerFinancialServicesPushToBank("9",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("9",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "Republic":
-                            openOwnerFinancialServicesPushToBank("10",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("10",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "CBG":
-                            openOwnerFinancialServicesPushToBank("11",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("11",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "First Atlantic":
-                            openOwnerFinancialServicesPushToBank("12",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("12",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "Stanbic":
-                            openOwnerFinancialServicesPushToBank("13",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("13",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "GCB":
-                            openOwnerFinancialServicesPushToBank("14",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("14",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "ABSA":
-                            openOwnerFinancialServicesPushToBank("15",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("15",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "UMB":
-                            openOwnerFinancialServicesPushToBank("16",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("16",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "FNB":
-                            openOwnerFinancialServicesPushToBank("17",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("17",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                           case "Bank Of Africa":
-                            openOwnerFinancialServicesPushToBank("4",agentAccountLinkedNumber,_amountController.text.trim());
+                            openOwnerFinancialServicesPullFromBank("4",agentAccountLinkedNumber,_amountController.text.trim());
                             break;
                         }
                       }

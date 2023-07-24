@@ -12,14 +12,27 @@ import '../sendsms.dart';
 import '../widget/loadingui.dart';
 
 
-class AddToMyAccount extends StatefulWidget {
-  const AddToMyAccount({Key? key}) : super(key: key);
+class UpdateMyAccount extends StatefulWidget {
+  final id;
+  final acc_num;
+  final acc_name;
+  final bank;
+  final phone_num;
+  final linkedNum;
+  const UpdateMyAccount({Key? key,required this.id,required this.acc_num,required this.acc_name,required this.bank,required this.phone_num,required this.linkedNum}) : super(key: key);
 
   @override
-  _AddToUserAccount createState() => _AddToUserAccount();
+  _AddToUserAccount createState() => _AddToUserAccount(id:this.id,acc_num: this.acc_num,acc_name: this.acc_name,bank:this.bank,phone_num: this.phone_num,linkedNum: this.linkedNum);
 }
 
-class _AddToUserAccount extends State<AddToMyAccount> {
+class _AddToUserAccount extends State<UpdateMyAccount> {
+  final id;
+  final acc_num;
+  final acc_name;
+  final bank;
+  final phone_num;
+  final linkedNum;
+  _AddToUserAccount({required this.id,required this.acc_num,required this.acc_name,required this.bank,required this.phone_num,required this.linkedNum});
   final _formKey = GlobalKey<FormState>();
   void _startPosting()async{
     setState(() {
@@ -43,9 +56,10 @@ class _AddToUserAccount extends State<AddToMyAccount> {
   final storage = GetStorage();
   late String username = "";
   final SendSmsController sendSms = SendSmsController();
+  bool isInterBank = false;
+  bool isOtherBank = false;
 
   List newBanks = [
-    "Select bank",
     "Zenith Bank",
     "ADB",
     "GN Bank",
@@ -88,16 +102,16 @@ class _AddToUserAccount extends State<AddToMyAccount> {
   }
   final ProfileController controller = Get.find();
 
-  late final TextEditingController _accountNumberController = TextEditingController();
-  late final TextEditingController phone = TextEditingController();
-  late final TextEditingController accountName = TextEditingController();
-  late final TextEditingController mtnLinkedNum = TextEditingController();
+  late final TextEditingController _accountNumberController;
+  late final TextEditingController phone;
+  late final TextEditingController accountName;
+  late final TextEditingController mtnLinkedNum;
 
 
-  addToAccount()async{
-    const registerUrl = "https://fnetagents.xyz/add_to_user_accounts/";
+  updateAccount()async{
+    final registerUrl = "https://fnetagents.xyz/update_my_accounts_detail/$id/";
     final myLink = Uri.parse(registerUrl);
-    final res = await http.post(myLink, headers: {
+    final res = await http.put(myLink, headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       "Authorization": "Token $uToken"
     }, body: {
@@ -107,17 +121,18 @@ class _AddToUserAccount extends State<AddToMyAccount> {
       "phone": phone.text,
       "mtn_linked_number": mtnLinkedNum.text,
     });
-    if(res.statusCode == 201){
-      Get.snackbar("Congratulations", "Account was added successfully",
+    if(res.statusCode == 200){
+      Get.snackbar("Congratulations", "Your account was updated",
           colorText: Colors.white,
           snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 10),
           backgroundColor: snackBackground);
-      setState(() {
-        _accountNumberController.text = "";
-        accountName.text = "";
-        _currentSelectedBank = "Select bank";
-      });
+      // setState(() {
+      //   _accountNumberController.text = "";
+      //   accountName.text = "";
+      //   mtnLinkedNum.text = "";
+      //   _currentSelectedBank = "Select bank";
+      // });
     }
     else{
       if (kDebugMode) {
@@ -140,6 +155,11 @@ class _AddToUserAccount extends State<AddToMyAccount> {
         uToken = storage.read("token");
       });
     }
+    _accountNumberController = TextEditingController(text: acc_num);
+    phone = TextEditingController(text: phone_num);
+    accountName = TextEditingController(text: acc_name);
+    mtnLinkedNum = TextEditingController(text: linkedNum);
+    _currentSelectedBank = bank;
   }
 
 
@@ -148,7 +168,7 @@ class _AddToUserAccount extends State<AddToMyAccount> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: const Text("Add bank accounts"),
+        title: const Text("Update bank accounts"),
       ),
       body: ListView(
         children: [
@@ -169,7 +189,7 @@ class _AddToUserAccount extends State<AddToMyAccount> {
                       cursorRadius: const Radius.elliptical(10, 10),
                       cursorWidth: 10,
                       decoration: InputDecoration(
-                          labelText: "Enter account number",
+                          labelText: "Update account number",
                           labelStyle: const TextStyle(color: secondaryColor),
                           focusColor: secondaryColor,
                           fillColor: secondaryColor,
@@ -195,7 +215,7 @@ class _AddToUserAccount extends State<AddToMyAccount> {
                       cursorRadius: const Radius.elliptical(10, 10),
                       cursorWidth: 10,
                       decoration: InputDecoration(
-                          labelText: "Enter account name",
+                          labelText: "Update account name",
                           labelStyle: const TextStyle(color: secondaryColor),
                           focusColor: secondaryColor,
                           fillColor: secondaryColor,
@@ -221,7 +241,7 @@ class _AddToUserAccount extends State<AddToMyAccount> {
                       cursorRadius: const Radius.elliptical(10, 10),
                       cursorWidth: 10,
                       decoration: InputDecoration(
-                          labelText: "Enter phone number",
+                          labelText: "Update phone number",
                           labelStyle: const TextStyle(color: secondaryColor),
                           focusColor: secondaryColor,
                           fillColor: secondaryColor,
@@ -248,7 +268,7 @@ class _AddToUserAccount extends State<AddToMyAccount> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 10.0, right: 10),
                         child: DropdownButton(
-                          hint: const Text("Select bank"),
+                          hint: const Text("Select bank type"),
                           isExpanded: true,
                           underline: const SizedBox(),
 
@@ -274,7 +294,7 @@ class _AddToUserAccount extends State<AddToMyAccount> {
                       cursorRadius: const Radius.elliptical(10, 10),
                       cursorWidth: 10,
                       decoration: InputDecoration(
-                          labelText: "Linked Num",
+                          labelText: "Update Linked Num",
                           labelStyle: const TextStyle(color: secondaryColor),
                           focusColor: secondaryColor,
                           fillColor: secondaryColor,
@@ -299,7 +319,7 @@ class _AddToUserAccount extends State<AddToMyAccount> {
                       if (!_formKey.currentState!.validate()) {
                         return;
                       } else {
-                        addToAccount();
+                        updateAccount();
                       }
                     },
                     shape: RoundedRectangleBorder(
@@ -309,7 +329,7 @@ class _AddToUserAccount extends State<AddToMyAccount> {
                     fillColor: secondaryColor,
                     splashColor: defaultWhite,
                     child: const Text(
-                      "Save",
+                      "Update",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
