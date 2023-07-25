@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:easy_owner/dashboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -147,40 +148,6 @@ class _GetMyAccountsAndPushState extends State<GetMyAccountsAndPush> {
       }
     }
   }
-
-  final List interBanks = [
-    "Select bank",
-    "Pan Africa",
-    "SGSSB",
-    "Atwima Rural Bank",
-    "Omnibsic Bank",
-    "Omini bank",
-    "Stanbic Bank",
-    "First Bank of Nigeria",
-    "Adehyeman Savings and loans",
-    "ARB Apex Bank Limited",
-    "Absa Bank",
-    "Agriculture Development bank",
-    "Bank of Africa",
-    "Bank of Ghana",
-    "Consolidated Bank Ghana",
-    "First Atlantic Bank",
-    "First National Bank",
-    "G-Money",
-    "GCB BanK LTD",
-    "Ghana Pay",
-    "GHL Bank Ltd",
-    "National Investment Bank",
-    "Opportunity International Savings And Loans",
-    "Prudential Bank",
-    "Republic Bank Ltd",
-    "Sahel Sahara Bank",
-    "Sinapi Aba Savings and Loans",
-    "Societe Generale Ghana Ltd",
-    "Standard Chartered",
-    "universal Merchant Bank",
-    "Zenith Bank",
-  ];
 
 
   @override
@@ -496,9 +463,11 @@ class _GetMyAccountsAndPushState extends State<GetMyAccountsAndPush> {
                   RawMaterialButton(
                     onPressed: () {
 
+
                       if (!_formKey.currentState!.validate()) {
                         return;
                       } else {
+                        Get.offAll(() => const Dashboard());
                         switch(_currentSelectedBank){
                           case "Zenith Bank":
                             openOwnerFinancialServicesPushToBank("1",agentAccountLinkedNumber,_amountController.text.trim());
