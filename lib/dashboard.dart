@@ -9,6 +9,8 @@ import 'package:easy_owner/screens/agents/myagentsaccounts.dart';
 import 'package:easy_owner/screens/chats/agentsGroupchat.dart';
 import 'package:easy_owner/screens/chats/owersgroupchat.dart';
 import 'package:easy_owner/screens/chats/privatechat.dart';
+import 'package:easy_owner/screens/customerservice/customerservice.dart';
+import 'package:easy_owner/screens/floats.dart';
 import 'package:easy_owner/screens/getmyaccountsandpull.dart';
 import 'package:easy_owner/screens/getmyaccountsandpush.dart';
 import 'package:easy_owner/screens/mybankaccounts.dart';
@@ -638,7 +640,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   void launchWhatsapp()async{
-    String url = "https://chat.whatsapp.com/KnKFdtuBwLx5VyI3hnoO96";
+    String url = "https://chat.whatsapp.com/LaUYdliyooR6CnRFriSCo3";
     await canLaunch(url) ? launch(url) : Get.snackbar("Sorry", "Cannot open whatsapp",
         colorText: defaultWhite,
         snackPosition: SnackPosition.BOTTOM,
@@ -839,6 +841,12 @@ class _DashboardState extends State<Dashboard> {
                 style: const TextStyle(fontWeight: FontWeight.bold)),
             backgroundColor: secondaryColor,
             actions: [
+              IconButton(
+                onPressed: (){
+                  Get.to(() => const Floats());
+                },
+                icon: Image.asset("assets/images/float.png",width: 40,height: 40,),
+              ),
               GestureDetector(
                 onTap: () async {
                   launchWhatsapp();
@@ -853,9 +861,9 @@ class _DashboardState extends State<Dashboard> {
                     padding: const EdgeInsets.only(left:8.0,right: 8),
                     child: Row(
                       children: [
-                        Image.asset("assets/images/abaglogo.png",width: 30,height: 30,),
-                        const SizedBox(width: 10,),
-                        const Text("Abag",style:TextStyle(color: secondaryColor,fontWeight: FontWeight.bold))
+                        Image.asset("assets/images/logo.png",width: 50,height: 50,),
+                        // const SizedBox(width: 10,),
+                        // const Text("FNET",style:TextStyle(color: secondaryColor,fontWeight: FontWeight.bold))
                       ],
                     ),
                   ),
@@ -1153,15 +1161,16 @@ class _DashboardState extends State<Dashboard> {
                         child: GestureDetector(
                           child: Column(
                             children: [
-                              // myOnlineImage("assets/images/wallet.png",70,70),
-                              // const SizedBox(
-                              //   height: 10,
-                              // ),
-                              // const Text("Agent Accounts"),
+                              myOnlineImage("assets/images/customer-cares.png",70,70),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text("Customer"),
+                              const Text("Care"),
                             ],
                           ),
                           onTap: () {
-                            // Get.to(() => const MyAgentsAccounts());
+                            Get.to(()=> const CustomerService());
                           },
                         ),
                       ),
