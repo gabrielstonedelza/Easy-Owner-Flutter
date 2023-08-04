@@ -99,7 +99,7 @@ class AgentController extends GetxController{
       "company_number": cNumber,
       "location": loc,
       "digital_address": dAdd,
-      "abag_code": abagCode,
+      "agent_code": abagCode,
     });
     if (response.statusCode == 201) {
       sendSms.sendMySms("+233244529353", "EasyAgent","Hi Mr Frank Fordjour,a new owner with the name  $fullName has registered on the Easy Portal,please login and check.");
