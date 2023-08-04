@@ -851,21 +851,14 @@ class _DashboardState extends State<Dashboard> {
                 onTap: () async {
                   launchWhatsapp();
                 },
-                child: Card(
-                  elevation: 12,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)
-                  ),
-                  child:
-                  Padding(
-                    padding: const EdgeInsets.only(left:8.0,right: 8),
-                    child: Row(
-                      children: [
-                        Image.asset("assets/images/logo.png",width: 50,height: 50,),
-                        // const SizedBox(width: 10,),
-                        // const Text("FNET",style:TextStyle(color: secondaryColor,fontWeight: FontWeight.bold))
-                      ],
-                    ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left:8.0,right: 8),
+                  child: Row(
+                    children: [
+                      Image.asset("assets/images/forapp.png",width: 40,height: 40,),
+                      // const SizedBox(width: 10,),
+                      // const Text("FNET",style:TextStyle(color: secondaryColor,fontWeight: FontWeight.bold))
+                    ],
                   ),
                 ),
               ),

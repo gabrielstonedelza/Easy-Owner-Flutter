@@ -180,32 +180,6 @@ class _AddToUserAccount extends State<UpdateMyAccount> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: TextFormField(
-                      controller: _accountNumberController,
-                      cursorColor: secondaryColor,
-                      cursorRadius: const Radius.elliptical(10, 10),
-                      cursorWidth: 10,
-                      decoration: InputDecoration(
-                          labelText: "Update account number",
-                          labelStyle: const TextStyle(color: secondaryColor),
-                          focusColor: secondaryColor,
-                          fillColor: secondaryColor,
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: secondaryColor, width: 2),
-                              borderRadius: BorderRadius.circular(12)),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12))),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Please enter account number";
-                        }
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: TextFormField(
                       controller: accountName,
                       cursorColor: secondaryColor,
                       cursorRadius: const Radius.elliptical(10, 10),
@@ -229,6 +203,33 @@ class _AddToUserAccount extends State<UpdateMyAccount> {
                       },
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: TextFormField(
+                      controller: _accountNumberController,
+                      cursorColor: secondaryColor,
+                      cursorRadius: const Radius.elliptical(10, 10),
+                      cursorWidth: 10,
+                      decoration: InputDecoration(
+                          labelText: "Update account number",
+                          labelStyle: const TextStyle(color: secondaryColor),
+                          focusColor: secondaryColor,
+                          fillColor: secondaryColor,
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: secondaryColor, width: 2),
+                              borderRadius: BorderRadius.circular(12)),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12))),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Please enter account number";
+                        }
+                      },
+                    ),
+                  ),
+
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: TextFormField(
